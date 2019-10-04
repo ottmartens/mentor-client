@@ -1,6 +1,10 @@
 import React from "react";
 import styles from "./mentorGroupList.module.scss";
 
+import {
+  MentorGroupPreview
+} from '../../Components';
+
 export default function MentorGroupListView() {
   const groups = [
     {
@@ -45,20 +49,7 @@ export default function MentorGroupListView() {
   return (
     <div className={styles.mentorGroupListView}>
       {groups.map(({ persons, groupName, bio }) => {
-        return (
-          <div>
-            <h1>{groupName}</h1>
-            {persons.map(({ firstName, lastName, imgUrl }) => {
-              return (
-                <div>
-                  <img src={imgUrl} alt={`${firstName} ${lastName}`} />
-                  <div>{`${firstName} ${lastName}`}</div>
-                </div>
-              );
-            })}
-            <div>{bio}</div>
-          </div>
-        );
+        return <MentorGroupPreview key={groupName} persons={persons} groupName={groupName} bio={bio}/>
       })}
     </div>
   );
