@@ -1,0 +1,39 @@
+@font-face {
+  font-family: "FF Nexus Sans";
+  src: url("http://db.onlinewebfonts.com/t/c66a8c8c0b5ca45e72dd64fdd13edb49.eot"); /* IE9*/
+  src: url("http://db.onlinewebfonts.com/t/c66a8c8c0b5ca45e72dd64fdd13edb49.eot?#iefix") format("embedded-opentype"),
+    /* IE6-IE8 */ url("http://db.onlinewebfonts.com/t/c66a8c8c0b5ca45e72dd64fdd13edb49.woff2") format("woff2"),
+    /* chrome firefox */ url("http://db.onlinewebfonts.com/t/c66a8c8c0b5ca45e72dd64fdd13edb49.woff") format("woff"),
+    /* chrome firefox */ url("http://db.onlinewebfonts.com/t/c66a8c8c0b5ca45e72dd64fdd13edb49.ttf") format("truetype"),
+    /* chrome firefox opera Safari, Android, iOS 4.2+*/
+      url("http://db.onlinewebfonts.com/t/c66a8c8c0b5ca45e72dd64fdd13edb49.svg#FF Nexus Sans") format("svg"); /* iOS 4.1- */
+}
+
+body {
+  display: flex; // fix sticky footer in ie11
+  margin: 0;
+  padding: 0;
+  font-family: "FF Nexus Sans";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  > :last-child {
+    margin-top: auto;
+  }
+
+  /* Large Devices, Wide Screens */
+  @media only screen and (min-width: 1200px) {
+    margin: auto;
+    width: 60%;
+  }
+}
