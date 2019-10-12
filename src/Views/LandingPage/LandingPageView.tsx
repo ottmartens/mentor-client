@@ -27,6 +27,7 @@ export default function LandingPageView() {
 			<div className={classes.buttons}>
 				<div>
 					<Button
+						href="/login"
 						className={classes.button}
 						variant="contained"
 						color="primary"
@@ -36,6 +37,7 @@ export default function LandingPageView() {
 				</div>
 				<div>
 					<Button
+						href="register"
 						className={classes.button}
 						variant="contained"
 						color="primary"

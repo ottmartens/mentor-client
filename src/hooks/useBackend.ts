@@ -8,24 +8,32 @@ export enum RequestMethod {
 	GET = "get"
 }
 
-export enum EndPoints {
+export enum EndPoint {
 	REGISTER = "/api/user/new",
 	LOGIN = "/api/user/login",
 	HEALTH = "/api/health"
 }
 
+type UseBackendReturnValue = [
+	() => void,
+	{ data: any; loading: boolean; error: any }
+];
+
 export default function useBackend(
 	requestMethod: RequestMethod,
-	endPoint: EndPoints
-) {
-	const [data, setData] = React.useState();
-	const [loading, setLoading] = React.useState<boolean>();
-	const [error, setError] = React.useState();
-	React.useEffect(() => {
+	endPoint: EndPoint,
+	variables?: any
+): UseBackendReturnValue {
+	const [data, setData] = React.useState(undefined);
+	const [loading, setLoading] = React.useState(false);
+	const [error, setError] = React.useState(undefined);
+
+	function onSubmit() {
 		setLoading(true);
 		axios({
 			method: requestMethod,
-			url: `${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}${endPoint}`
+			url: `${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}${endPoint}`,
+			data: { ...variables }
 		})
 			.then(res => setData(res.data))
 			.catch(err => {
@@ -34,7 +42,7 @@ export default function useBackend(
 			.finally(() => {
 				setLoading(false);
 			});
-	}, [requestMethod, endPoint]);
+	}
 
-	return { data, loading, error };
+	return [onSubmit, { data, loading, error }];
 }

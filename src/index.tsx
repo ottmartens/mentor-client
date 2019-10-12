@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import LandingPageView from "./views/landingPage/LandingPageView";
 import RegisterView from "./views/register/RegisterView";
 import LoginView from "./views/login/LoginView";
+import MentorGroupListView from "./views/mentorGroupList/MentorGroupListView";
 
 function Root() {
 	return (
