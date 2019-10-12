@@ -13,6 +13,7 @@ function Root() {
 			<Route exact path="/" component={LandingPageView} />
 			<Route exact path="/login" component={LoginView} />
 			<Route exact path="/register" component={RegisterView} />
+			<Route exact path="/mentor-group-list" component={MentorGroupListView}/>
 		</Router>
 	);
 }
