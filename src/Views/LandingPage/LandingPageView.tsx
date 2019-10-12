@@ -14,13 +14,12 @@ const useStyles = makeStyles(theme => ({
 	container: {
 		display: "flex",
 		flexDirection: "column",
-		justifyContent: "flex-start",
+		justifyContent: "center",
 		flexGrow: 1
 	}
 }));
 
 export default function LandingPageView() {
-<<<<<<< HEAD
 	const classes = useStyles();
 	return (
 		<Container className={classes.container} component="main" maxWidth="sm">
@@ -48,7 +47,3 @@ export default function LandingPageView() {
 		</Container>
 	);
 }
-=======
-    return <div className={styles.wrap}>{}</div>
-}
->>>>>>> 465a63b4bc632987e5892735644572da651df27f
