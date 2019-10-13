@@ -1,9 +1,9 @@
 import React from "react";
 import { Container, makeStyles, Button } from "@material-ui/core";
 import useInput from "../../hooks/useInput";
-import Field from "../../Components/field/Field";
 import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
 import { Redirect } from "react-router";
+import Field from "../../components/field/Field";
 
 const useStyles = makeStyles(theme => ({
 	container: {

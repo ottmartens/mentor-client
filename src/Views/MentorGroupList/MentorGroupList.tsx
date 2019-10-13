@@ -1,9 +1,7 @@
 import React from "react";
-import styles from "./mentorGroupList.module.scss";
-
-import { MentorGroupPreview } from "../../Components";
 import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
 import { Container } from "@material-ui/core";
+import MentorGroupPreview from "../../components/mentorGroupPreview/MentorGroupPreview";
 
 export default function MentorGroupListView() {
 	const [queryFn, { data, loading, called }] = useBackend({

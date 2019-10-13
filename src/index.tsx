@@ -6,9 +6,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import LoginView from "./views/login/LoginView";
 import RegisterView from "./views/register/RegisterView";
 import MentorGroupListView from "./views/mentorGroupList/MentorGroupList";
-
 import MentorGroupView from "./views/mentorGroup/MentorGroupView";
-import LandingPageView from "./views/LandingPage/LandingPage";
+import LandingPageView from "./views/landingPage/LandingPage";
 function Root() {
 	return (
 		<Router>

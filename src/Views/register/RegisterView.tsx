@@ -2,9 +2,9 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { Container, makeStyles } from "@material-ui/core";
 import useInput from "../../hooks/useInput";
-import Field from "../../Components/field/Field";
+import Field from "../../components/field/Field";
 import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
-import RadioButtonField from "../../Components/radioButtonField/RadioButtonField";
+import RadioButtonField from "../../components/radioButtonField/RadioButtonField";
 import { Redirect } from "react-router";
 
 const useStyles = makeStyles(theme => ({

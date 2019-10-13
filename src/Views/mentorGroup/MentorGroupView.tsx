@@ -1,5 +1,4 @@
 import React from "react";
-import { MentorGroupPreview } from "../../Components";
 import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
 import {
 	Container,
@@ -13,6 +12,7 @@ import {
 	ListItemText,
 	Button
 } from "@material-ui/core";
+import MentorGroupPreview from "../../components/mentorGroupPreview/MentorGroupPreview";
 
 const useStyles = makeStyles(theme => ({
 	menteeCard: {
