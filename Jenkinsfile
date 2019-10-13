@@ -13,7 +13,7 @@ node {
     }
 
     stage('push image to local registry') {
-        sh 'docker tag mentor-server localhost:5000/mentor-client-local'
+        sh 'docker tag mentor-client localhost:5000/mentor-client-local'
         sh 'docker push localhost:5000/mentor-client-local'
     }
 
