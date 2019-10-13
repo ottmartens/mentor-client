@@ -28,15 +28,15 @@ export default function RegisterView() {
 		role: useInput(radioButtonOptions[0].value)
 	};
 
-	const [requestFn, { data, error, loading }] = useBackend(
-		RequestMethod.POST,
-		EndPoint.REGISTER,
-		{
+	const [requestFn, { data, error, loading }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.REGISTER,
+		variables: {
 			email: input.email.value,
 			password: input.password.value,
 			role: input.role.value
 		}
-	);
+	});
 
 	if (loading) {
 		return <div>Loading...</div>;

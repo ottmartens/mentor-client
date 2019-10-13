@@ -20,14 +20,14 @@ export default function LoginView() {
 		password: useInput()
 	};
 
-	const [requestFn, { data, error, loading }] = useBackend(
-		RequestMethod.POST,
-		EndPoint.LOGIN,
-		{
+	const [requestFn, { data, error, loading }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.LOGIN,
+		variables: {
 			email: input.email.value,
 			password: input.password.value
 		}
-	);
+	});
 
 	if (loading) {
 		return <div>Loading...</div>;

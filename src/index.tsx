@@ -20,11 +20,7 @@ function Root() {
 				path="/mentor-group-list"
 				component={MentorGroupListView}
 			/>
-			<Route
-				exact
-				path="/mentor-group-view"
-				component={MentorGroupView}
-			/>
+			<Route exact path="/mentor-group/:id" component={MentorGroupView} />
 		</Router>
 	);
 }

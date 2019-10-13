@@ -1,72 +1,131 @@
 import React from "react";
-import styles from "./mentorGroupView.module.scss";
 import { MentorGroupPreview } from "../../Components";
+import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
+import {
+	Container,
+	Card,
+	CardContent,
+	CardMedia,
+	Typography,
+	CardActionArea,
+	makeStyles
+} from "@material-ui/core";
 
-export default function MentorGroupView(){
+const useStyles = makeStyles(theme => ({
+	container: {
+		marginBottom: "12px"
+	},
+	mentors: {
+		display: "flex",
+		justifyContent: "space-around"
+	},
 
-    const groupName = "Testgrupp"
-    const bio = "oleme coolid kiisumiisud, käime väljas jooksmas ja kasti pissimas. Whiskas is the best!"
-    const persons = [
-            {
-                firstName: "Priit",
-                lastName: "Suur",
-                imgUrl:
-                    "https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-            },
-            {
-                firstName: "Kert",
-                lastName: "Vana",
-                imgUrl:
-                    "https://timesofindia.indiatimes.com/thumb/msid-67586673,width-800,height-600,resizemode-4/67586673.jpg"
-            }
-    ]
+	image: {
+		display: "inline-block",
+		width: "50px",
+		height: "50px",
+		borderRadius: "50%"
+	},
+	menteeRow: {
+		display: "flex"
+	},
+	menteeName: {
+		display: "inline-block",
+		borderTop: "2px solid black",
+		borderBottom: "2px solid black",
+		margin: "0"
+	}
+}));
 
-    const menteed = [
-        {
-            firstName: "Tere",
-            lastName: "Terav",
-            imgUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-        }
-        ,
-        {
-            firstName: "Tarmo",
-            lastName: "Sulane",
-            imgUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-        }
-        ,
-        {
-            firstName: "Jaan",
-            lastName: "Tamm",
-            imgUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-        }
-    ]
+export default function MentorGroupView({ match }) {
+	const classes = useStyles();
+	const { params } = match;
 
-    return  <div className={styles.alus}>
-        <div className={styles.top}>
-            <MentorGroupPreview
-						key={groupName}
-						persons={persons}
-						groupName={groupName}
-						bio={bio}
+	const menteed = [
+		{
+			FirstName: "Tere",
+			LastName: "Terav",
+			ImageUrl:
+				"https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
+		},
+		{
+			FirstName: "Tarmo",
+			LastName: "Sulane",
+			ImageUrl:
+				"https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
+		},
+		{
+			FirstName: "Jaan",
+			LastName: "Tamm",
+			ImageUrl:
+				"https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
+		}
+	];
+
+	const [queryFn, { data, loading, error, called }] = useBackend({
+		requestMethod: RequestMethod.GET,
+		endPoint: EndPoint.GROUPS,
+		endPointUrlParam: params.id
+	});
+
+	const groupInfo = data && data.data;
+
+	React.useEffect(() => {
+		if (called) {
+			return;
+		}
+		queryFn();
+	});
+
+	if (loading || !data) {
+		return <div>Loading...</div>;
+	}
+
+	console.log(groupInfo);
+
+	return (
+		<Container>
+			<div>
+				<div>
+					<MentorGroupPreview
+						mentors={groupInfo.mentors}
+						groupName={groupInfo.title}
+						bio={groupInfo.description}
 					/>
-        </div>
-        <div className={styles.bottom}>
-            <h3>
-                Approved mentees
-            </h3>
-            {menteed.map(({ firstName, lastName, imgUrl }) => {
-          return (
-              <div className={styles.mentee}>
-                  <img className={styles.pilt} src={imgUrl} width="100px">
-                  </img>
-                  <div className={styles.name}>{`${firstName} ${lastName}`}
-                  </div>
-              </div>
-          );
-        })}
-        </div>
-    </div>
+				</div>
+				<div className={classes.container}>
+					<Card>
+						<CardActionArea>
+							{menteed.map(
+								({ ImageUrl, FirstName, LastName }, idx) => {
+									return (
+										<div
+											key={idx}
+											className={classes.menteeRow}
+										>
+											<CardMedia
+												image={ImageUrl}
+												className={classes.image}
+											/>
+											<CardContent
+												className={classes.menteeName}
+											>
+												<Typography
+													gutterBottom
+													variant="h5"
+													component="h2"
+												>
+													{`${FirstName} ${LastName}`}
+												</Typography>
+											</CardContent>
+										</div>
+									);
+								}
+							)}
+						</CardActionArea>
+					</Card>
+				</div>
+			</div>
+		</Container>
+	);
 }
