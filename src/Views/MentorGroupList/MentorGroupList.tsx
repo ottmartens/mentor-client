@@ -24,7 +24,7 @@ export default function MentorGroupListView() {
 	console.log(data.data);
 	return (
 		<Container maxWidth="sm">
-			<div className={styles.mentorGroupListView}>
+			<div>
 				{data.data.map(({ mentors, title, tagline, id }, idx) => {
 					return (
 						<MentorGroupPreview

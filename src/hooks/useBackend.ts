@@ -9,10 +9,12 @@ export enum RequestMethod {
 }
 
 export enum EndPoint {
-	REGISTER = "/api/user/new",
-	LOGIN = "/api/user/login",
-	HEALTH = "/api/health",
-	GROUPS = "/api/groups"
+	REGISTER = "/user/new",
+	LOGIN = "/user/login",
+	HEALTH = "/health",
+	GROUPS = "/groups",
+	JOIN_GROUP = "/groups/join",
+	ACCEPT_OR_REJECT_GROUP_JOIN_REQUEST = "/groups/accept-joining"
 }
 
 interface Props {
@@ -22,8 +24,12 @@ interface Props {
 	variables?: any;
 }
 
+interface SubmitProps {
+	overrideVariables?: any;
+}
+
 type UseBackendReturnValue = [
-	() => void,
+	(props?: SubmitProps) => void,
 	{ data: any; loading: boolean; error: any; called: boolean }
 ];
 
@@ -38,15 +44,25 @@ export default function useBackend({
 	const [error, setError] = React.useState(undefined);
 	const [called, setCalled] = React.useState(false);
 
-	function onSubmit() {
+	function onSubmit(props?: SubmitProps): void {
+		const overrideVariables =
+			(props && props.overrideVariables) || undefined;
+		const queryVariables =
+			variables && overrideVariables
+				? { ...variables, ...overrideVariables }
+				: variables
+				? variables
+				: overrideVariables
+				? overrideVariables
+				: undefined;
 		setCalled(true);
 		setLoading(true);
 		axios({
 			method: requestMethod,
 			url: `${process.env.REACT_APP_BACKEND_URL}:${
 				process.env.REACT_APP_BACKEND_PORT
-			}${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ""}`,
-			data: variables ? variables : undefined
+			}/api${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ""}`,
+			data: queryVariables
 		})
 			.then(res => setData(res.data))
 			.catch(err => {

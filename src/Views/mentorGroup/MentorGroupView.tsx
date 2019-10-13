@@ -4,36 +4,37 @@ import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
 import {
 	Container,
 	Card,
-	CardContent,
-	CardMedia,
-	Typography,
-	CardActionArea,
-	makeStyles
+	makeStyles,
+	Divider,
+	List,
+	ListItem,
+	ListItemAvatar,
+	Avatar,
+	ListItemText,
+	Button
 } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
-	container: {
-		marginBottom: "12px"
+	menteeCard: {
+		padding: "20px",
+		marginBottom: "12px",
+		marginTop: "20px"
 	},
-	mentors: {
-		display: "flex",
-		justifyContent: "space-around"
+	title: {
+		marginLeft: "16px",
+		marginTop: "0"
 	},
-
-	image: {
-		display: "inline-block",
-		width: "50px",
-		height: "50px",
-		borderRadius: "50%"
+	buttonContainer: {
+		textAlign: "center"
 	},
-	menteeRow: {
-		display: "flex"
+	mentorGroupContainer: {
+		marginTop: "12px"
 	},
-	menteeName: {
-		display: "inline-block",
-		borderTop: "2px solid black",
-		borderBottom: "2px solid black",
-		margin: "0"
+	requestImage: {
+		borderRadius: "0"
+	},
+	requestButton: {
+		margin: "4px"
 	}
 }));
 
@@ -41,31 +42,26 @@ export default function MentorGroupView({ match }) {
 	const classes = useStyles();
 	const { params } = match;
 
-	const menteed = [
-		{
-			FirstName: "Tere",
-			LastName: "Terav",
-			ImageUrl:
-				"https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-		},
-		{
-			FirstName: "Tarmo",
-			LastName: "Sulane",
-			ImageUrl:
-				"https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-		},
-		{
-			FirstName: "Jaan",
-			LastName: "Tamm",
-			ImageUrl:
-				"https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg"
-		}
-	];
+	const userString = localStorage.getItem("mentorAppUser");
 
-	const [queryFn, { data, loading, called }] = useBackend({
+	const user = userString ? JSON.parse(userString) : undefined;
+
+	const [requestGroupJoinFn] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.JOIN_GROUP,
+		variables: { userId: user.ID, groupId: Number(params.id) }
+	});
+
+	const [queryMentorGroupData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.GROUPS,
 		endPointUrlParam: params.id
+	});
+
+	const [determineGroupJoinFn] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.ACCEPT_OR_REJECT_GROUP_JOIN_REQUEST,
+		variables: { groupId: Number(params.id) }
 	});
 
 	const groupInfo = data && data.data;
@@ -74,7 +70,7 @@ export default function MentorGroupView({ match }) {
 		if (called) {
 			return;
 		}
-		queryFn();
+		queryMentorGroupData();
 	});
 
 	if (loading || !data) {
@@ -86,44 +82,129 @@ export default function MentorGroupView({ match }) {
 	return (
 		<Container>
 			<div>
-				<div>
+				<div className={classes.mentorGroupContainer}>
 					<MentorGroupPreview
 						mentors={groupInfo.mentors}
 						groupName={groupInfo.title}
 						bio={groupInfo.description}
 					/>
 				</div>
-				<div className={classes.container}>
-					<Card>
-						<CardActionArea>
-							{menteed.map(
-								({ ImageUrl, FirstName, LastName }, idx) => {
-									return (
-										<div
-											key={idx}
-											className={classes.menteeRow}
-										>
-											<CardMedia
-												image={ImageUrl}
-												className={classes.image}
+				<div className={classes.buttonContainer}>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={() => {
+							requestGroupJoinFn();
+						}}
+					>
+						APPLY
+					</Button>
+				</div>
+
+				<Card className={classes.menteeCard}>
+					<h2 className={classes.title}>Approved mentees</h2>
+					<List>
+						{groupInfo.mentees.map(
+							({ ImageUrl, FirstName, LastName }, idx) => {
+								return (
+									<div key={idx}>
+										{idx === 0 && (
+											<Divider
+												variant="inset"
+												component="li"
 											/>
-											<CardContent
-												className={classes.menteeName}
-											>
-												<Typography
-													gutterBottom
-													variant="h5"
-													component="h2"
+										)}
+										<ListItem key={idx}>
+											<ListItemAvatar>
+												<Avatar src={ImageUrl} />
+											</ListItemAvatar>
+											<ListItemText
+												primary={`${FirstName} ${LastName}`}
+											/>
+										</ListItem>
+										<Divider
+											variant="inset"
+											component="li"
+										/>
+									</div>
+								);
+							}
+						)}
+					</List>
+				</Card>
+				<div>
+					<List>
+						{groupInfo.requests &&
+							groupInfo.requests.map(
+								(
+									{ ImageUrl, FirstName, LastName, UserId },
+									idx
+								) => {
+									return (
+										<div key={idx}>
+											{idx === 0 && (
+												<Divider
+													variant="inset"
+													component="li"
+												/>
+											)}
+											<ListItem key={idx}>
+												<ListItemAvatar>
+													<Avatar
+														className={
+															classes.requestImage
+														}
+														src={ImageUrl}
+													/>
+												</ListItemAvatar>
+												<ListItemText
+													primary={`${FirstName} ${LastName}`}
+												/>
+												<Button
+													variant="contained"
+													color="primary"
+													className={
+														classes.requestButton
+													}
+													onClick={() => {
+														determineGroupJoinFn({
+															overrideVariables: {
+																userId: UserId,
+																accept: true
+															}
+														});
+													}}
 												>
-													{`${FirstName} ${LastName}`}
-												</Typography>
-											</CardContent>
+													APPROVE
+												</Button>{" "}
+												<Button
+													variant="contained"
+													color="primary"
+													className={
+														classes.requestButton
+													}
+													onClick={() => {
+														determineGroupJoinFn({
+															overrideVariables: {
+																userId: UserId,
+																accept: false
+															}
+														});
+													}}
+												>
+													DECLINE
+												</Button>
+											</ListItem>
+
+											<Divider
+												variant="inset"
+												component="li"
+											/>
 										</div>
 									);
 								}
 							)}
-						</CardActionArea>
-					</Card>
+					</List>
 				</div>
 			</div>
 		</Container>
