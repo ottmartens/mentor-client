@@ -44,7 +44,7 @@ export default function RegisterView() {
 	}
 
 	if (data && data.success) {
-		localStorage.setItem("mentorAppUserToken", data.account.token);
+		localStorage.setItem("mentorAppUser", JSON.stringify(data.account));
 		return <Redirect to="/mentor-group-list" />;
 	}
 
