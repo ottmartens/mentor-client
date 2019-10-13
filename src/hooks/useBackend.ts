@@ -33,11 +33,11 @@ export default function useBackend(
 		axios({
 			method: requestMethod,
 			url: `${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}${endPoint}`,
-			data: { ...variables }
+			data: variables
 		})
 			.then(res => setData(res.data))
 			.catch(err => {
-				setError(err);
+				setError(err.message);
 			})
 			.finally(() => {
 				setLoading(false);

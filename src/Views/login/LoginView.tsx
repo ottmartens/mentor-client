@@ -52,7 +52,7 @@ export default function LoginView() {
 					/>
 				</div>
 				<Button type="submit" variant="contained" color="primary">
-					REGISTER
+					LOG IN
 				</Button>
 			</form>
 		</Container>
