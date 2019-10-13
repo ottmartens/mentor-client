@@ -3,5 +3,6 @@ import styles from ".loginView.module.scss";
 import { Container } from "@material-ui/core";
 
 export default function LoginView() {
-	return <Container>Hello</Container>;
+	return <Container>
+	</Container>;
 }

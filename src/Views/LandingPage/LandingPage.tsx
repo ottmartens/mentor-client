@@ -2,7 +2,9 @@ import React from "react";
 import { Button, Container, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
-	logo: { flexGrow: 1 },
+	logo: { 
+		width: "100%"
+	},
 	buttons: {
 		flexGrow: 1,
 		textAlign: "center"
@@ -23,7 +25,7 @@ export default function LandingPageView() {
 	const classes = useStyles();
 	return (
 		<Container className={classes.container} component="main" maxWidth="sm">
-			<div className={classes.logo}>MITS LOGO</div>
+			<img className={classes.logo} src="https://drive.google.com/uc?id=1CJThJjFwtqXHxo0oZwbnRgrC7q_z1tg7"/>
 			<div className={classes.buttons}>
 				<div>
 					<Button

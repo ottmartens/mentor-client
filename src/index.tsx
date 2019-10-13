@@ -3,9 +3,10 @@ import ReactDOM from "react-dom";
 import "./themes/main.scss";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import LandingPageView from "./views/landingPage/LandingPageView";
-import RegisterView from "./views/register/RegisterView";
-import LoginView from "./views/login/LoginView";
+import LandingPageView from "./Views/LandingPage/LandingPage"
+import RegisterView from "./Views/register/Register";
+import LoginView from "./Views/login/Login";
+import MentorGroupListView from "./Views/MentorGroupList/MentorGroupList";
 
 function Root() {
 	return (
