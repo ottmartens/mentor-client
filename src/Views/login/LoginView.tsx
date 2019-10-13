@@ -1,8 +1,9 @@
 import React from "react";
 import { Container, makeStyles, Button } from "@material-ui/core";
 import useInput from "../../hooks/useInput";
-import Field from "../../Components/field/Field";
 import useBackend, { RequestMethod, EndPoint } from "../../hooks/useBackend";
+import { Redirect } from "react-router";
+import Field from "../../components/field/Field";
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -20,7 +21,7 @@ export default function LoginView() {
 		password: useInput()
 	};
 
-	const [requestFn, { data, error, loading }] = useBackend({
+	const [requestFn, { data, loading }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.LOGIN,
 		variables: {
@@ -31,6 +32,11 @@ export default function LoginView() {
 
 	if (loading) {
 		return <div>Loading...</div>;
+	}
+
+	if (data && data.success) {
+		localStorage.setItem("mentorAppUser", JSON.stringify(data.account));
+		return <Redirect to="/mentor-group-list" />;
 	}
 
 	return (
