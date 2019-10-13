@@ -8,33 +8,54 @@ export enum RequestMethod {
 	GET = "get"
 }
 
-export enum EndPoints {
+export enum EndPoint {
 	REGISTER = "/api/user/new",
 	LOGIN = "/api/user/login",
-	HEALTH = "/api/health"
+	HEALTH = "/api/health",
+	GROUPS = "/api/groups"
 }
 
-export default function useBackend(
-	requestMethod: RequestMethod,
-	endPoint: EndPoints
-) {
-	const [data, setData] = React.useState();
-	const [loading, setLoading] = React.useState<boolean>();
-	const [error, setError] = React.useState();
-	React.useEffect(() => {
+interface Props {
+	requestMethod: RequestMethod;
+	endPoint: EndPoint;
+	endPointUrlParam?: string;
+	variables?: any;
+}
+
+type UseBackendReturnValue = [
+	() => void,
+	{ data: any; loading: boolean; error: any; called: boolean }
+];
+
+export default function useBackend({
+	requestMethod,
+	endPoint,
+	endPointUrlParam,
+	variables
+}: Props): UseBackendReturnValue {
+	const [data, setData] = React.useState(undefined);
+	const [loading, setLoading] = React.useState(false);
+	const [error, setError] = React.useState(undefined);
+	const [called, setCalled] = React.useState(false);
+
+	function onSubmit() {
+		setCalled(true);
 		setLoading(true);
 		axios({
 			method: requestMethod,
-			url: `${process.env.REACT_APP_BACKEND_URL}:${process.env.REACT_APP_BACKEND_PORT}${endPoint}`
+			url: `${process.env.REACT_APP_BACKEND_URL}:${
+				process.env.REACT_APP_BACKEND_PORT
+			}${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ""}`,
+			data: variables ? variables : undefined
 		})
 			.then(res => setData(res.data))
 			.catch(err => {
-				setError(err);
+				setError(err.message);
 			})
 			.finally(() => {
 				setLoading(false);
 			});
-	}, [requestMethod, endPoint]);
+	}
 
-	return { data, loading, error };
+	return [onSubmit, { data, loading, error, called }];
 }

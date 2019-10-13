@@ -1,26 +1,84 @@
 import React from "react";
-import styles from "./mentorGroupPreview.module.scss";
+import {
+	makeStyles,
+	Card,
+	CardActionArea,
+	CardMedia,
+	CardContent,
+	Typography
+} from "@material-ui/core";
 
-export default function MentorGroupPreview({ persons, groupName, bio }) {
-  return (
-    <div className={styles.mentorGroupPreview}>
-      <h1 className={styles.title}>{groupName}</h1>
-      <div className={styles.persons}>
-        {persons.map(({ firstName, lastName, imgUrl }) => {
-          return (
-            <div key={`${firstName} ${lastName}`} className={styles.person}>
-              <div >
-                <img className={styles.image} src={imgUrl} alt={`${firstName} ${lastName}`} />
-              </div>
-              <div className={styles.name}>{`${firstName} ${lastName}`}</div>
-            </div>
-          );
-        })}
-      </div>
-      <div className={styles.bio}>{bio}</div>
-      <div className={styles.button}>
-        <button>Apply</button>
-      </div>
-    </div>
-  );
+export interface Mentor {
+	ImageUrl: string;
+}
+
+interface Props {
+	mentors: Mentor[];
+	groupName: string;
+	bio: string;
+	id?: string;
+	showNames?: boolean;
+	showGroupName?: boolean;
+}
+
+const useStyles = makeStyles(theme => ({
+	container: {
+		marginBottom: "12px"
+	},
+	mentors: {
+		display: "flex",
+		justifyContent: "space-around"
+	},
+
+	image: { width: "100%", height: "150px" }
+}));
+
+export default function MentorGroupPreview({
+	mentors,
+	groupName,
+	bio,
+	id,
+	showNames,
+	showGroupName
+}: Props) {
+	const classes = useStyles();
+
+	if (true) {
+		return (
+			<Card className={classes.container}>
+				<CardActionArea href={id ? `/mentor-group/${id}` : "#"}>
+					<div className={classes.mentors}>
+						{mentors.map(({ ImageUrl }, idx) => {
+							return (
+								<CardMedia
+									key={idx}
+									className={classes.image}
+									image={ImageUrl}
+								/>
+							);
+						})}
+					</div>
+
+					<CardContent>
+						{showGroupName && (
+							<Typography
+								gutterBottom
+								variant="h5"
+								component="h2"
+							>
+								{groupName}
+							</Typography>
+						)}
+						<Typography
+							variant="body2"
+							color="textSecondary"
+							component="p"
+						>
+							{bio}
+						</Typography>
+					</CardContent>
+				</CardActionArea>
+			</Card>
+		);
+	}
 }
