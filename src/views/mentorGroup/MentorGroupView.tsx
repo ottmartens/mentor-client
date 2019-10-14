@@ -83,7 +83,9 @@ export default function MentorGroupView({ match }) {
 		<Container>
 			<div>
 				<div className={classes.mentorGroupContainer}>
-					<MentorGroupPreview mentors={groupInfo.mentors} groupName={groupInfo.title} bio={groupInfo.description} />
+					{groupInfo.mentors && (
+						<MentorGroupPreview mentors={groupInfo.mentors} groupName={groupInfo.title} bio={groupInfo.description} />
+					)}
 				</div>
 				<div className={classes.buttonContainer}>
 					<Button
@@ -100,20 +102,21 @@ export default function MentorGroupView({ match }) {
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.title}>Approved mentees</h2>
 					<List>
-						{groupInfo.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
-							return (
-								<div key={idx}>
-									{idx === 0 && <Divider variant="inset" component="li" />}
-									<ListItem key={idx}>
-										<ListItemAvatar>
-											<Avatar src={ImageUrl} />
-										</ListItemAvatar>
-										<ListItemText primary={`${FirstName} ${LastName}`} />
-									</ListItem>
-									<Divider variant="inset" component="li" />
-								</div>
-							);
-						})}
+						{groupInfo.mentees &&
+							groupInfo.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
+								return (
+									<div key={idx}>
+										{idx === 0 && <Divider variant="inset" component="li" />}
+										<ListItem key={idx}>
+											<ListItemAvatar>
+												<Avatar src={ImageUrl} />
+											</ListItemAvatar>
+											<ListItemText primary={`${FirstName} ${LastName}`} />
+										</ListItem>
+										<Divider variant="inset" component="li" />
+									</div>
+								);
+							})}
 					</List>
 				</Card>
 				<div>
