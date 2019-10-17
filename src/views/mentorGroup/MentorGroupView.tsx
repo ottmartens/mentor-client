@@ -13,6 +13,7 @@ import {
 	Button,
 } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
+import { HasUserProps, UserRole } from '../../types';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -38,19 +39,17 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function MentorGroupView({ match }) {
+interface Props extends HasUserProps {
+	match: {
+		params: {
+			id: string;
+		};
+	};
+}
+
+export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
-
-	const userString = localStorage.getItem('mentorAppUser');
-
-	const user = userString ? JSON.parse(userString) : undefined;
-
-	const [requestGroupJoinFn] = useBackend({
-		requestMethod: RequestMethod.POST,
-		endPoint: EndPoint.JOIN_GROUP,
-		variables: { userId: user.ID, groupId: Number(params.id) },
-	});
 
 	const [queryMentorGroupData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -58,9 +57,15 @@ export default function MentorGroupView({ match }) {
 		endPointUrlParam: params.id,
 	});
 
+	const [requestGroupJoinFn] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.JOIN_GROUP,
+		variables: { userId: user.ID, groupId: Number(params.id) },
+	});
+
 	const [determineGroupJoinFn] = useBackend({
 		requestMethod: RequestMethod.POST,
-		endPoint: EndPoint.ACCEPT_OR_REJECT_GROUP_JOIN_REQUEST,
+		endPoint: EndPoint.HANDLE_GROUP_JOIN_REQUEST,
 		variables: { groupId: Number(params.id) },
 	});
 
@@ -69,29 +74,31 @@ export default function MentorGroupView({ match }) {
 			return;
 		}
 		queryMentorGroupData();
-	});
+	}, [called, queryMentorGroupData]);
 
 	if (loading || !data) {
 		return <div>Loading...</div>;
 	}
 
 	return (
-		<Container>
+		<Container maxWidth="sm">
 			<div>
 				<div className={classes.mentorGroupContainer}>
 					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} />}
 				</div>
-				<div className={classes.buttonContainer}>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => {
-							requestGroupJoinFn();
-						}}
-					>
-						APPLY
-					</Button>
-				</div>
+				{user.role === UserRole.MENTEE && (
+					<div className={classes.buttonContainer}>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={() => {
+								requestGroupJoinFn();
+							}}
+						>
+							APPLY
+						</Button>
+					</div>
+				)}
 
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.title}>Approved mentees</h2>

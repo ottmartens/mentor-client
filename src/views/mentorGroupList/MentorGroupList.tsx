@@ -2,8 +2,18 @@ import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Container } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
+import { makeStyles } from '@material-ui/styles';
 
-export default function MentorGroupListView() {
+const useStyles = makeStyles((theme) => ({
+	container: {
+		flexGrow: 1,
+		textAlign: 'center',
+	},
+}));
+
+export default function MentorGroupListView(props) {
+	console.log(props);
+	const classes = useStyles();
 	const [queryFn, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.GROUPS,
@@ -20,11 +30,13 @@ export default function MentorGroupListView() {
 		return <div>Loading...</div>;
 	}
 	return (
-		<Container maxWidth="sm">
+		<Container className={classes.container} maxWidth="sm">
+			<h1>Mentorgroups</h1>
 			<div>
-				{data.map(({ mentors, title, tagline, id }, idx) => {
-					return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={tagline} />;
-				})}
+				{data &&
+					data.map(({ mentors, title, tagline, id }, idx) => {
+						return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={tagline} />;
+					})}
 			</div>
 		</Container>
 	);

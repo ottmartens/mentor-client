@@ -14,7 +14,7 @@ export enum EndPoint {
 	HEALTH = '/health',
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
-	ACCEPT_OR_REJECT_GROUP_JOIN_REQUEST = '/groups/accept-joining',
+	HANDLE_GROUP_JOIN_REQUEST = '/groups/accept-joining',
 }
 
 interface Props {
@@ -55,6 +55,11 @@ export default function useBackend({
 	function onSubmit({ overrideVariables }: SubmitProps = {}): void {
 		const queryOverrideVariables = overrideVariables ? overrideVariables : {};
 		const sendData = { ...queryVariables, ...queryOverrideVariables };
+
+		// reset error
+		if (error) {
+			setError(undefined);
+		}
 		makeRequest(sendData);
 	}
 
@@ -77,7 +82,6 @@ export default function useBackend({
 			data: queryVariables,
 		})
 			.then((res: AxiosResponse<BackendResponse>) => {
-				console.log(res);
 				res.data.success ? setData(res.data.data) : setError(res.data.message);
 			})
 			.catch((err) => {

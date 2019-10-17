@@ -5,8 +5,8 @@ import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Redirect } from 'react-router';
 import Field from '../../components/field/Field';
 import { isSet, isEmail, validateInputs } from '../../services/validators';
-import { login } from '../../services/login';
 import Notice from '../../components/notice/Notice';
+import { login } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -33,7 +33,7 @@ export default function LoginView() {
 		password: useInput({ validators: [isSet] }),
 	};
 
-	const [requestFn, { data, loading, error }] = useBackend({
+	const [requestFn, { data, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.LOGIN,
 		variables: {
@@ -41,12 +41,9 @@ export default function LoginView() {
 			password: input.password.value,
 		},
 	});
-	if (loading) {
-		return <div>Loading...</div>;
-	}
 
 	if (data && login(data)) {
-		return <Redirect to="/mentor-group-list" />;
+		return <Redirect to="/member/mentor-group-list" />;
 	}
 	return (
 		<Container className={classes.container} maxWidth="sm">

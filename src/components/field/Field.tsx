@@ -2,7 +2,6 @@ import React from 'react';
 import { TextField } from '@material-ui/core';
 import { FieldError } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import classNames from 'classnames';
 
 interface Props {
 	type?: 'text' | 'password';
@@ -10,6 +9,8 @@ interface Props {
 	setValue: (value: string) => void;
 	value: string | undefined;
 	error: FieldError | undefined;
+	multiline?: boolean;
+	className?: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Field({ label, type, setValue, value, error }: Props) {
+export default function Field({ label, type, setValue, value, error, className, multiline }: Props) {
 	const classes = useStyles();
 	return (
 		<>
@@ -31,6 +32,9 @@ export default function Field({ label, type, setValue, value, error }: Props) {
 				margin="normal"
 				variant="outlined"
 				error={!!error}
+				className={className}
+				multiline={multiline}
+				rows={multiline ? 8 : undefined}
 			/>
 			<span className={classes.error}>{error}</span>
 		</>

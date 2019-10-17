@@ -6,9 +6,9 @@ import Field from '../../components/field/Field';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import RadioButtonField from '../../components/radioButtonField/RadioButtonField';
 import { Redirect } from 'react-router';
-import { login } from '../../services/login';
 import Notice from '../../components/notice/Notice';
 import { validateInputs, isSet, isEmail } from '../../services/validators';
+import { login } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -38,7 +38,7 @@ export default function RegisterView() {
 		role: useInput({ initialValue: radioButtonOptions[0].value }),
 	};
 
-	const [requestFn, { loading, data, error }] = useBackend({
+	const [requestFn, { data, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.REGISTER,
 		variables: {
@@ -48,12 +48,8 @@ export default function RegisterView() {
 		},
 	});
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
-
 	if (data && login(data)) {
-		return <Redirect to="/mentor-group-list" />;
+		return <Redirect to="/member/mentor-group-list" />;
 	}
 
 	return (
