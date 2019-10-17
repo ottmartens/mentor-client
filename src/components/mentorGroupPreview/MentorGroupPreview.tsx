@@ -43,7 +43,7 @@ export default function MentorGroupPreview({
 }: Props) {
 	const classes = useStyles();
 
-	if (true) {
+
 		return (
 			<Card className={classes.container}>
 				<CardActionArea href={id ? `/mentor-group/${id}` : "#"}>
@@ -81,4 +81,4 @@ export default function MentorGroupPreview({
 			</Card>
 		);
 	}
-}
+

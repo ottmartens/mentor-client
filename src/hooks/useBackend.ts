@@ -1,20 +1,20 @@
-import React from "react";
-import axios from "axios";
-import dotenv from "dotenv";
+import React from 'react';
+import axios, { AxiosResponse } from 'axios';
+import dotenv from 'dotenv';
 dotenv.config();
 
 export enum RequestMethod {
-	POST = "post",
-	GET = "get"
+	POST = 'post',
+	GET = 'get',
 }
 
 export enum EndPoint {
-	REGISTER = "/user/new",
-	LOGIN = "/user/login",
-	HEALTH = "/health",
-	GROUPS = "/groups",
-	JOIN_GROUP = "/groups/join",
-	ACCEPT_OR_REJECT_GROUP_JOIN_REQUEST = "/groups/accept-joining"
+	REGISTER = '/user/new',
+	LOGIN = '/user/login',
+	HEALTH = '/health',
+	GROUPS = '/groups',
+	JOIN_GROUP = '/groups/join',
+	HANDLE_GROUP_JOIN_REQUEST = '/groups/accept-joining',
 }
 
 interface Props {
@@ -28,47 +28,63 @@ interface SubmitProps {
 	overrideVariables?: any;
 }
 
+interface BackendResponse {
+	message: string;
+	success: boolean;
+	data?: any;
+}
+
 type UseBackendReturnValue = [
 	(props?: SubmitProps) => void,
-	{ data: any; loading: boolean; error: any; called: boolean }
+	{ data: any; loading: boolean; error: any; called: boolean },
 ];
 
 export default function useBackend({
 	requestMethod,
 	endPoint,
 	endPointUrlParam,
-	variables
+	variables,
 }: Props): UseBackendReturnValue {
-	const [data, setData] = React.useState(undefined);
+	const [data, setData] = React.useState<any>(undefined);
 	const [loading, setLoading] = React.useState(false);
-	const [error, setError] = React.useState(undefined);
+	const [error, setError] = React.useState<string | undefined>(undefined);
 	const [called, setCalled] = React.useState(false);
+	const queryVariables = variables ? variables : {};
 
-	const REACT_APP_BACKEND_URL = "http://167.71.64.237"
-	const REACT_APP_BACKEND_PORT = "8000"
+	// does pre query actions like validation and parameter overriding
+	function onSubmit({ overrideVariables }: SubmitProps = {}): void {
+		const queryOverrideVariables = overrideVariables ? overrideVariables : {};
+		const sendData = { ...queryVariables, ...queryOverrideVariables };
 
-	function onSubmit(props?: SubmitProps): void {
-		const overrideVariables =
-			(props && props.overrideVariables) || undefined;
-		const queryVariables =
-			variables && overrideVariables
-				? { ...variables, ...overrideVariables }
-				: variables
-				? variables
-				: overrideVariables
-				? overrideVariables
-				: undefined;
+		// reset error
+		if (error) {
+			setError(undefined);
+		}
+		makeRequest(sendData);
+	}
+
+	//builds up request url
+	function buildUrl() {
+		const backendUrl = 'http://167.71.64.237';
+		const backendPort = '8000';
+		const queryPrefix = '/api';
+
+		return `${backendUrl}:${backendPort}${queryPrefix}${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ''}`;
+	}
+
+	// makes request to the backend and sets data, error and loading
+	function makeRequest(queryVariables) {
 		setCalled(true);
 		setLoading(true);
 		axios({
 			method: requestMethod,
-			url: `${REACT_APP_BACKEND_URL}:${
-				REACT_APP_BACKEND_PORT
-			}/api${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ""}`,
-			data: queryVariables
+			url: buildUrl(),
+			data: queryVariables,
 		})
-			.then(res => setData(res.data))
-			.catch(err => {
+			.then((res: AxiosResponse<BackendResponse>) => {
+				res.data.success ? setData(res.data.data) : setError(res.data.message);
+			})
+			.catch((err) => {
 				setError(err.message);
 			})
 			.finally(() => {

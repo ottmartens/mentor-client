@@ -1,37 +1,38 @@
-import React from "react";
-import { Button, Container, makeStyles } from "@material-ui/core";
+import React from 'react';
+import { Button, Container, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	logo: {
-		display: "block",
-		width: "170px",
-		height: "170px",
-		margin: "auto"
+		display: 'block',
+		width: '170px',
+		height: '170px',
+		margin: 'auto',
 	},
 	logoContainer: {
-		display: "flex",
-		width: "200px",
-		height: "200px",
-		background: "#3f51b5",
-		margin: "auto",
-		borderRadius: "50%"
+		display: 'flex',
+		width: '200px',
+		height: '200px',
+		background: '#3f51b5',
+		margin: 'auto',
+		borderRadius: '50%',
+		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
 	},
 	buttons: {
-		marginTop: "20px",
+		marginTop: '20px',
 		flexGrow: 1,
-		textAlign: "center"
+		textAlign: 'center',
 	},
 	button: {
-		minWidth: "128px",
-		margin: "4px"
+		minWidth: '128px',
+		margin: '4px',
 	},
 	container: {
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
 		flexGrow: 1,
-		padding: "30px"
-	}
+		padding: '30px',
+	},
 }));
 
 export default function LandingPageView() {
@@ -40,30 +41,16 @@ export default function LandingPageView() {
 	return (
 		<Container className={classes.container} component="main" maxWidth="sm">
 			<div className={classes.logoContainer}>
-				<img
-					className={classes.logo}
-					src="images/logo_valge.webp"
-					alt="MITS LOGO"
-				></img>
+				<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
 			</div>
 			<div className={classes.buttons}>
 				<div>
-					<Button
-						href="/login"
-						className={classes.button}
-						variant="contained"
-						color="primary"
-					>
+					<Button href="/login" className={classes.button} variant="contained" color="primary">
 						LOG IN
 					</Button>
 				</div>
 				<div>
-					<Button
-						href="/register"
-						className={classes.button}
-						variant="contained"
-						color="primary"
-					>
+					<Button href="/register" className={classes.button} variant="contained" color="primary">
 						REGISTER
 					</Button>
 				</div>
