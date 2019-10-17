@@ -5,18 +5,20 @@ export enum UserRole {
 }
 
 export interface HasUserProps {
-	user: {
-		CreatedAt: Date;
-		DeletedAt: null | Date;
-		ID: number;
-		UpdatedAt: Date;
-		email: string;
-		firstName: string;
-		groupId: number;
-		imageUrl: string;
-		lastName: string;
-		password: string;
-		role: UserRole;
-		token: string;
-	};
+	user: User;
 }
+
+export type User = {
+	CreatedAt: Date;
+	DeletedAt: null | Date;
+	ID: number;
+	UpdatedAt: Date;
+	email: string;
+	firstName: string;
+	groupId: number;
+	imageUrl: string;
+	lastName: string;
+	password: string;
+	role: UserRole;
+	token: string;
+};

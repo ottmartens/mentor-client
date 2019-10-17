@@ -20,12 +20,14 @@ const useStyles = makeStyles((theme) => ({
 		display: 'block',
 		marginLeft: 'auto',
 		marginRight: 'auto',
-		marginBottom: '8px',
 		height: '224px',
 		width: '224px',
 	},
 	largeWidth: {
 		width: '224px',
+	},
+	imageButton: {
+		marginTop: '-28px',
 	},
 }));
 
@@ -56,7 +58,7 @@ export default function ProfileView({ user }: HasUserProps) {
 						onChange={onChangeHandler}
 					/>
 					<label htmlFor="raised-button-file">
-						<Button variant="outlined" component="span">
+						<Button variant="contained" color="secondary" className={classes.imageButton}>
 							Upload
 						</Button>
 					</label>

@@ -1,17 +1,28 @@
 import React from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { parseUser } from '../../services/auth';
+import { User } from '../../types';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	return (
 		<Route
 			{...rest}
 			render={(routeProps) => {
-				const user = parseUser();
+				const user: User | undefined = parseUser();
 
+				// if not logged in, redirect to login
 				if (!user) {
 					return <Redirect to="/login" />;
 				}
+
+				// if profile info missing, redirect to profile
+				/* if (
+					(!user.firstName || !user.lastName || !user.imageUrl) &&
+					routeProps.location.pathname !== '/member/profile'
+				) {
+					return <Redirect to="/member/profile" />;
+				} */
+
 				return renderMergedProps(component, routeProps, { user });
 			}}
 		/>
