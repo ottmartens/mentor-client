@@ -64,8 +64,6 @@ export default function MentorGroupView({ match }) {
 		variables: { groupId: Number(params.id) },
 	});
 
-	const groupInfo = data && data.data;
-
 	React.useEffect(() => {
 		if (called) {
 			return;
@@ -77,15 +75,11 @@ export default function MentorGroupView({ match }) {
 		return <div>Loading...</div>;
 	}
 
-	console.log(groupInfo);
-
 	return (
 		<Container>
 			<div>
 				<div className={classes.mentorGroupContainer}>
-					{groupInfo.mentors && (
-						<MentorGroupPreview mentors={groupInfo.mentors} groupName={groupInfo.title} bio={groupInfo.description} />
-					)}
+					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} />}
 				</div>
 				<div className={classes.buttonContainer}>
 					<Button
@@ -102,8 +96,8 @@ export default function MentorGroupView({ match }) {
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.title}>Approved mentees</h2>
 					<List>
-						{groupInfo.mentees &&
-							groupInfo.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
+						{data.mentees &&
+							data.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
@@ -121,8 +115,8 @@ export default function MentorGroupView({ match }) {
 				</Card>
 				<div>
 					<List>
-						{groupInfo.requests &&
-							groupInfo.requests.map(({ ImageUrl, FirstName, LastName, UserId }, idx) => {
+						{data.requests &&
+							data.requests.map(({ ImageUrl, FirstName, LastName, UserId }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
