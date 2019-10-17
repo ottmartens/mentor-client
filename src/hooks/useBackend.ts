@@ -44,6 +44,9 @@ export default function useBackend({
 	const [error, setError] = React.useState(undefined);
 	const [called, setCalled] = React.useState(false);
 
+	const REACT_APP_BACKEND_URL = "http://167.71.64.237"
+	const REACT_APP_BACKEND_PORT = "8000"
+
 	function onSubmit(props?: SubmitProps): void {
 		const overrideVariables =
 			(props && props.overrideVariables) || undefined;
@@ -59,8 +62,8 @@ export default function useBackend({
 		setLoading(true);
 		axios({
 			method: requestMethod,
-			url: `${process.env.REACT_APP_BACKEND_URL}:${
-				process.env.REACT_APP_BACKEND_PORT
+			url: `${REACT_APP_BACKEND_URL}:${
+				REACT_APP_BACKEND_PORT
 			}/api${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ""}`,
 			data: queryVariables
 		})
