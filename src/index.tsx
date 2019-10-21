@@ -11,6 +11,7 @@ import LandingPageView from './views/landingPage/LandingPage';
 import { ProtectedRoute } from './components/protectedRoute/ProtectedRoute';
 import ProfileView from './views/profileView/ProfileView';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import LogoutView from './views/logout/LogoutView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -36,6 +37,7 @@ function Root() {
 					<ProtectedRoute exact path="/member/mentor-group-list" component={MentorGroupListView} />
 					<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
 					<ProtectedRoute exact path="/member/profile" component={ProfileView} />
+					<ProtectedRoute exact path="/member/logout" component={LogoutView} />
 				</Switch>
 			</Router>
 		</MuiThemeProvider>

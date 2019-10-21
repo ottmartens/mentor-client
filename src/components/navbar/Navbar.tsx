@@ -9,6 +9,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { User, UserRole, HasUserProps } from '../../types';
 import { Link } from 'react-router-dom';
+import { Toolbar, AppBar } from '@material-ui/core';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -30,6 +32,15 @@ const useStyles = makeStyles((theme) => ({
 	profileIcon: {
 		color: '#ffffff',
 	},
+	listElementContainer: {
+		textAlign: 'center',
+		paddingTop: '12px',
+		paddingBottom: '12px',
+		borderBottom: '1px solid #5a9fff',
+	},
+	listTitle: {
+		margin: 0,
+	},
 }));
 
 type NavItem = {
@@ -40,40 +51,38 @@ type NavItem = {
 export default function Navbar({ user }: HasUserProps) {
 	const classes = useStyles();
 	const routes = getPossibleRoutes(user);
-	const [state, setState] = React.useState({
-		left: false,
-	});
+	const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(false);
 
-	const toggleDrawer = (side, open) => (event) => {
-		setState({ ...state, [side]: open });
+	const showDrawer = (open) => (e) => {
+		setIsDrawerOpen(open);
 	};
-
-	const sideList = (side) => (
-		<div className={classes.list} role="presentation" onClick={toggleDrawer(side, false)}>
-			<List>
-				{routes.map((route, index) => (
-					<ListItem button component="a" key={index} href={route.url}>
-						<ListItemText primary={route.label} />
-					</ListItem>
-				))}
-			</List>
-		</div>
-	);
-
 	return (
-		<div className={classes.nav}>
-			<Button onClick={toggleDrawer('left', true)} className={classes.button}>
-				<MenuIcon />
-			</Button>
-			<Button className={classes.profileButton}>
-				<Link to="/member/profile">
-					<AccountCircleIcon className={classes.profileIcon} />
-				</Link>
-			</Button>
-			<SwipeableDrawer open={state.left} onClose={toggleDrawer('left', false)} onOpen={toggleDrawer('left', true)}>
-				{sideList('left')}
-			</SwipeableDrawer>
-		</div>
+		<AppBar color="secondary" position="relative">
+			<Toolbar variant="dense">
+				<Button onClick={showDrawer(true)} className={classes.button}>
+					<MenuIcon />
+				</Button>
+				<Button className={classes.profileButton}>
+					<Link to="/member/profile">
+						<AccountCircleIcon className={classes.profileIcon} />
+					</Link>
+				</Button>
+				<SwipeableDrawer open={isDrawerOpen} onClose={showDrawer(false)} onOpen={showDrawer(true)}>
+					<div className={classes.list} onClick={showDrawer(false)}>
+						<List>
+							<ListItem component="label" className={classNames(classes.listElementContainer)}>
+								<ListItemText primary={<h3 className={classes.listTitle}>MentorApp</h3>} />
+							</ListItem>
+							{routes.map((route, index) => (
+								<ListItem button component="a" key={index} href={route.url} className={classes.listElementContainer}>
+									<ListItemText primary={route.label} />
+								</ListItem>
+							))}
+						</List>
+					</div>
+				</SwipeableDrawer>
+			</Toolbar>
+		</AppBar>
 	);
 }
 
@@ -84,7 +93,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 				{ label: 'My group', url: '/member/mentor-group/:id' },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
-				{ label: 'Log out', url: '/member/log-out' },
+				{ label: 'Logout', url: '/member/logout' },
 			];
 
 		case UserRole.MENTOR:
@@ -92,7 +101,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 				{ label: 'My group', url: '/member/mentor-group/:id' },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
-				{ label: 'Log out', url: '/member/log-out' },
+				{ label: 'Logout', url: '/member/logout' },
 			];
 
 		case UserRole.ADMIN:
@@ -102,7 +111,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 				{ label: 'Activities', url: '/admin/acitivities' },
 				{ label: 'Deadlines', url: '/admin/deadlines' },
 				{ label: 'Vefify Users', url: '/admin/verify-users' },
-				{ label: 'Log out', url: '/admin/log-out' },
+				{ label: 'Logout', url: '/admin/logout' },
 			];
 		default:
 			return [];
