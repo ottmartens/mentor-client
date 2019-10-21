@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { parseUser } from '../../services/auth';
 import { User } from '../../types';
+import WithNavigation from '../withNavigation/WithNavigation';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	return (
@@ -23,7 +24,7 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 					return <Redirect to="/member/profile" />;
 				} */
 
-				return renderMergedProps(component, routeProps, { user });
+				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}
 		/>
 	);

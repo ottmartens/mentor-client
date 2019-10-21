@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
 	requestButton: {
 		margin: '4px',
 	},
+	container: {
+		textAlign: 'center',
+	},
 }));
 
 interface Props extends HasUserProps {
@@ -82,7 +85,8 @@ export default function MentorGroupView({ match, user }: Props) {
 
 	return (
 		<Container maxWidth="sm">
-			<div>
+			<div className={classes.container}>
+				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
 					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} />}
 				</div>

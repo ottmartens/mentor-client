@@ -51,7 +51,7 @@ export default function useBackend({
 	const [called, setCalled] = React.useState(false);
 	const queryVariables = variables ? variables : {};
 
-	// does pre query actions like validation and parameter overriding
+	// does pre query actions like validation(?) and parameter overriding
 	function onSubmit({ overrideVariables }: SubmitProps = {}): void {
 		const queryOverrideVariables = overrideVariables ? overrideVariables : {};
 		const sendData = { ...queryVariables, ...queryOverrideVariables };
