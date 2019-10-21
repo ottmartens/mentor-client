@@ -45,6 +45,7 @@ export default function LoginView() {
 	if (data && login(data)) {
 		return <Redirect to="/member/mentor-group-list" />;
 	}
+
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title="Login failed" message={error} />}
