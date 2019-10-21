@@ -10,10 +10,12 @@ import MentorGroupView from './views/mentorGroup/MentorGroupView';
 import LandingPageView from './views/landingPage/LandingPage';
 import { ProtectedRoute } from './components/protectedRoute/ProtectedRoute';
 import ProfileView from './views/profileView/ProfileView';
+import Navbar from './components/navbar/Navbar';
 
 function Root() {
 	return (
 		<Router>
+			<Navbar />
 			<Route exact path="/" component={LandingPageView} />
 			<Route exact path="/login" component={LoginView} />
 			<Route exact path="/register" component={RegisterView} />
