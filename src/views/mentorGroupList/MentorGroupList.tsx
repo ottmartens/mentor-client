@@ -3,6 +3,7 @@ import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Container } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { makeStyles } from '@material-ui/styles';
+import { HasUserProps } from '../../types';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -11,12 +12,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function MentorGroupListView(props) {
-	console.log(props);
+export default function MentorGroupListView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const [queryFn, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.GROUPS,
+		authToken: user.token,
 	});
 
 	React.useEffect(() => {

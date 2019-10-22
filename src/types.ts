@@ -21,4 +21,21 @@ export type User = {
 	password: string;
 	role: UserRole;
 	token: string;
+	bio: string;
+};
+
+export type OverwriteUserInfo = {
+	CreatedAt?: Date;
+	DeletedAt?: null | Date;
+	ID?: number;
+	UpdatedAt?: Date;
+	email?: string;
+	firstName?: string;
+	groupId?: number;
+	imageUrl?: string;
+	lastName?: string;
+	password?: string;
+	role?: UserRole;
+	token?: string;
+	bio?: string;
 };

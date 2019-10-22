@@ -11,11 +11,15 @@ export enum RequestMethod {
 export enum EndPoint {
 	REGISTER = '/user/new',
 	LOGIN = '/user/login',
+	UPDATE_PROFILE = '/user/edit',
 	HEALTH = '/health',
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
 	HANDLE_GROUP_JOIN_REQUEST = '/groups/accept-joining',
 	GROUP_EDIT = '/groups/edit-group'
+	GET_AVAILABLE_MENTORS = '/available-mentors',
+	MAKE_GROUP_CREATE_REQUEST = '/groups/request-creation',
+	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
 }
 
 interface Props {
@@ -23,6 +27,7 @@ interface Props {
 	endPoint: EndPoint;
 	endPointUrlParam?: string;
 	variables?: any;
+	authToken?: string;
 }
 
 interface SubmitProps {
@@ -45,6 +50,7 @@ export default function useBackend({
 	endPoint,
 	endPointUrlParam,
 	variables,
+	authToken,
 }: Props): UseBackendReturnValue {
 	const [data, setData] = React.useState<any>(undefined);
 	const [loading, setLoading] = React.useState(false);
@@ -52,7 +58,7 @@ export default function useBackend({
 	const [called, setCalled] = React.useState(false);
 	const queryVariables = variables ? variables : {};
 
-	// does pre query actions like validation and parameter overriding
+	// does pre query actions like validation(?) and parameter overriding
 	function onSubmit({ overrideVariables }: SubmitProps = {}): void {
 		const queryOverrideVariables = overrideVariables ? overrideVariables : {};
 		const sendData = { ...queryVariables, ...queryOverrideVariables };
@@ -78,6 +84,7 @@ export default function useBackend({
 		setCalled(true);
 		setLoading(true);
 		axios({
+			headers: authToken ? { Authorization: authToken } : undefined,
 			method: requestMethod,
 			url: buildUrl(),
 			data: queryVariables,
