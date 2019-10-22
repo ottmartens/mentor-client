@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { parseUser } from '../../services/auth';
 import { User } from '../../types';
+import WithNavigation from '../withNavigation/WithNavigation';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	return (
@@ -16,14 +17,11 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 				}
 
 				// if profile info missing, redirect to profile
-				/* if (
-					(!user.firstName || !user.lastName || !user.imageUrl) &&
-					routeProps.location.pathname !== '/member/profile'
-				) {
+				/* if ((!user.firstName || !user.lastName) && routeProps.location.pathname !== '/member/profile') {
 					return <Redirect to="/member/profile" />;
 				} */
 
-				return renderMergedProps(component, routeProps, { user });
+				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}
 		/>
 	);

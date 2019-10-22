@@ -1,3 +1,5 @@
+import { OverwriteUserInfo } from '../types';
+
 export function login(user) {
 	try {
 		localStorage.setItem('mentorAppUser', JSON.stringify(user));
@@ -23,4 +25,15 @@ export function parseUser() {
 	} catch {
 		return undefined;
 	}
+}
+
+export function overwriteUserInfo(props: OverwriteUserInfo) {
+	const userJSON = localStorage.getItem('mentorAppUser');
+	if (!userJSON) {
+		return false;
+	}
+	const user = JSON.parse(userJSON);
+	const newUser = { ...user, ...props };
+	localStorage.setItem('mentorAppUser', JSON.stringify(newUser));
+	return true;
 }

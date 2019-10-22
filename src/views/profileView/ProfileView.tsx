@@ -5,7 +5,9 @@ import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { CardMedia } from '@material-ui/core';
-import { isSet } from '../../services/validators';
+import { isSet, validateInputs } from '../../services/validators';
+import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
+import { overwriteUserInfo } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -35,10 +37,26 @@ export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const [image, selectImage] = React.useState<File | undefined>();
 	const input: { [s: string]: UseInput } = {
-		firstName: useInput({ validators: [isSet] }),
-		lastName: useInput({ validators: [isSet] }),
-		bio: useInput(),
+		firstName: useInput({ validators: [isSet], initialValue: `${user.firstName}` }),
+		lastName: useInput({ validators: [isSet], initialValue: `${user.lastName}` }),
+		bio: useInput({ validators: [isSet], initialValue: `${user.bio}` }),
 	};
+
+	const [updateProfile, { data }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.UPDATE_PROFILE,
+		variables: {
+			firstName: input.firstName.value,
+			lastName: input.lastName.value,
+			bio: input.bio.value,
+		},
+		authToken: user.token,
+	});
+
+	if (data) {
+		console.log(data);
+		overwriteUserInfo(data);
+	}
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			<h2>Profile</h2>
@@ -64,7 +82,14 @@ export default function ProfileView({ user }: HasUserProps) {
 					</label>
 				</div>
 
-				<form>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						if (validateInputs(input)) {
+							updateProfile();
+						}
+					}}
+				>
 					<Field className={classes.largeWidth} {...input.firstName} label="First name" />
 					<Field className={classes.largeWidth} {...input.lastName} label="Last name" />
 					<Field className={classes.largeWidth} {...input.bio} label="Bio" multiline />
