@@ -17,10 +17,7 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 				}
 
 				// if profile info missing, redirect to profile
-				/* if (
-					(!user.firstName || !user.lastName || !user.imageUrl) &&
-					routeProps.location.pathname !== '/member/profile'
-				) {
+				/* if ((!user.firstName || !user.lastName) && routeProps.location.pathname !== '/member/profile') {
 					return <Redirect to="/member/profile" />;
 				} */
 

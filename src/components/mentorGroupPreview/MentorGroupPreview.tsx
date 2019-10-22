@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, Card, CardActionArea, CardMedia, CardContent, Typography } from '@material-ui/core';
 
 export interface Mentor {
-	ImageUrl: string;
+	imageUrl: string;
 }
 
 interface Props {
@@ -33,8 +33,8 @@ export default function MentorGroupPreview({ mentors, groupName, bio, id, showNa
 		<Card className={classes.container}>
 			<CardActionArea href={id ? `/member/mentor-group/${id}` : '#'}>
 				<div className={classes.mentors}>
-					{mentors.map(({ ImageUrl }, idx) => {
-						return <CardMedia key={idx} className={classes.image} image={ImageUrl} />;
+					{mentors.map(({ imageUrl }, idx) => {
+						return <CardMedia key={idx} className={classes.image} image={imageUrl} />;
 					})}
 				</div>
 

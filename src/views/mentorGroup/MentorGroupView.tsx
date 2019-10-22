@@ -113,15 +113,15 @@ export default function MentorGroupView({ match, user }: Props) {
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>Approved mentees</h2>
 						<List>
-							{data.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
+							{data.mentees.map(({ imageUrl, firstName, lastName }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
 										<ListItem key={idx}>
 											<ListItemAvatar>
-												<Avatar src={ImageUrl} />
+												<Avatar src={imageUrl} />
 											</ListItemAvatar>
-											<ListItemText primary={`${FirstName} ${LastName}`} />
+											<ListItemText primary={`${firstName} ${lastName}`} />
 										</ListItem>
 										<Divider variant="inset" component="li" />
 									</div>
@@ -135,15 +135,15 @@ export default function MentorGroupView({ match, user }: Props) {
 				{data.requests && data.requests.length !== 0 && (
 					<div>
 						<List>
-							{data.requests.map(({ ImageUrl, FirstName, LastName, UserId }, idx) => {
+							{data.requests.map(({ imageUrl, firstName, lastName, UserId }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
 										<ListItem key={idx}>
 											<ListItemAvatar>
-												<Avatar className={classes.requestImage} src={ImageUrl} />
+												<Avatar className={classes.requestImage} src={imageUrl} />
 											</ListItemAvatar>
-											<ListItemText primary={`${FirstName} ${LastName}`} />
+											<ListItemText primary={`${firstName} ${lastName}`} />
 											<Button
 												variant="contained"
 												color="primary"

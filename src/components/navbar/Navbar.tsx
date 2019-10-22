@@ -90,7 +90,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 	switch (user.role) {
 		case UserRole.MENTEE:
 			return [
-				{ label: 'My group', url: '/member/mentor-group/:id' },
+				{ label: 'My group', url: `/member/mentor-group/${user.groupId}` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
 				{ label: 'Logout', url: '/member/logout' },
@@ -98,10 +98,10 @@ function getPossibleRoutes(user: User): NavItem[] {
 
 		case UserRole.MENTOR:
 			return [
-				{ label: 'My group', url: '/member/mentor-group/:id' },
+				{ label: 'My group', url: `/member/mentor-group/${user.groupId}` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
-        { label: 'Activities', url: '/member/acitivities' },
-        { label: 'Find co-mentor', url: '/member/find-co-mentor' },        
+				{ label: 'Activities', url: '/member/acitivities' },
+				{ label: 'Find co-mentor', url: '/member/find-co-mentor' },
 				{ label: 'Logout', url: '/member/logout' },
 			];
 

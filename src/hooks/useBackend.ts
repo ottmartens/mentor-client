@@ -11,13 +11,14 @@ export enum RequestMethod {
 export enum EndPoint {
 	REGISTER = '/user/new',
 	LOGIN = '/user/login',
+	UPDATE_PROFILE = '/user/edit',
 	HEALTH = '/health',
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
 	HANDLE_GROUP_JOIN_REQUEST = '/groups/accept-joining',
-	GET_DATA = '/available-mentors',
-	REQUEST_CREATION = '/group/request-creation',
-	ACCEPT_CREATION = '/groups/accept-creation'
+	GET_AVAILABLE_MENTORS = '/available-mentors',
+	MAKE_GROUP_CREATE_REQUEST = '/groups/request-creation',
+	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
 }
 
 interface Props {

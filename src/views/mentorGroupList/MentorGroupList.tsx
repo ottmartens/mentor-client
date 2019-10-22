@@ -3,7 +3,6 @@ import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Container } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { makeStyles } from '@material-ui/styles';
-import { userInfo } from 'os';
 import { HasUserProps } from '../../types';
 
 const useStyles = makeStyles((theme) => ({
