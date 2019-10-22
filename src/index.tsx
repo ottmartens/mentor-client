@@ -11,6 +11,7 @@ import LandingPageView from './views/landingPage/LandingPage';
 import { ProtectedRoute } from './components/protectedRoute/ProtectedRoute';
 import ProfileView from './views/profileView/ProfileView';
 import Navbar from './components/navbar/Navbar';
+import MentorGroupEditView from './views/mentorGroupEdit/MentorGroupEditView';
 
 function Root() {
 	return (
@@ -22,6 +23,7 @@ function Root() {
 			<ProtectedRoute exact path="/member/mentor-group-list" component={MentorGroupListView} />
 			<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
 			<ProtectedRoute exact path="/member/profile" component={ProfileView} />
+			<ProtectedRoute exact path="/member/mentor-group-edit" component={MentorGroupEditView} />
 		</Router>
 	);
 }
