@@ -100,7 +100,8 @@ function getPossibleRoutes(user: User): NavItem[] {
 			return [
 				{ label: 'My group', url: '/member/mentor-group/:id' },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
-				{ label: 'Activities', url: '/member/acitivities' },
+        { label: 'Activities', url: '/member/acitivities' },
+        { label: 'Find co-mentor', url: '/member/find-co-mentor' },        
 				{ label: 'Logout', url: '/member/logout' },
 			];
 

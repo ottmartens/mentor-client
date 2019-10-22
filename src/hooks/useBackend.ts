@@ -15,6 +15,10 @@ export enum EndPoint {
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
 	HANDLE_GROUP_JOIN_REQUEST = '/groups/accept-joining',
+	GET_REQUESTS_SENT_TO_YOU = '',
+	GET_FREE_MENTORS = '',
+	PAIR_UP = '',
+	REPLY_TO_REQUESTS = ''
 }
 
 interface Props {

@@ -12,6 +12,8 @@ import { ProtectedRoute } from './components/protectedRoute/ProtectedRoute';
 import ProfileView from './views/profileView/ProfileView';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import LogoutView from './views/logout/LogoutView';
+import Navbar from './components/navbar/Navbar';
+import MentorPairingView from './views/mentorPairingView/MentorPairingView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -38,6 +40,7 @@ function Root() {
 					<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
 					<ProtectedRoute exact path="/member/profile" component={ProfileView} />
 					<ProtectedRoute exact path="/member/logout" component={LogoutView} />
+					<ProtectedRoute exact path="/member/find-co-mentor" component={MentorPairingView} />
 				</Switch>
 			</Router>
 		</MuiThemeProvider>
