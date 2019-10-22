@@ -26,6 +26,7 @@ interface Props {
 	endPoint: EndPoint;
 	endPointUrlParam?: string;
 	variables?: any;
+	authToken?: string;
 }
 
 interface SubmitProps {
@@ -48,6 +49,7 @@ export default function useBackend({
 	endPoint,
 	endPointUrlParam,
 	variables,
+	authToken,
 }: Props): UseBackendReturnValue {
 	const [data, setData] = React.useState<any>(undefined);
 	const [loading, setLoading] = React.useState(false);
@@ -81,6 +83,7 @@ export default function useBackend({
 		setCalled(true);
 		setLoading(true);
 		axios({
+			headers: authToken ? { Authorization: authToken } : undefined,
 			method: requestMethod,
 			url: buildUrl(),
 			data: queryVariables,

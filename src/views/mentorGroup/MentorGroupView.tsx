@@ -58,18 +58,21 @@ export default function MentorGroupView({ match, user }: Props) {
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.GROUPS,
 		endPointUrlParam: params.id,
+		authToken: user.token,
 	});
 
 	const [requestGroupJoinFn] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.JOIN_GROUP,
 		variables: { userId: user.ID, groupId: Number(params.id) },
+		authToken: user.token,
 	});
 
 	const [determineGroupJoinFn] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.HANDLE_GROUP_JOIN_REQUEST,
 		variables: { groupId: Number(params.id) },
+		authToken: user.token,
 	});
 
 	React.useEffect(() => {
