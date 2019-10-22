@@ -82,7 +82,6 @@ export default function MentorGroupView({ match, user }: Props) {
 	if (loading || !data) {
 		return <div>Loading...</div>;
 	}
-
 	return (
 		<Container maxWidth="sm">
 			<div className={classes.container}>
@@ -90,6 +89,8 @@ export default function MentorGroupView({ match, user }: Props) {
 				<div className={classes.mentorGroupContainer}>
 					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} />}
 				</div>
+
+				{/* Mentors */}
 				{user.role === UserRole.MENTEE && (
 					<div className={classes.buttonContainer}>
 						<Button
@@ -104,11 +105,12 @@ export default function MentorGroupView({ match, user }: Props) {
 					</div>
 				)}
 
-				<Card className={classes.menteeCard}>
-					<h2 className={classes.title}>Approved mentees</h2>
-					<List>
-						{data.mentees &&
-							data.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
+				{/* Mentees */}
+				{data.mentees && data.mentees.length !== 0 && (
+					<Card className={classes.menteeCard}>
+						<h2 className={classes.title}>Approved mentees</h2>
+						<List>
+							{data.mentees.map(({ ImageUrl, FirstName, LastName }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
@@ -122,12 +124,15 @@ export default function MentorGroupView({ match, user }: Props) {
 									</div>
 								);
 							})}
-					</List>
-				</Card>
-				<div>
-					<List>
-						{data.requests &&
-							data.requests.map(({ ImageUrl, FirstName, LastName, UserId }, idx) => {
+						</List>
+					</Card>
+				)}
+
+				{/* Requests */}
+				{data.requests && data.requests.length !== 0 && (
+					<div>
+						<List>
+							{data.requests.map(({ ImageUrl, FirstName, LastName, UserId }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
@@ -172,8 +177,9 @@ export default function MentorGroupView({ match, user }: Props) {
 									</div>
 								);
 							})}
-					</List>
-				</div>
+						</List>
+					</div>
+				)}
 			</div>
 		</Container>
 	);
