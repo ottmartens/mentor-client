@@ -16,6 +16,7 @@ export enum EndPoint {
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
 	HANDLE_GROUP_JOIN_REQUEST = '/groups/accept-joining',
+	GROUP_EDIT = '/groups/edit-group',
 	GET_AVAILABLE_MENTORS = '/available-mentors',
 	MAKE_GROUP_CREATE_REQUEST = '/groups/request-creation',
 	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
@@ -58,7 +59,7 @@ export default function useBackend({
 	const queryVariables = variables ? variables : {};
 
 	// does pre query actions like validation(?) and parameter overriding
-	function onSubmit({ overrideVariables }: SubmitProps = {}): void {
+	function onSubmit({ overrideVariables }: SubmitProps = {}): Promise<void> {
 		const queryOverrideVariables = overrideVariables ? overrideVariables : {};
 		const sendData = { ...queryVariables, ...queryOverrideVariables };
 
@@ -66,7 +67,7 @@ export default function useBackend({
 		if (error) {
 			setError(undefined);
 		}
-		makeRequest(sendData);
+		return makeRequest(sendData);
 	}
 
 	//builds up request url
@@ -79,10 +80,10 @@ export default function useBackend({
 	}
 
 	// makes request to the backend and sets data, error and loading
-	function makeRequest(queryVariables) {
+	function makeRequest(queryVariables): Promise<void> {
 		setCalled(true);
 		setLoading(true);
-		axios({
+		return axios({
 			headers: authToken ? { Authorization: authToken } : undefined,
 			method: requestMethod,
 			url: buildUrl(),

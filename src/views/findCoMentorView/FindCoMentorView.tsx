@@ -104,13 +104,14 @@ export default function MentorPairingView({ user }: HasUserProps) {
 											variant="contained"
 											color="primary"
 											className={classes.requestButton}
-											onClick={() => {
-												replyToRequestsFn({
+											onClick={async () => {
+												await replyToRequestsFn({
 													overrideVariables: {
 														userId,
 														accept: true,
 													},
 												});
+												await queryFreeMentorsData();
 											}}
 										>
 											ACCEPT
@@ -120,13 +121,14 @@ export default function MentorPairingView({ user }: HasUserProps) {
 											variant="contained"
 											color="primary"
 											className={classes.requestButton}
-											onClick={() => {
-												replyToRequestsFn({
+											onClick={async () => {
+												await replyToRequestsFn({
 													overrideVariables: {
 														userId,
 														accept: false,
 													},
 												});
+												await queryFreeMentorsData();
 											}}
 										>
 											DECLINE
@@ -140,12 +142,13 @@ export default function MentorPairingView({ user }: HasUserProps) {
 											variant="contained"
 											color="primary"
 											className={classes.requestButton}
-											onClick={() => {
-												requestPairUpFn({
+											onClick={async () => {
+												await requestPairUpFn({
 													overrideVariables: {
 														userId,
 													},
 												});
+												await queryFreeMentorsData();
 											}}
 										>
 											REQUEST
