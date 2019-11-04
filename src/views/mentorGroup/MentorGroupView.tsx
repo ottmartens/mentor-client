@@ -99,8 +99,9 @@ export default function MentorGroupView({ match, user }: Props) {
 						<Button
 							variant="contained"
 							color="primary"
-							onClick={() => {
-								requestGroupJoinFn();
+							onClick={async () => {
+								await requestGroupJoinFn();
+								await queryMentorGroupData();
 							}}
 						>
 							APPLY
@@ -148,13 +149,14 @@ export default function MentorGroupView({ match, user }: Props) {
 												variant="contained"
 												color="primary"
 												className={classes.requestButton}
-												onClick={() => {
-													determineGroupJoinFn({
+												onClick={async () => {
+													await determineGroupJoinFn({
 														overrideVariables: {
 															userId: UserId,
 															accept: true,
 														},
 													});
+													await queryMentorGroupData();
 												}}
 											>
 												APPROVE
@@ -163,13 +165,14 @@ export default function MentorGroupView({ match, user }: Props) {
 												variant="contained"
 												color="primary"
 												className={classes.requestButton}
-												onClick={() => {
-													determineGroupJoinFn({
+												onClick={async () => {
+													await determineGroupJoinFn({
 														overrideVariables: {
 															userId: UserId,
 															accept: false,
 														},
 													});
+													await queryMentorGroupData();
 												}}
 											>
 												DECLINE

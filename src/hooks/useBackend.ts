@@ -41,7 +41,7 @@ interface BackendResponse {
 }
 
 type UseBackendReturnValue = [
-	(props?: SubmitProps) => void,
+	(props?: SubmitProps) => Promise<void>,
 	{ data: any; loading: boolean; error: any; called: boolean },
 ];
 
