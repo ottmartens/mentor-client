@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, Card, CardContent, Typography, Link } from '@material-ui/core';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
@@ -17,14 +17,17 @@ const useStyles = makeStyles((theme) => ({
 		padding: '30px',
 	},
 	form: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		flexGrow: 1,
 		textAlign: 'center',
 	},
 	button: {
 		marginTop: '20px',
+		marginBottom: '20px',
+	},
+	card: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		flexGrow: 1,
 	},
 }));
 
@@ -55,7 +58,8 @@ export default function RegisterView() {
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title="Registration failed" message={error} />}
-			<form
+			<Card className={classes.card}>
+				<form
 				onSubmit={(e) => {
 					e.preventDefault();
 					if (validateInputs(input)) {
@@ -80,6 +84,12 @@ export default function RegisterView() {
 					</Button>
 				</div>
 			</form>
+			<CardContent>
+				<Typography gutterBottom variant="subtitle1" align="center">
+					Already have an account? <Link href="/login" color="primary">Login</Link>
+				</Typography>
+			</CardContent>
+			</Card>
 		</Container>
 	);
 }

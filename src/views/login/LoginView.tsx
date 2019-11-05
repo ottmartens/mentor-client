@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, makeStyles, Button } from '@material-ui/core';
+import { Container, makeStyles, Button, Card, CardContent, Typography, Link } from '@material-ui/core';
 import useInput, { UseInput } from '../../hooks/useInput';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Redirect } from 'react-router';
@@ -15,14 +15,17 @@ const useStyles = makeStyles((theme) => ({
 		padding: '30px',
 	},
 	form: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		flexGrow: 1,
 		textAlign: 'center',
 	},
 	button: {
 		marginTop: '20px',
+		marginBottom: '20px',
+	},
+	card: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		flexGrow: 1,
 	},
 }));
 
@@ -49,7 +52,8 @@ export default function LoginView() {
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title="Login failed" message={error} />}
-			<form
+			<Card className={classes.card}>
+				<form
 				onSubmit={(e) => {
 					e.preventDefault();
 					if (validateInputs(input)) {
@@ -71,6 +75,12 @@ export default function LoginView() {
 					</Button>
 				</div>
 			</form>
+			<CardContent>
+				<Typography gutterBottom variant="subtitle1" align="center">
+					Don't have an account? <Link href="/register" color="primary">Register</Link>
+				</Typography>
+			</CardContent>
+			</Card>
 		</Container>
 	);
 }
