@@ -12,7 +12,6 @@ import {
 	Button,
 } from '@material-ui/core';
 import { HasUserProps } from '../../types';
-import { overwriteUserInfo } from '../../services/auth';
 
 type Mentor = {
 	userId: number;
@@ -67,11 +66,6 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		endPoint: EndPoint.ACCEPT_GROUP_CREATE_REQUEST,
 		authToken: user.token,
 	});
-
-	if (acceptRequestResponse) {
-		console.log(acceptRequestResponse);
-		overwriteUserInfo(acceptRequestResponse);
-	}
 
 	React.useEffect(() => {
 		if (called) {

@@ -93,7 +93,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 				{ label: 'My group', url: `/member/mentor-group/${user.groupId}` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
-				{ label: 'Logout', url: '/member/logout' },
+				{ label: 'Logout', url: '/logout' },
 			];
 
 		case UserRole.MENTOR:
@@ -102,7 +102,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
 				{ label: 'Find co-mentor', url: '/member/find-co-mentor' },
-				{ label: 'Logout', url: '/member/logout' },
+				{ label: 'Logout', url: '/logout' },
 			];
 
 		case UserRole.ADMIN:

@@ -35,11 +35,11 @@ function Root() {
 				<Switch>
 					<Route exact path="/" component={LandingPageView} />
 					<Route exact path="/login" component={LoginView} />
+					<Route exact path="/logout" component={LogoutView} />
 					<Route exact path="/register" component={RegisterView} />
 					<ProtectedRoute exact path="/member/mentor-group-list" component={MentorGroupListView} />
 					<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
 					<ProtectedRoute exact path="/member/profile" component={ProfileView} />
-					<ProtectedRoute exact path="/member/logout" component={LogoutView} />
 					<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 				</Switch>
 			</Router>

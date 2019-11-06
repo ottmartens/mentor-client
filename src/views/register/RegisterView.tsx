@@ -8,7 +8,7 @@ import RadioButtonField from '../../components/radioButtonField/RadioButtonField
 import { Redirect } from 'react-router';
 import Notice from '../../components/notice/Notice';
 import { validateInputs, isSet, isEmail } from '../../services/validators';
-import { login } from '../../services/auth';
+import { setUserToken } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -48,7 +48,7 @@ export default function RegisterView() {
 		},
 	});
 
-	if (data && login(data)) {
+	if (data && setUserToken(data.token)) {
 		return <Redirect to="/member/mentor-group-list" />;
 	}
 

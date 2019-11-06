@@ -6,7 +6,7 @@ import { Redirect } from 'react-router';
 import Field from '../../components/field/Field';
 import { isSet, isEmail, validateInputs } from '../../services/validators';
 import Notice from '../../components/notice/Notice';
-import { login } from '../../services/auth';
+import { setUserToken } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -42,7 +42,7 @@ export default function LoginView() {
 		},
 	});
 
-	if (data && login(data)) {
+	if (data && setUserToken(data.token)) {
 		return <Redirect to="/member/mentor-group-list" />;
 	}
 

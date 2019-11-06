@@ -1,9 +1,9 @@
 import React from 'react';
-import { logout } from '../../services/auth';
+import { removeUserToken } from '../../services/auth';
 import { Redirect } from 'react-router';
 
 export default function LogoutView() {
-	if (logout()) {
+	if (removeUserToken()) {
 		return <Redirect to="/" />;
 	}
 

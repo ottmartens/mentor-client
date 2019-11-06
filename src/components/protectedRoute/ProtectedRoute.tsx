@@ -1,25 +1,45 @@
 import React from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
-import { parseUser } from '../../services/auth';
-import { User } from '../../types';
 import WithNavigation from '../withNavigation/WithNavigation';
+import { getUserToken } from '../../services/auth';
+import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
+	const [user, setUser] = React.useState();
+	const token: string | null = getUserToken();
+
+	const [getUser, { data: userData, loading, called }] = useBackend({
+		requestMethod: RequestMethod.GET,
+		endPoint: EndPoint.USER,
+		skip: !token,
+	});
+
+	React.useEffect(() => {
+		if (called || !token) {
+			return;
+		}
+		getUser();
+	}, [called, token, getUser]);
+
+	React.useEffect(() => {
+		if (!userData) {
+			return;
+		}
+		setUser(userData);
+	}, [userData, user]);
 	return (
 		<Route
 			{...rest}
 			render={(routeProps) => {
-				const user: User | undefined = parseUser();
-
 				// if not logged in, redirect to login
-				if (!user) {
+				if (!token || (called && !loading && !userData)) {
 					return <Redirect to="/login" />;
 				}
 
-				// if profile info missing, redirect to profile
-				/* if ((!user.firstName || !user.lastName) && routeProps.location.pathname !== '/member/profile') {
-					return <Redirect to="/member/profile" />;
-				} */
+				if (loading || !user) {
+					return <div>Loading...</div>;
+				}
+				// handle redirects
 
 				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}
