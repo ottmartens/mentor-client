@@ -35,8 +35,8 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 			<h1>Mentorgroups</h1>
 			<div>
 				{data &&
-					data.map(({ mentors, title, tagline, id }, idx) => {
-						return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={tagline} />;
+					data.map(({ mentors, title, id, description }, idx) => {
+						return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={description} showGroupName={true} showNames={false} showLongBio={false}/>;
 					})}
 			</div>
 		</Container>
