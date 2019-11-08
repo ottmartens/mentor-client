@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, makeStyles } from '@material-ui/core';
+import { Button, Container, makeStyles, Card, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	logo: {
@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme) => ({
 		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
 	},
 	buttons: {
-		marginTop: '20px',
 		flexGrow: 1,
 		textAlign: 'center',
 	},
 	button: {
+		marginTop: '1em',
 		minWidth: '128px',
 		margin: '4px',
 	},
@@ -31,7 +31,22 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		flexGrow: 1,
+		margin: 'auto',
+		width: '35%',
+	},
+	card: {
+		
+		paddingTop: '100px',
+		paddingBottom: '100px',
 		padding: '30px',
+		borderRadius: '10px',
+	},
+	intro: {
+		letterSpacing: '1px',
+		textAlign: 'center',		
+		marginTop: '2em',
+		marginBottom: '2em',
+		color: '#2a1c6b',
 	},
 }));
 
@@ -40,21 +55,26 @@ export default function LandingPageView() {
 
 	return (
 		<div className={classes.container}>
-			<div className={classes.logoContainer}>
-				<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
-			</div>
-			<div className={classes.buttons}>
-				<div>
-					<Button href="/login" className={classes.button} variant="contained" color="primary">
-						LOG IN
-					</Button>
+			<Card className={classes.card}>
+				<div className={classes.logoContainer}>
+					<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
 				</div>
-				<div>
-					<Button href="/register" className={classes.button} variant="contained" color="primary">
-						REGISTER
-					</Button>
+				<div className={classes.intro}>
+					<Typography variant='h4'>Mat-Inf student society's mentor programme</Typography>
 				</div>
-			</div>
+				<div className={classes.buttons}>
+					<div>
+						<Button href="/login" className={classes.button} variant="contained" color="primary">
+							LOG IN
+						</Button>
+					</div>
+					<div>
+						<Button href="/register" className={classes.button} variant="contained" color="primary">
+							REGISTER
+						</Button>
+					</div>
+				</div>
+			</Card>
 		</div>
 	);
 }
