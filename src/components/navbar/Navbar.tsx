@@ -6,21 +6,20 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { User, UserRole, HasUserProps } from '../../types';
 import { Link } from 'react-router-dom';
-import { Toolbar, AppBar } from '@material-ui/core';
+import { Toolbar, AppBar, Avatar, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 250,
 		height: '100%',
-		background: theme.palette.secondary.main,
+		background: theme.palette.primary.main,
 		color: '#ffffff',
 	},
 	nav: {
-		background: theme.palette.secondary.main,
+		background: theme.palette.primary.main,
 	},
 	button: {
 		color: '#ffffff',
@@ -29,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
 		position: 'absolute',
 		right: 0,
 	},
+	name: {
+		position: 'absolute',
+		right: 70,
+	},
 	profileIcon: {
 		color: '#ffffff',
 	},
@@ -36,10 +39,28 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 		paddingTop: '12px',
 		paddingBottom: '12px',
-		borderBottom: '1px solid #5a9fff',
+		borderBottom: '1px solid #9F81F7',
 	},
 	listTitle: {
 		margin: 0,
+	},
+	avatar: {
+		margin: 10,
+	},
+	logo: {
+		display: 'block',
+		width: '40px',
+		height: '40px',
+		margin: 'auto',
+	},
+	logoContainer: {
+		display: 'flex',
+		width: '50px',
+		height: '50px',
+		background: theme.palette.primary.main,
+		margin: 'auto',
+		borderRadius: '50%',
+		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
 	},
 }));
 
@@ -57,14 +78,17 @@ export default function Navbar({ user }: HasUserProps) {
 		setIsDrawerOpen(open);
 	};
 	return (
-		<AppBar color="secondary" position="relative">
+		<AppBar color="primary" position="relative">
 			<Toolbar variant="dense">
 				<Button onClick={showDrawer(true)} className={classes.button}>
 					<MenuIcon />
 				</Button>
+				<Typography className={classes.name}>
+					Good Boye
+				</Typography>
 				<Button className={classes.profileButton}>
 					<Link to="/member/profile">
-						<AccountCircleIcon className={classes.profileIcon} />
+						<Avatar src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg" className={classes.avatar}>GB</Avatar>
 					</Link>
 				</Button>
 				<SwipeableDrawer open={isDrawerOpen} onClose={showDrawer(false)} onOpen={showDrawer(true)}>
@@ -78,6 +102,11 @@ export default function Navbar({ user }: HasUserProps) {
 									<ListItemText primary={route.label} />
 								</ListItem>
 							))}
+							<ListItem button className={classes.listElementContainer}>
+								<a href='https://mits.ee'>
+									<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
+								</a>
+							</ListItem>
 						</List>
 					</div>
 				</SwipeableDrawer>
