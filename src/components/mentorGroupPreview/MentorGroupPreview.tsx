@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Card, CardActionArea, CardMedia, CardContent, Typography, Grid } from '@material-ui/core';
+import { makeStyles, Card, CardActionArea, CardMedia, CardContent, Typography, Grid, Paper } from '@material-ui/core';
 
 export interface Mentor {
 	imageUrl: string;
@@ -61,13 +61,11 @@ export default function MentorGroupPreview({ mentors, groupName, bio, id, showNa
 				<CardContent>
 					{showNames && (
 					<div className={classes.names}>
-						<Grid container direction="row" justify="center" alignItems="center" item xs={12} sm={6}>
 							{mentors.map(({firstName, lastName}, idx, ) => {
 								return <Typography gutterBottom variant="h5" component="h2">
-										{firstName} {lastName}
-									</Typography>;
+											{firstName} {lastName}
+										</Typography>
 							})}
-						</Grid>
 					</div>
 					)}
 					{showGroupName && (
