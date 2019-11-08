@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
 	requestButton: {
 		margin: '4px',
 	},
+	declineButton: {
+		margin: '4px',
+		backgroundColor: '#B40404',
+		color: '#fff'
+	},
 	container: {
 		textAlign: 'center',
 	},
@@ -49,6 +54,10 @@ interface Props extends HasUserProps {
 		};
 	};
 }
+
+function ListItemLink(props) {
+	return <ListItem button component="a" {...props} />;
+  }
 
 export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
@@ -90,7 +99,7 @@ export default function MentorGroupView({ match, user }: Props) {
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
-					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} showNames />}
+					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} showNames={true} showGroupName={false} showLongBio={true}/>}
 				</div>
 
 				{/* Mentors */}
@@ -135,16 +144,22 @@ export default function MentorGroupView({ match, user }: Props) {
 				{/* Requests */}
 				{data.requests && data.requests.length !== 0 && (
 					<div>
+					<Card className={classes.menteeCard}>
+					<h2 className={classes.title}>Applied mentees</h2>
 						<List>
 							{data.requests.map(({ imageUrl, firstName, lastName, UserId }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItem key={idx}>
+										<ListItemLink href={UserId ? `/member/user/${UserId}` :  `/member/user/1` }>
+
+										<ListItem key={idx} button>
+											
 											<ListItemAvatar>
-												<Avatar className={classes.requestImage} src={imageUrl} />
+												<Avatar className={classes.requestImage} src={imageUrl}></Avatar>
 											</ListItemAvatar>
 											<ListItemText primary={`${firstName} ${lastName}`} />
+											
 											<Button
 												variant="contained"
 												color="primary"
@@ -163,8 +178,7 @@ export default function MentorGroupView({ match, user }: Props) {
 											</Button>{' '}
 											<Button
 												variant="contained"
-												color="primary"
-												className={classes.requestButton}
+												className={classes.declineButton}
 												onClick={async () => {
 													await determineGroupJoinFn({
 														overrideVariables: {
@@ -178,12 +192,15 @@ export default function MentorGroupView({ match, user }: Props) {
 												DECLINE
 											</Button>
 										</ListItem>
+										</ListItemLink>
 
 										<Divider variant="inset" component="li" />
 									</div>
 								);
 							})}
 						</List>
+						</Card>
+
 					</div>
 				)}
 			</div>
