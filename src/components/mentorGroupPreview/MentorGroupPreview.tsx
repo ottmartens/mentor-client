@@ -26,47 +26,63 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: 'space-around',
 	},
 
-	image: { 
-		width: '100%', height: '150px' 
+	image: {
+		width: '100%',
+		height: '150px',
 	},
-	
+
 	bio: {
 		lineHeight: '1.3em',
 		maxHeight: '2.6em',
-		whitespace: 'nowrap', 
-      	overflow: 'hidden',
-      	textoverflow: 'ellipsis',
+		whitespace: 'nowrap',
+		overflow: 'hidden',
+		textoverflow: 'ellipsis',
 	},
 	longBio: {
 		lineHeight: '1.3em',
 		maxHeight: 'none',
 	},
 	names: {
+		display: 'flex',
 		flexDirection: 'row',
+		justifyContent: 'space-around',
+	},
+	name: {
+		display: 'inline-block',
 	},
 }));
 
-export default function MentorGroupPreview({ mentors, groupName, bio, id, showNames, showGroupName, showLongBio }: Props) {
+export default function MentorGroupPreview({
+	mentors,
+	groupName,
+	bio,
+	id,
+	showNames,
+	showGroupName,
+	showLongBio,
+}: Props) {
 	const classes = useStyles();
 
 	return (
 		<Card className={classes.container}>
 			<CardActionArea href={id ? `/member/mentor-group/${id}` : '#'}>
 				<div className={classes.mentors}>
-					{mentors.map(({ imageUrl }, idx, ) => {
+					{mentors.map(({ imageUrl }, idx) => {
 						return <CardMedia key={idx} className={classes.image} image={imageUrl}></CardMedia>;
 					})}
 				</div>
 
 				<CardContent>
 					{showNames && (
-					<div className={classes.names}>
-							{mentors.map(({firstName, lastName}, idx, ) => {
-								return <Typography gutterBottom variant="h5" component="h2">
-											{firstName} {lastName}
-										</Typography>
+						<div className={classes.names}>
+							{mentors.map(({ firstName, lastName }, idx) => {
+								return (
+									<Typography key={idx} gutterBottom variant="h5" component="h2" className={classes.name}>
+										{firstName} {lastName}
+									</Typography>
+								);
 							})}
-					</div>
+						</div>
 					)}
 					{showGroupName && (
 						<Typography gutterBottom variant="h5" component="h2">
@@ -79,11 +95,10 @@ export default function MentorGroupPreview({ mentors, groupName, bio, id, showNa
 								{bio}
 							</Typography>
 						</div>
-
 					)}
 					{!showLongBio && (
 						<div className={classes.bio}>
-							<Typography variant="body2" color="textSecondary" component="p" >
+							<Typography variant="body2" color="textSecondary" component="p">
 								{bio}
 							</Typography>
 						</div>

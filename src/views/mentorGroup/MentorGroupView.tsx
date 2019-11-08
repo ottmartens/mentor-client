@@ -90,7 +90,7 @@ export default function MentorGroupView({ match, user }: Props) {
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
-					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} />}
+					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} showNames />}
 				</div>
 
 				{/* Mentors */}
