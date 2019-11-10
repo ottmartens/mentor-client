@@ -12,6 +12,7 @@ export enum EndPoint {
 	REGISTER = '/user/new',
 	LOGIN = '/user/login',
 	UPDATE_PROFILE = '/user/edit',
+	USER = '/user/self',
 	HEALTH = '/health',
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
@@ -29,6 +30,7 @@ interface Props {
 	endPointUrlParam?: string;
 	variables?: any;
 	authToken?: string;
+	skip?: boolean;
 }
 
 interface SubmitProps {
@@ -42,7 +44,7 @@ interface BackendResponse {
 }
 
 type UseBackendReturnValue = [
-	(props?: SubmitProps) => Promise<void>,
+	(props?: SubmitProps) => Promise<void> | void,
 	{ data: any; loading: boolean; error: any; called: boolean },
 ];
 
@@ -52,6 +54,7 @@ export default function useBackend({
 	endPointUrlParam,
 	variables,
 	authToken,
+	skip,
 }: Props): UseBackendReturnValue {
 	const [data, setData] = React.useState<any>(undefined);
 	const [loading, setLoading] = React.useState(false);
@@ -60,13 +63,17 @@ export default function useBackend({
 	const queryVariables = variables ? variables : {};
 
 	// does pre query actions like validation(?) and parameter overriding
-	function onSubmit({ overrideVariables }: SubmitProps = {}): Promise<void> {
+	function onSubmit({ overrideVariables }: SubmitProps = {}): Promise<void> | void {
 		const queryOverrideVariables = overrideVariables ? overrideVariables : {};
 		const sendData = { ...queryVariables, ...queryOverrideVariables };
 
 		// reset error
 		if (error) {
 			setError(undefined);
+		}
+
+		if (skip) {
+			return;
 		}
 		return makeRequest(sendData);
 	}

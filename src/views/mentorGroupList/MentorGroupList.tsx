@@ -4,6 +4,7 @@ import { Container } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
+import Loader from '../../components/loader/Loader';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -28,7 +29,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 	}, [called, queryFn]);
 
 	if (loading || !data) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 	return (
 		<Container className={classes.container} maxWidth="sm">

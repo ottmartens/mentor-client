@@ -6,7 +6,8 @@ import { Redirect } from 'react-router';
 import Field from '../../components/field/Field';
 import { isSet, isEmail, validateInputs } from '../../services/validators';
 import Notice from '../../components/notice/Notice';
-import { login } from '../../services/auth';
+import { UserContext } from '../../contexts/UserContext';
+import { setUserToken } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -30,12 +31,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginView() {
+	// css classes
 	const classes = useStyles();
+
+	// state
+	const [redirect, willRedirect] = React.useState<boolean>(false);
+
+	// context
+	const userContext = React.useContext(UserContext);
+	const setUser = userContext && userContext.setUser;
+
+	// inputs
 	const input: { [s: string]: UseInput } = {
 		email: useInput({ validators: [isSet, isEmail] }),
 		password: useInput({ validators: [isSet] }),
 	};
 
+	// login request
 	const [requestFn, { data, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.LOGIN,
@@ -45,7 +57,18 @@ export default function LoginView() {
 		},
 	});
 
-	if (data && login(data)) {
+	// set user to context if request is successful
+	React.useEffect(() => {
+		if (!data || !setUser) {
+			return;
+		}
+		setUserToken(data.token);
+		setUser(data);
+		willRedirect(true);
+	}, [data, setUser]);
+
+	// redirect after successful request
+	if (redirect) {
 		return <Redirect to="/member/mentor-group-list" />;
 	}
 

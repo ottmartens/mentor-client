@@ -73,7 +73,7 @@ export default function MentorGroupView({ match, user }: Props) {
 	const [requestGroupJoinFn] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.JOIN_GROUP,
-		variables: { userId: user.ID, groupId: Number(params.id) },
+		variables: { groupId: Number(params.id) },
 		authToken: user.token,
 	});
 
@@ -118,7 +118,7 @@ export default function MentorGroupView({ match, user }: Props) {
 					</div>
 				)}
 
-				{/* Mentees */}
+				{/* Accepted mentees */}
 				{data.mentees && data.mentees.length !== 0 && (
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>Approved mentees</h2>
@@ -141,7 +141,7 @@ export default function MentorGroupView({ match, user }: Props) {
 					</Card>
 				)}
 
-				{/* Requests */}
+				{/* Join requests */}
 				{data.requests && data.requests.length !== 0 && (
 					<div>
 					<Card className={classes.menteeCard}>

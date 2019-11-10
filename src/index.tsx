@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import './themes/main.scss';
 import * as serviceWorker from './serviceWorker';
@@ -13,8 +13,8 @@ import ProfileView from './views/profileView/ProfileView';
 import UserView from './views/userView/UserView';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import LogoutView from './views/logout/LogoutView';
-import Navbar from './components/navbar/Navbar';
 import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
+import { UserContext, UserContextValue, UserContextUser } from './contexts/UserContext';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -28,23 +28,28 @@ const theme = createMuiTheme({
 	},
 });
 
-// #3185FC -secondary
 function Root() {
+	const [user, setUser] = React.useState<null | UserContextUser>(null);
+
+	const providerValue = useMemo(() => ({ user, setUser }), [user, setUser]);
+
 	return (
 		<MuiThemeProvider theme={theme}>
-			<Router>
-				<Switch>
-					<Route exact path="/" component={LandingPageView} />
-					<Route exact path="/login" component={LoginView} />
-					<Route exact path="/register" component={RegisterView} />
-					<ProtectedRoute exact path="/member/mentor-group-list" component={MentorGroupListView} />
-					<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
-					<ProtectedRoute exact path="/member/profile" component={ProfileView} />
-					<ProtectedRoute exact path="/member/logout" component={LogoutView} />
-					<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
-					<ProtectedRoute exact path="/member/user/:id" component={UserView} />
-				</Switch>
-			</Router>
+			<UserContext.Provider value={providerValue}>
+				<Router>
+					<Switch>
+						<Route exact path="/" component={LandingPageView} />
+						<Route exact path="/login" component={LoginView} />
+						<Route exact path="/register" component={RegisterView} />
+						<ProtectedRoute exact path="/member/mentor-group-list" component={MentorGroupListView} />
+						<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
+						<ProtectedRoute exact path="/member/profile" component={ProfileView} />
+						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
+						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
+						<ProtectedRoute exact path="/logout" component={LogoutView} />
+					</Switch>
+				</Router>
+			</UserContext.Provider>
 		</MuiThemeProvider>
 	);
 }
