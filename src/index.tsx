@@ -15,6 +15,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import LogoutView from './views/logout/LogoutView';
 import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
 import { UserContext, UserContextValue, UserContextUser } from './contexts/UserContext';
+import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -43,6 +44,7 @@ function Root() {
 						<Route exact path="/register" component={RegisterView} />
 						<ProtectedRoute exact path="/member/mentor-group-list" component={MentorGroupListView} />
 						<ProtectedRoute exact path="/member/mentor-group/:id" component={MentorGroupView} />
+						<ProtectedRoute exact path="/member/my-mentor-group/" component={MyMentorGroupView} />
 						<ProtectedRoute exact path="/member/profile" component={ProfileView} />
 						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />

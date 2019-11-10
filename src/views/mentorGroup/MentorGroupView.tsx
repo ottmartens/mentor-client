@@ -20,7 +20,6 @@ import useInput, { UseInput } from '../../hooks/useInput';
 import { isSet, validateInputs } from '../../services/validators';
 import Field from '../../components/field/Field';
 
-
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
 		padding: '20px',
@@ -57,8 +56,7 @@ const useStyles = makeStyles((theme) => ({
 		textDecoration: 'none',
 		color: 'initial',
 	},
-	button: { marginBottom: '8px' 
-	},
+	button: { marginBottom: '8px' },
 	largeWidth: {
 		width: '224px',
 	},
@@ -109,8 +107,8 @@ export default function MentorGroupView({ match, user }: Props) {
 	const [requestFn, { data: editGroup, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.GROUP_EDIT,
-		variables: { 
-			description: input.description.value, 
+		variables: {
+			description: input.description.value,
 		},
 		authToken: user.token,
 	});
@@ -126,7 +124,7 @@ export default function MentorGroupView({ match, user }: Props) {
 		return <Loader />;
 	}
 	return (
-		<Container maxWidth="sm">
+		<>
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
@@ -142,22 +140,6 @@ export default function MentorGroupView({ match, user }: Props) {
 					)}
 				</div>
 
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						if (validateInputs(input)) {
-							requestFn();
-						}
-					}}
-				>
-					<Field className={classes.largeWidth} {...input.groupName} disabled={true} label="Group name" />
-					<Field className={classes.largeWidth} {...input.description} disabled={true} label="Bio" multiline />
-					
-					<Button variant="contained" color="primary" type="submit" className={classes.button}>
-						SAVE
-					</Button>
-				</form>
-
 				{/* Mentors */}
 				{user.role === UserRole.MENTEE && (
 					<div className={classes.buttonContainer}>
@@ -170,20 +152,6 @@ export default function MentorGroupView({ match, user }: Props) {
 							}}
 						>
 							APPLY
-						</Button>
-					</div>
-				)}
-
-				{user.role === UserRole.MENTOR && (
-					<div className={classes.buttonContainer}>
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={async () => {
-								//????????????
-							}}
-						>
-							EDIT
 						</Button>
 					</div>
 				)}
@@ -279,6 +247,6 @@ export default function MentorGroupView({ match, user }: Props) {
 					</div>
 				)}
 			</div>
-		</Container>
+		</>
 	);
 }

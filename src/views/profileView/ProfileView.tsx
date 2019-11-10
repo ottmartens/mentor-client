@@ -17,8 +17,6 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 		marginBottom: '16px',
 	},
-
-	input: {},
 	button: { marginBottom: '8px' },
 	image: {
 		display: 'block',
@@ -31,7 +29,23 @@ const useStyles = makeStyles((theme) => ({
 		width: '224px',
 	},
 	imageButton: {
-		marginTop: '-28px',
+		color: '#fff',
+		background: '#3185FC',
+		padding: '6px 16px',
+		fontSize: '0.975rem',
+		minWidth: '64px',
+		boxSizing: 'border-box',
+		fontWeight: 500,
+		lineHeight: '1.75',
+		borderRadius: '4px',
+		letterSpacing: '0.02857em',
+		textTransform: 'uppercase',
+		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
+	},
+	imageButtonContainer: {
+		display: 'block',
+		marginTop: '-14px',
+		marginBottom: '14px',
 	},
 }));
 
@@ -70,9 +84,8 @@ export default function ProfileView({ user }: HasUserProps) {
 	});
 
 	if (loading || !userData) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
-	console.log(userData);
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
@@ -84,11 +97,10 @@ export default function ProfileView({ user }: HasUserProps) {
 						image={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 						className={classes.image}
 					/>
-
-					<input accept="image/*" className={classes.input} type="file" onChange={onChangeHandler} />
-					{/* <Button variant="contained" color="secondary" className={classes.imageButton} disabled={isloadingImage}>
-							Upload {isloadingImage && <Loader />}
-						</Button> */}
+					<label className={classes.imageButtonContainer}>
+						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
+						<span className={classes.imageButton}>Upload{isloadingImage && <Loader />}</span>
+					</label>
 				</div>
 
 				<form
@@ -117,7 +129,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		var formData = new FormData();
 		formData.append('file', event.target.files[0]);
 		setIsLoadingImage(true);
-		return axios({
+		axios({
 			method: 'post',
 			url: `${BASE_URL}${queryPrefix}/user/image`,
 			data: formData,
