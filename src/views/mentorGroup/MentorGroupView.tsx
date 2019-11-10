@@ -85,6 +85,14 @@ export default function MentorGroupView({ match, user }: Props) {
 		authToken: user.token,
 	});
 
+	const [requestFn, { data: editGroup, error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.GROUP_EDIT,
+		variables: { 
+			description: input.description.value, 
+		},
+	});
+
 	React.useEffect(() => {
 		if (called) {
 			return;
@@ -124,6 +132,20 @@ export default function MentorGroupView({ match, user }: Props) {
 							}}
 						>
 							APPLY
+						</Button>
+					</div>
+				)}
+
+				{user.role === UserRole.MENTOR && (
+					<div className={classes.buttonContainer}>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={async () => {
+							//TODO
+							}}
+						>
+							EDIT
 						</Button>
 					</div>
 				)}

@@ -10,12 +10,23 @@ import { HasUserProps, UserRole } from '../../types';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
-		marginLeft: '16px',
-		marginTop: '0',
+		marginTop: '1em',
 	},
 	container: {
-		textAlign: 'center',
-	},
+        textAlign: 'center',
+        padding: '2em',
+        marginTop: '2em',
+    },
+    image:{
+        width: '100%',
+        marginBottom: '1em',
+    },
+    bio:{
+        marginTop: '1em',
+    },
+    email:{
+        marginTop: '1em',
+    },
 }));
 
 interface Props extends HasUserProps {
@@ -44,18 +55,17 @@ export default function UserView({ match, user }: Props) {
 		queryUserData();
 	}, [called, queryUserData]);
 
-	if (loading || !data) {
+/*	if (loading || !data) {
 		return <div>Loading...</div>;
-	}
+    }*/
+    
 	return (
 		<Container maxWidth="sm">
 			<div className={classes.container}>
-                <Card>
-                    <img src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg"></img>
-                    <Typography gutterBottom variant="h5" component="h2" className={classes.title}>{data.firstName}' '{data.lastName}</Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">{data.bio}</Typography>
-                    <Typography variant="h5" component="h2">{data.email}</Typography>                
-                </Card>
+                    <img src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg" className={classes.image}></img>
+                    <Typography gutterBottom variant="h5" component="h2" className={classes.title}>Firstname Lastname</Typography>
+                    <Typography variant="body2" color="textSecondary" component="p" className={classes.bio}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas elementum lorem nec eros posuere, ut fermentum est lobortis. Vivamus lobortis mollis augue aliquam tincidunt.</Typography>
+                    <Typography variant="subtitle2" className={classes.email}>mentee@heamentee.ee</Typography>                
             </div>
 		</Container>
 	);
