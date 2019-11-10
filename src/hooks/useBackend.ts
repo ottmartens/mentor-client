@@ -21,7 +21,6 @@ export enum EndPoint {
 	GET_AVAILABLE_MENTORS = '/available-mentors',
 	MAKE_GROUP_CREATE_REQUEST = '/groups/request-creation',
 	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
-	USER = '/member/users',
 }
 
 interface Props {

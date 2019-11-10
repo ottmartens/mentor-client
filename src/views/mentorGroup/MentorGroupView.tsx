@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { HasUserProps, UserRole } from '../../types';
+import Loader from '../../components/loader/Loader';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 	declineButton: {
 		margin: '4px',
 		backgroundColor: '#B40404',
-		color: '#fff'
+		color: '#fff',
 	},
 	container: {
 		textAlign: 'center',
@@ -57,7 +58,7 @@ interface Props extends HasUserProps {
 
 function ListItemLink(props) {
 	return <ListItem button component="a" {...props} />;
-  }
+}
 
 export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
@@ -92,14 +93,23 @@ export default function MentorGroupView({ match, user }: Props) {
 	}, [called, queryMentorGroupData]);
 
 	if (loading || !data) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 	return (
 		<Container maxWidth="sm">
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
-					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} showNames={true} showGroupName={false} showLongBio={true}/>}
+					{data.mentors && (
+						<MentorGroupPreview
+							mentors={data.mentors}
+							groupName={data.title}
+							bio={data.description}
+							showNames={true}
+							showGroupName={false}
+							showLongBio={true}
+						/>
+					)}
 				</div>
 
 				{/* Mentors */}
@@ -144,63 +154,59 @@ export default function MentorGroupView({ match, user }: Props) {
 				{/* Join requests */}
 				{data.requests && data.requests.length !== 0 && (
 					<div>
-					<Card className={classes.menteeCard}>
-					<h2 className={classes.title}>Applied mentees</h2>
-						<List>
-							{data.requests.map(({ imageUrl, firstName, lastName, UserId }, idx) => {
-								return (
-									<div key={idx}>
-										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItemLink href={UserId ? `/member/user/${UserId}` :  `/member/user/1` }>
+						<Card className={classes.menteeCard}>
+							<h2 className={classes.title}>Applied mentees</h2>
+							<List>
+								{data.requests.map(({ imageUrl, firstName, lastName, UserId }, idx) => {
+									return (
+										<div key={idx}>
+											{idx === 0 && <Divider variant="inset" component="li" />}
+											<ListItemLink href={UserId ? `/member/user/${UserId}` : `/member/user/1`}>
+												<ListItem key={idx} button>
+													<ListItemAvatar>
+														<Avatar className={classes.requestImage} src={imageUrl}></Avatar>
+													</ListItemAvatar>
+													<ListItemText primary={`${firstName} ${lastName}`} />
+													<Button
+														variant="contained"
+														color="primary"
+														className={classes.requestButton}
+														onClick={async () => {
+															await determineGroupJoinFn({
+																overrideVariables: {
+																	userId: UserId,
+																	accept: true,
+																},
+															});
+															await queryMentorGroupData();
+														}}
+													>
+														APPROVE
+													</Button>{' '}
+													<Button
+														variant="contained"
+														className={classes.declineButton}
+														onClick={async () => {
+															await determineGroupJoinFn({
+																overrideVariables: {
+																	userId: UserId,
+																	accept: false,
+																},
+															});
+															await queryMentorGroupData();
+														}}
+													>
+														DECLINE
+													</Button>
+												</ListItem>
+											</ListItemLink>
 
-										<ListItem key={idx} button>
-											
-											<ListItemAvatar>
-												<Avatar className={classes.requestImage} src={imageUrl}></Avatar>
-											</ListItemAvatar>
-											<ListItemText primary={`${firstName} ${lastName}`} />
-											
-											<Button
-												variant="contained"
-												color="primary"
-												className={classes.requestButton}
-												onClick={async () => {
-													await determineGroupJoinFn({
-														overrideVariables: {
-															userId: UserId,
-															accept: true,
-														},
-													});
-													await queryMentorGroupData();
-												}}
-											>
-												APPROVE
-											</Button>{' '}
-											<Button
-												variant="contained"
-												className={classes.declineButton}
-												onClick={async () => {
-													await determineGroupJoinFn({
-														overrideVariables: {
-															userId: UserId,
-															accept: false,
-														},
-													});
-													await queryMentorGroupData();
-												}}
-											>
-												DECLINE
-											</Button>
-										</ListItem>
-										</ListItemLink>
-
-										<Divider variant="inset" component="li" />
-									</div>
-								);
-							})}
-						</List>
+											<Divider variant="inset" component="li" />
+										</div>
+									);
+								})}
+							</List>
 						</Card>
-
 					</div>
 				)}
 			</div>

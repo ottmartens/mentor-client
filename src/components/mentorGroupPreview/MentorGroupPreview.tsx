@@ -44,7 +44,9 @@ const useStyles = makeStyles((theme) => ({
 		maxHeight: 'none',
 	},
 	names: {
+		display: 'flex',
 		flexDirection: 'row',
+		justifyContent: 'space-around',
 	},
 	name: {
 		display: 'inline-block',

@@ -12,6 +12,7 @@ import {
 	Button,
 } from '@material-ui/core';
 import { HasUserProps } from '../../types';
+import Loader from '../../components/loader/Loader';
 
 type Mentor = {
 	userId: number;
@@ -75,7 +76,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	}, [called, queryFreeMentorsData]);
 
 	if (loading || !data) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 
 	const sortedData: Mentor[] = data.sort((_, b) => (b.hasRequestedYou ? 1 : b.youHaveRequested ? 1 : -1));
