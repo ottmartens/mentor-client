@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { Toolbar, AppBar, Avatar, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import { UserContextUser } from '../../contexts/UserContext';
+import { BASE_URL } from '../../services/variables';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -88,11 +89,13 @@ export default function Navbar({ user }: HasUserProps) {
 				<Button onClick={showDrawer(true)} className={classes.button}>
 					<MenuIcon />
 				</Button>
-				<Typography className={classes.name}>Good Boye</Typography>
+				<Typography className={classes.name}>
+					{user.firstName ? user.firstName : ''} {user.lastName ? user.lastName : ''}
+				</Typography>
 				<Button className={classes.profileButton}>
 					<Link to="/member/profile">
 						<Avatar
-							src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg"
+							src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 							className={classes.avatar}
 						>
 							GB
@@ -129,7 +132,7 @@ function getPossibleRoutes(user: UserContextUser): NavItem[] {
 	switch (user.role) {
 		case UserRole.MENTEE:
 			return [
-				{ label: 'My group', url: `/member/mentor-group/my-group` },
+				{ label: 'My group', url: `/member/my-mentor-group/` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
 				{ label: 'Logout', url: '/logout' },
@@ -137,7 +140,7 @@ function getPossibleRoutes(user: UserContextUser): NavItem[] {
 
 		case UserRole.MENTOR:
 			return [
-				{ label: 'My group', url: `/member/mentor-group/my-group` },
+				{ label: 'My group', url: `/member/my-mentor-group/` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
 				{ label: 'Find co-mentor', url: '/member/find-co-mentor' },
