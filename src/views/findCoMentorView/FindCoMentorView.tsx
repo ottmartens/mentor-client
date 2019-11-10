@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
 		textAlign: 'center',
 	},
 	requestImage: {
-		borderRadius: '0',
+		borderRadius: '50%',
 	},
 	requestButton: {
 		margin: '4px',
@@ -90,7 +90,10 @@ export default function MentorPairingView({ user }: HasUserProps) {
 							{idx === 0 && <Divider variant="inset" component="li" />}
 							<ListItem key={idx}>
 								<ListItemAvatar>
-									<Avatar className={classes.requestImage} src={imageUrl} />
+									<Avatar
+										className={classes.requestImage}
+										src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+									/>
 								</ListItemAvatar>
 								<ListItemText primary={`${firstName} ${lastName}`} />
 								{hasRequestedYou ? (

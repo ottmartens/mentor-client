@@ -7,6 +7,9 @@ import { CardMedia } from '@material-ui/core';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
+import axios from 'axios';
+import { BASE_URL, queryPrefix } from '../../services/variables';
+import Loader from '../../components/loader/Loader';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
-	const [image, selectImage] = React.useState<File | undefined>();
+	const [isloadingImage, setIsLoadingImage] = React.useState(false);
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -55,7 +58,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		bio: useInput({ validators: [isSet], initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile, { data: updateData }] = useBackend({
+	const [updateProfile] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
@@ -78,22 +81,14 @@ export default function ProfileView({ user }: HasUserProps) {
 			<div>
 				<div>
 					<CardMedia
-						image={user.imageUrl ? user.imageUrl : '/images/avatar_placeholder.webp'}
+						image={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 						className={classes.image}
 					/>
-					<input
-						accept="image/*"
-						className={classes.input}
-						style={{ display: 'none' }}
-						id="raised-button-file"
-						type="file"
-						onChange={onChangeHandler}
-					/>
-					<label htmlFor="raised-button-file">
-						<Button variant="contained" color="secondary" className={classes.imageButton}>
-							Upload
-						</Button>
-					</label>
+
+					<input accept="image/*" className={classes.input} type="file" onChange={onChangeHandler} />
+					{/* <Button variant="contained" color="secondary" className={classes.imageButton} disabled={isloadingImage}>
+							Upload {isloadingImage && <Loader />}
+						</Button> */}
 				</div>
 
 				<form
@@ -116,9 +111,23 @@ export default function ProfileView({ user }: HasUserProps) {
 	);
 
 	function onChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
-		if (!event.target.files) {
+		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
-		selectImage(event.target.files[0]);
+		var formData = new FormData();
+		formData.append('file', event.target.files[0]);
+		setIsLoadingImage(true);
+		return axios({
+			method: 'post',
+			url: `${BASE_URL}${queryPrefix}/user/image`,
+			data: formData,
+			headers: { 'Content-Type': 'multipart/form-data', Authorization: user.token },
+		})
+			.catch((err) => {
+				throw new Error(err);
+			})
+			.finally(() => {
+				setIsLoadingImage(false);
+			});
 	}
 }

@@ -6,7 +6,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { UserRole, HasUserProps } from '../../types';
 import { Link } from 'react-router-dom';
 import { Toolbar, AppBar, Avatar, Typography } from '@material-ui/core';
@@ -17,11 +16,11 @@ const useStyles = makeStyles((theme) => ({
 	list: {
 		width: 250,
 		height: '100%',
-		background: theme.palette.primary.main,
+		background: theme.palette.secondary.main,
 		color: '#ffffff',
 	},
 	nav: {
-		background: theme.palette.primary.main,
+		background: theme.palette.secondary.main,
 	},
 	button: {
 		color: '#ffffff',
@@ -59,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		width: '50px',
 		height: '50px',
-		background: theme.palette.primary.main,
+		background: theme.palette.secondary.main,
 		margin: 'auto',
 		borderRadius: '50%',
 		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
@@ -84,7 +83,7 @@ export default function Navbar({ user }: HasUserProps) {
 		setIsDrawerOpen(open);
 	};
 	return (
-		<AppBar color="primary" position="relative">
+		<AppBar color="secondary" position="relative">
 			<Toolbar variant="dense">
 				<Button onClick={showDrawer(true)} className={classes.button}>
 					<MenuIcon />

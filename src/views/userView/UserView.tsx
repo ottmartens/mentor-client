@@ -1,12 +1,8 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import {
-	Container,
-	Card,
-	makeStyles,
-    Typography,
-} from '@material-ui/core';
+import { Container, Card, makeStyles, Typography } from '@material-ui/core';
 import { HasUserProps, UserRole } from '../../types';
+import Loader from '../../components/loader/Loader';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
@@ -43,11 +39,11 @@ export default function UserView({ match, user }: Props) {
 
 	const [queryUserData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
-		endPoint: EndPoint.USER,
+		endPoint: EndPoint.OTHER_USER,
 		endPointUrlParam: params.id,
 		authToken: user.token,
-    });
-    
+	});
+
 	React.useEffect(() => {
 		if (called) {
 			return;
@@ -55,18 +51,25 @@ export default function UserView({ match, user }: Props) {
 		queryUserData();
 	}, [called, queryUserData]);
 
-/*	if (loading || !data) {
-		return <div>Loading...</div>;
-    }*/
-    
+	if (loading || !data) {
+		return <Loader />;
+	}
 	return (
 		<Container maxWidth="sm">
 			<div className={classes.container}>
-                    <img src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg" className={classes.image}></img>
-                    <Typography gutterBottom variant="h5" component="h2" className={classes.title}>Firstname Lastname</Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" className={classes.bio}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas elementum lorem nec eros posuere, ut fermentum est lobortis. Vivamus lobortis mollis augue aliquam tincidunt.</Typography>
-                    <Typography variant="subtitle2" className={classes.email}>mentee@heamentee.ee</Typography>                
-            </div>
+				<Card>
+					<img src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg"></img>
+					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
+						{data.firstName}' '{data.lastName}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						{data.bio}
+					</Typography>
+					<Typography variant="h5" component="h2">
+						{data.email}
+					</Typography>
+				</Card>
+			</div>
 		</Container>
 	);
 }

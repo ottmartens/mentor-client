@@ -1,6 +1,7 @@
 import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import dotenv from 'dotenv';
+import { queryPrefix, BASE_URL } from '../services/variables';
 dotenv.config();
 
 export enum RequestMethod {
@@ -13,6 +14,7 @@ export enum EndPoint {
 	LOGIN = '/user/login',
 	UPDATE_PROFILE = '/user/edit',
 	USER = '/user/self',
+	OTHER_USER = '/user/',
 	HEALTH = '/health',
 	GROUPS = '/groups',
 	JOIN_GROUP = '/groups/join',
@@ -79,11 +81,7 @@ export default function useBackend({
 
 	//builds up request url
 	function buildUrl() {
-		const backendUrl = 'http://167.71.64.237';
-		const backendPort = '8000';
-		const queryPrefix = '/api';
-
-		return `${backendUrl}:${backendPort}${queryPrefix}${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ''}`;
+		return `${BASE_URL}${queryPrefix}${endPoint}${endPointUrlParam ? `/${endPointUrlParam}` : ''}`;
 	}
 
 	// makes request to the backend and sets data, error and loading
