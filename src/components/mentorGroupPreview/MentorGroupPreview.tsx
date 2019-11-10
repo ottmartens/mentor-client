@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles, Card, CardMedia, CardContent, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 export interface Mentor {
 	imageUrl: string;
@@ -51,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
 	name: {
 		display: 'inline-block',
 	},
+	noPointer: {
+		cursor: 'default',
+	},
 }));
 
 export default function MentorGroupPreview({
@@ -66,7 +70,10 @@ export default function MentorGroupPreview({
 
 	return (
 		<Card className={classes.container}>
-			<Link to={id ? `/member/mentor-group/${id}` : '#'} className={classes.link}>
+			<Link
+				to={id ? `/member/mentor-group/${id}` : '#'}
+				className={classNames(classes.link, { [classes.noPointer]: !id })}
+			>
 				<div className={classes.mentors}>
 					{mentors.map(({ imageUrl }, idx) => {
 						return (
