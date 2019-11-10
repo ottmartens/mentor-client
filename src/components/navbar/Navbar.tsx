@@ -7,10 +7,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { User, UserRole, HasUserProps } from '../../types';
+import { UserRole, HasUserProps } from '../../types';
 import { Link } from 'react-router-dom';
 import { Toolbar, AppBar } from '@material-ui/core';
 import classNames from 'classnames';
+import { UserContextUser } from '../../contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -86,11 +87,11 @@ export default function Navbar({ user }: HasUserProps) {
 	);
 }
 
-function getPossibleRoutes(user: User): NavItem[] {
+function getPossibleRoutes(user: UserContextUser): NavItem[] {
 	switch (user.role) {
 		case UserRole.MENTEE:
 			return [
-				{ label: 'My group', url: `/member/mentor-group/${user.groupId}` },
+				{ label: 'My group', url: `/member/mentor-group/my-group` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
 				{ label: 'Logout', url: '/logout' },
@@ -98,7 +99,7 @@ function getPossibleRoutes(user: User): NavItem[] {
 
 		case UserRole.MENTOR:
 			return [
-				{ label: 'My group', url: `/member/mentor-group/${user.groupId}` },
+				{ label: 'My group', url: `/member/mentor-group/my-group` },
 				{ label: 'All groups', url: '/member/mentor-group-list' },
 				{ label: 'Activities', url: '/member/acitivities' },
 				{ label: 'Find co-mentor', url: '/member/find-co-mentor' },

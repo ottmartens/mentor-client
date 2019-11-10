@@ -1,3 +1,5 @@
+import { UserContextUser } from './contexts/UserContext';
+
 export enum UserRole {
 	MENTOR = 'MENTOR',
 	MENTEE = 'MENTEE',
@@ -5,37 +7,5 @@ export enum UserRole {
 }
 
 export interface HasUserProps {
-	user: User;
+	user: UserContextUser;
 }
-
-export type User = {
-	CreatedAt: Date;
-	DeletedAt: null | Date;
-	ID: number;
-	UpdatedAt: Date;
-	email: string;
-	firstName: string;
-	groupId: number;
-	imageUrl: string;
-	lastName: string;
-	password: string;
-	role: UserRole;
-	token: string;
-	bio: string;
-};
-
-export type OverwriteUserInfo = {
-	CreatedAt?: Date;
-	DeletedAt?: null | Date;
-	ID?: number;
-	UpdatedAt?: Date;
-	email?: string;
-	firstName?: string;
-	groupId?: number;
-	imageUrl?: string;
-	lastName?: string;
-	password?: string;
-	role?: UserRole;
-	token?: string;
-	bio?: string;
-};

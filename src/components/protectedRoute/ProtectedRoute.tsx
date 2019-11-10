@@ -1,45 +1,25 @@
 import React from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import WithNavigation from '../withNavigation/WithNavigation';
-import { getUserToken } from '../../services/auth';
-import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
+import { UserContextUser, UserContext } from '../../contexts/UserContext';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
-	const [user, setUser] = React.useState();
-	const token: string | null = getUserToken();
-
-	const [getUser, { data: userData, loading, called }] = useBackend({
-		requestMethod: RequestMethod.GET,
-		endPoint: EndPoint.USER,
-		skip: !token,
-	});
-
-	React.useEffect(() => {
-		if (called || !token) {
-			return;
-		}
-		getUser();
-	}, [called, token, getUser]);
-
-	React.useEffect(() => {
-		if (!userData) {
-			return;
-		}
-		setUser(userData);
-	}, [userData, user]);
+	const userContext = React.useContext(UserContext);
 	return (
 		<Route
 			{...rest}
 			render={(routeProps) => {
+				const user: UserContextUser | null = userContext && userContext.user;
+
 				// if not logged in, redirect to login
-				if (!token || (called && !loading && !userData)) {
+				if (!user) {
 					return <Redirect to="/login" />;
 				}
 
-				if (loading || !user) {
-					return <div>Loading...</div>;
-				}
-				// handle redirects
+				// if profile info missing, redirect to profile
+				/* if ((!user.firstName || !user.lastName) && routeProps.location.pathname !== '/member/profile') {
+					return <Redirect to="/member/profile" />;
+				} */
 
 				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}

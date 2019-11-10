@@ -13,3 +13,7 @@ export function removeUserToken() {
 export function getUserToken() {
 	return localStorage.getItem(tokenName);
 }
+
+export function parseUser() {
+	return undefined;
+}
