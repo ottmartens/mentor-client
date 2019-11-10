@@ -11,6 +11,7 @@ interface Props {
 	error: FieldError | undefined;
 	multiline?: boolean;
 	className?: string;
+	disabled?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -20,11 +21,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Field({ label, type, setValue, value, error, className, multiline }: Props) {
+export default function Field({ label, type, setValue, value, error, className, multiline, disabled }: Props) {
 	const classes = useStyles();
 	return (
 		<>
 			<TextField
+				disabled={disabled}
 				label={label}
 				type={type}
 				value={value || ''}

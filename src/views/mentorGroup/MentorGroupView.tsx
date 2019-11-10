@@ -16,6 +16,10 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { Link } from 'react-router-dom';
+import useInput, { UseInput } from '../../hooks/useInput';
+import { isSet, validateInputs } from '../../services/validators';
+import Field from '../../components/field/Field';
+
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -52,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 		textDecoration: 'none',
 		color: 'initial',
+	},
+	button: { marginBottom: '8px' 
+	},
+	largeWidth: {
+		width: '224px',
 	},
 }));
 
@@ -92,12 +101,18 @@ export default function MentorGroupView({ match, user }: Props) {
 		authToken: user.token,
 	});
 
+	const input: { [s: string]: UseInput } = {
+		description: useInput({ validators: [isSet], initialValue: (data && data.description) || '' }),
+		groupName: useInput({ validators: [isSet], initialValue: (data && data.groupName) || '' }),
+	};
+
 	const [requestFn, { data: editGroup, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.GROUP_EDIT,
 		variables: { 
 			description: input.description.value, 
 		},
+		authToken: user.token,
 	});
 
 	React.useEffect(() => {
@@ -127,6 +142,22 @@ export default function MentorGroupView({ match, user }: Props) {
 					)}
 				</div>
 
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						if (validateInputs(input)) {
+							requestFn();
+						}
+					}}
+				>
+					<Field className={classes.largeWidth} {...input.groupName} disabled={true} label="Group name" />
+					<Field className={classes.largeWidth} {...input.description} disabled={true} label="Bio" multiline />
+					
+					<Button variant="contained" color="primary" type="submit" className={classes.button}>
+						SAVE
+					</Button>
+				</form>
+
 				{/* Mentors */}
 				{user.role === UserRole.MENTEE && (
 					<div className={classes.buttonContainer}>
@@ -149,7 +180,7 @@ export default function MentorGroupView({ match, user }: Props) {
 							variant="contained"
 							color="primary"
 							onClick={async () => {
-							//TODO
+								//????????????
 							}}
 						>
 							EDIT
