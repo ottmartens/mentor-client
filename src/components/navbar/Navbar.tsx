@@ -42,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
 	listTitle: {
 		margin: 0,
 	},
+	listText: {
+		color: '#fff',
+		textDecoration: 'none',
+	},
 }));
 
 type NavItem = {
@@ -75,9 +79,11 @@ export default function Navbar({ user }: HasUserProps) {
 								<ListItemText primary={<h3 className={classes.listTitle}>MentorApp</h3>} />
 							</ListItem>
 							{routes.map((route, index) => (
-								<ListItem button component="a" key={index} href={route.url} className={classes.listElementContainer}>
-									<ListItemText primary={route.label} />
-								</ListItem>
+								<Link to={route.url} key={index} className={classes.listText}>
+									<ListItem button component="label" className={classes.listElementContainer}>
+										<ListItemText primary={route.label} />
+									</ListItem>
+								</Link>
 							))}
 						</List>
 					</div>

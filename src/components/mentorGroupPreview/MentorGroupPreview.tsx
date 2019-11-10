@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Card, CardActionArea, CardMedia, CardContent, Typography } from '@material-ui/core';
+import { makeStyles, Card, CardMedia, CardContent, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 export interface Mentor {
 	imageUrl: string;
@@ -24,17 +25,27 @@ const useStyles = makeStyles((theme) => ({
 	},
 
 	image: { width: '100%', height: '150px' },
+	link: {
+		textDecoration: 'none',
+		color: 'inherit',
+	},
 }));
 
-export default function MentorGroupPreview({ mentors, groupName, bio, id, showNames, showGroupName }: Props) {
+export default function MentorGroupPreview({ mentors, groupName, bio, id, showGroupName }: Props) {
 	const classes = useStyles();
 
 	return (
 		<Card className={classes.container}>
-			<CardActionArea href={id ? `/member/mentor-group/${id}` : '#'}>
+			<Link to={id ? `/member/mentor-group/${id}` : '#'} className={classes.link}>
 				<div className={classes.mentors}>
 					{mentors.map(({ imageUrl }, idx) => {
-						return <CardMedia key={idx} className={classes.image} image={imageUrl} />;
+						return (
+							<CardMedia
+								key={idx}
+								className={classes.image}
+								image={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+							/>
+						);
 					})}
 				</div>
 
@@ -48,7 +59,7 @@ export default function MentorGroupPreview({ mentors, groupName, bio, id, showNa
 						{bio}
 					</Typography>
 				</CardContent>
-			</CardActionArea>
+			</Link>
 		</Card>
 	);
 }

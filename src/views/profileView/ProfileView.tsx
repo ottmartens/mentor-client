@@ -33,24 +33,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ProfileView({ user }: HasUserProps) {
-	console.log(user);
-
-	return <div>hello</div>;
-	/* const classes = useStyles();
+	const classes = useStyles();
 	const [image, selectImage] = React.useState<File | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.USER,
+		authToken: user.token,
 	});
 
+	React.useEffect(() => {
+		if (called) {
+			return;
+		}
+		getUserInfo();
+	}, [called, getUserInfo]);
+
 	const input: { [s: string]: UseInput } = {
-		firstName: useInput({ validators: [isSet], initialValue: `${user.firstName}` }),
-		lastName: useInput({ validators: [isSet], initialValue: `${user.lastName}` }),
-		bio: useInput({ validators: [isSet], initialValue: `${user.bio}` }),
+		firstName: useInput({ validators: [isSet], initialValue: (userData && userData.firstName) || '' }),
+		lastName: useInput({ validators: [isSet], initialValue: (userData && userData.lastName) || '' }),
+		bio: useInput({ validators: [isSet], initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile, { data }] = useBackend({
+	const [updateProfile, { data: updateData }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
@@ -60,6 +65,11 @@ export default function ProfileView({ user }: HasUserProps) {
 		},
 		authToken: user.token,
 	});
+
+	if (loading || !userData) {
+		return <div>Loading...</div>;
+	}
+	console.log(userData);
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
@@ -109,7 +119,6 @@ export default function ProfileView({ user }: HasUserProps) {
 		if (!event.target.files) {
 			return;
 		}
-		console.log('changed state');
 		selectImage(event.target.files[0]);
-	} */
+	}
 }

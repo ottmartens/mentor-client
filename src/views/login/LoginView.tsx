@@ -6,8 +6,8 @@ import { Redirect } from 'react-router';
 import Field from '../../components/field/Field';
 import { isSet, isEmail, validateInputs } from '../../services/validators';
 import Notice from '../../components/notice/Notice';
-import { setUserToken } from '../../services/auth';
 import { UserContext } from '../../contexts/UserContext';
+import { setUserToken } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -59,6 +59,7 @@ export default function LoginView() {
 		if (!data || !setUser) {
 			return;
 		}
+		setUserToken(data.token);
 		setUser(data);
 		willRedirect(true);
 	}, [data, setUser]);

@@ -1,7 +1,7 @@
 import React from 'react';
-import { removeUserToken } from '../../services/auth';
 import { Redirect } from 'react-router';
 import { UserContext } from '../../contexts/UserContext';
+import { removeUserToken } from '../../services/auth';
 
 export default function LogoutView() {
 	// state
@@ -16,6 +16,7 @@ export default function LogoutView() {
 		if (!setUser) {
 			return;
 		}
+		removeUserToken();
 		setUser(null);
 		willRedirect(true);
 	}, [setUser]);
@@ -24,4 +25,6 @@ export default function LogoutView() {
 	if (redirect) {
 		return <Redirect to="/" />;
 	}
+
+	return null;
 }

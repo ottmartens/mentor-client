@@ -11,7 +11,11 @@ export function removeUserToken() {
 }
 
 export function getUserToken() {
-	return localStorage.getItem(tokenName);
+	const token = localStorage.getItem(tokenName);
+	if (!token) {
+		return undefined;
+	}
+	return token;
 }
 
 export function parseUser() {

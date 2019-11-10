@@ -30,7 +30,7 @@ const theme = createMuiTheme({
 function Root() {
 	const [user, setUser] = React.useState<null | UserContextUser>(null);
 
-	const providerValue = useMemo(() => ({ user, setUser }), [[user, setUser]]);
+	const providerValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 
 	return (
 		<MuiThemeProvider theme={theme}>
