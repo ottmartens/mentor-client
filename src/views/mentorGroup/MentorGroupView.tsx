@@ -14,6 +14,12 @@ import {
 } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { HasUserProps, UserRole } from '../../types';
+import Loader from '../../components/loader/Loader';
+import { Link } from 'react-router-dom';
+import useInput, { UseInput } from '../../hooks/useInput';
+import { isSet, validateInputs } from '../../services/validators';
+import Field from '../../components/field/Field';
+
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -31,14 +37,30 @@ const useStyles = makeStyles((theme) => ({
 	mentorGroupContainer: {
 		marginTop: '12px',
 	},
-	requestImage: {
-		borderRadius: '0',
+	listImage: {
+		borderRadius: '50%',
 	},
 	requestButton: {
 		margin: '4px',
 	},
+	declineButton: {
+		margin: '4px',
+		backgroundColor: '#B40404',
+		color: '#fff',
+	},
 	container: {
 		textAlign: 'center',
+	},
+	listLink: {
+		display: 'flex',
+		flexGrow: 1,
+		textDecoration: 'none',
+		color: 'initial',
+	},
+	button: { marginBottom: '8px' 
+	},
+	largeWidth: {
+		width: '224px',
 	},
 }));
 
@@ -48,6 +70,10 @@ interface Props extends HasUserProps {
 			id: string;
 		};
 	};
+}
+
+function ListItemLink(props) {
+	return <ListItem button component="a" {...props} />;
 }
 
 export default function MentorGroupView({ match, user }: Props) {
@@ -64,7 +90,7 @@ export default function MentorGroupView({ match, user }: Props) {
 	const [requestGroupJoinFn] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.JOIN_GROUP,
-		variables: { userId: user.ID, groupId: Number(params.id) },
+		variables: { groupId: Number(params.id) },
 		authToken: user.token,
 	});
 
@@ -72,6 +98,20 @@ export default function MentorGroupView({ match, user }: Props) {
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.HANDLE_GROUP_JOIN_REQUEST,
 		variables: { groupId: Number(params.id) },
+		authToken: user.token,
+	});
+
+	const input: { [s: string]: UseInput } = {
+		description: useInput({ validators: [isSet], initialValue: (data && data.description) || '' }),
+		groupName: useInput({ validators: [isSet], initialValue: (data && data.groupName) || '' }),
+	};
+
+	const [requestFn, { data: editGroup, error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.GROUP_EDIT,
+		variables: { 
+			description: input.description.value, 
+		},
 		authToken: user.token,
 	});
 
@@ -83,15 +123,40 @@ export default function MentorGroupView({ match, user }: Props) {
 	}, [called, queryMentorGroupData]);
 
 	if (loading || !data) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 	return (
 		<Container maxWidth="sm">
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
-					{data.mentors && <MentorGroupPreview mentors={data.mentors} groupName={data.title} bio={data.description} />}
+					{data.mentors && (
+						<MentorGroupPreview
+							mentors={data.mentors}
+							groupName={data.title}
+							bio={data.description}
+							showNames={true}
+							showGroupName={false}
+							showLongBio={true}
+						/>
+					)}
 				</div>
+
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						if (validateInputs(input)) {
+							requestFn();
+						}
+					}}
+				>
+					<Field className={classes.largeWidth} {...input.groupName} disabled={true} label="Group name" />
+					<Field className={classes.largeWidth} {...input.description} disabled={true} label="Bio" multiline />
+					
+					<Button variant="contained" color="primary" type="submit" className={classes.button}>
+						SAVE
+					</Button>
+				</form>
 
 				{/* Mentors */}
 				{user.role === UserRole.MENTEE && (
@@ -99,8 +164,9 @@ export default function MentorGroupView({ match, user }: Props) {
 						<Button
 							variant="contained"
 							color="primary"
-							onClick={() => {
-								requestGroupJoinFn();
+							onClick={async () => {
+								await requestGroupJoinFn();
+								await queryMentorGroupData();
 							}}
 						>
 							APPLY
@@ -108,20 +174,39 @@ export default function MentorGroupView({ match, user }: Props) {
 					</div>
 				)}
 
-				{/* Mentees */}
+				{user.role === UserRole.MENTOR && (
+					<div className={classes.buttonContainer}>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={async () => {
+								//????????????
+							}}
+						>
+							EDIT
+						</Button>
+					</div>
+				)}
+
+				{/* Accepted mentees */}
 				{data.mentees && data.mentees.length !== 0 && (
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>Approved mentees</h2>
 						<List>
-							{data.mentees.map(({ imageUrl, firstName, lastName }, idx) => {
+							{data.mentees.map(({ imageUrl, firstName, lastName, userId }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
 										<ListItem key={idx}>
-											<ListItemAvatar>
-												<Avatar src={imageUrl} />
-											</ListItemAvatar>
-											<ListItemText primary={`${firstName} ${lastName}`} />
+											<Link to={`/member/user/${userId}`} className={classes.listLink}>
+												<ListItemAvatar>
+													<Avatar
+														className={classes.listImage}
+														src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+													/>
+												</ListItemAvatar>
+												<ListItemText primary={`${firstName} ${lastName}`} />
+											</Link>
 										</ListItem>
 										<Divider variant="inset" component="li" />
 									</div>
@@ -131,56 +216,66 @@ export default function MentorGroupView({ match, user }: Props) {
 					</Card>
 				)}
 
-				{/* Requests */}
+				{/* Join requests */}
 				{data.requests && data.requests.length !== 0 && (
 					<div>
-						<List>
-							{data.requests.map(({ imageUrl, firstName, lastName, UserId }, idx) => {
-								return (
-									<div key={idx}>
-										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItem key={idx}>
-											<ListItemAvatar>
-												<Avatar className={classes.requestImage} src={imageUrl} />
-											</ListItemAvatar>
-											<ListItemText primary={`${firstName} ${lastName}`} />
-											<Button
-												variant="contained"
-												color="primary"
-												className={classes.requestButton}
-												onClick={() => {
-													determineGroupJoinFn({
-														overrideVariables: {
-															userId: UserId,
-															accept: true,
-														},
-													});
-												}}
-											>
-												APPROVE
-											</Button>{' '}
-											<Button
-												variant="contained"
-												color="primary"
-												className={classes.requestButton}
-												onClick={() => {
-													determineGroupJoinFn({
-														overrideVariables: {
-															userId: UserId,
-															accept: false,
-														},
-													});
-												}}
-											>
-												DECLINE
-											</Button>
-										</ListItem>
-
-										<Divider variant="inset" component="li" />
-									</div>
-								);
-							})}
-						</List>
+						<Card className={classes.menteeCard}>
+							<h2 className={classes.title}>Applied mentees</h2>
+							<List>
+								{data.requests.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+									return (
+										<div key={idx}>
+											{idx === 0 && <Divider variant="inset" component="li" />}
+											<ListItem key={idx}>
+												<Link to={`/member/user/${userId}`} className={classes.listLink}>
+													<ListItemAvatar>
+														<Avatar
+															className={classes.listImage}
+															src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+														></Avatar>
+													</ListItemAvatar>
+													<ListItemText primary={`${firstName} ${lastName}`} />
+												</Link>
+												<Button
+													variant="contained"
+													color="primary"
+													className={classes.requestButton}
+													onClick={async (e) => {
+														e.stopPropagation();
+														await determineGroupJoinFn({
+															overrideVariables: {
+																userId,
+																accept: true,
+															},
+														});
+														await queryMentorGroupData();
+													}}
+												>
+													APPROVE
+												</Button>{' '}
+												<Button
+													variant="contained"
+													className={classes.declineButton}
+													onClick={async (e) => {
+														e.stopPropagation();
+														await determineGroupJoinFn({
+															overrideVariables: {
+																userId,
+																accept: false,
+															},
+														});
+														await queryMentorGroupData();
+													}}
+												>
+													DECLINE
+												</Button>
+											</ListItem>
+											<Divider variant="inset" component="li" />
+										</div>
+									);
+								})}
+							</List>
+						</Card>
 					</div>
 				)}
 			</div>

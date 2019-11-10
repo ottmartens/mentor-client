@@ -12,7 +12,7 @@ import {
 	Button,
 } from '@material-ui/core';
 import { HasUserProps } from '../../types';
-import { overwriteUserInfo } from '../../services/auth';
+import Loader from '../../components/loader/Loader';
 
 type Mentor = {
 	userId: number;
@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
 		textAlign: 'center',
 	},
 	requestImage: {
-		borderRadius: '0',
+		borderRadius: '50%',
 	},
 	requestButton: {
 		margin: '4px',
@@ -68,11 +68,6 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
-	if (acceptRequestResponse) {
-		console.log(acceptRequestResponse);
-		overwriteUserInfo(acceptRequestResponse);
-	}
-
 	React.useEffect(() => {
 		if (called) {
 			return;
@@ -81,7 +76,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	}, [called, queryFreeMentorsData]);
 
 	if (loading || !data) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 
 	const sortedData: Mentor[] = data.sort((_, b) => (b.hasRequestedYou ? 1 : b.youHaveRequested ? 1 : -1));
@@ -95,7 +90,10 @@ export default function MentorPairingView({ user }: HasUserProps) {
 							{idx === 0 && <Divider variant="inset" component="li" />}
 							<ListItem key={idx}>
 								<ListItemAvatar>
-									<Avatar className={classes.requestImage} src={imageUrl} />
+									<Avatar
+										className={classes.requestImage}
+										src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+									/>
 								</ListItemAvatar>
 								<ListItemText primary={`${firstName} ${lastName}`} />
 								{hasRequestedYou ? (
@@ -104,13 +102,14 @@ export default function MentorPairingView({ user }: HasUserProps) {
 											variant="contained"
 											color="primary"
 											className={classes.requestButton}
-											onClick={() => {
-												replyToRequestsFn({
+											onClick={async () => {
+												await replyToRequestsFn({
 													overrideVariables: {
 														userId,
 														accept: true,
 													},
 												});
+												await queryFreeMentorsData();
 											}}
 										>
 											ACCEPT
@@ -120,13 +119,14 @@ export default function MentorPairingView({ user }: HasUserProps) {
 											variant="contained"
 											color="primary"
 											className={classes.requestButton}
-											onClick={() => {
-												replyToRequestsFn({
+											onClick={async () => {
+												await replyToRequestsFn({
 													overrideVariables: {
 														userId,
 														accept: false,
 													},
 												});
+												await queryFreeMentorsData();
 											}}
 										>
 											DECLINE
@@ -140,12 +140,13 @@ export default function MentorPairingView({ user }: HasUserProps) {
 											variant="contained"
 											color="primary"
 											className={classes.requestButton}
-											onClick={() => {
-												requestPairUpFn({
+											onClick={async () => {
+												await requestPairUpFn({
 													overrideVariables: {
 														userId,
 													},
 												});
+												await queryFreeMentorsData();
 											}}
 										>
 											REQUEST

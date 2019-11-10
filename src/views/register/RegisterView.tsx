@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, Card, CardContent, Typography, Link } from '@material-ui/core';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
@@ -8,7 +8,8 @@ import RadioButtonField from '../../components/radioButtonField/RadioButtonField
 import { Redirect } from 'react-router';
 import Notice from '../../components/notice/Notice';
 import { validateInputs, isSet, isEmail } from '../../services/validators';
-import { login } from '../../services/auth';
+import { UserContext } from '../../contexts/UserContext';
+import { setUserToken } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -17,27 +18,42 @@ const useStyles = makeStyles((theme) => ({
 		padding: '30px',
 	},
 	form: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		flexGrow: 1,
 		textAlign: 'center',
 	},
 	button: {
 		marginTop: '20px',
+		marginBottom: '20px',
+	},
+	card: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		flexGrow: 1,
 	},
 }));
 
 export default function RegisterView() {
+	// css classes
 	const classes = useStyles();
+
+	// state
+	const [redirect, willRedirect] = React.useState<boolean>(false);
+
+	// context
+	const userContext = React.useContext(UserContext);
+	const setUser = userContext && userContext.setUser;
+
+	// input options
 	const radioButtonOptions = [{ value: 'MENTOR', label: 'Mentor' }, { value: 'MENTEE', label: 'Mentee' }];
 
+	// inputs
 	const input: { [s: string]: UseInput } = {
 		email: useInput({ validators: [isSet, isEmail] }),
 		password: useInput({ validators: [isSet] }),
 		role: useInput({ initialValue: radioButtonOptions[0].value }),
 	};
 
+	//register request
 	const [requestFn, { data, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.REGISTER,
@@ -48,14 +64,25 @@ export default function RegisterView() {
 		},
 	});
 
-	if (data && login(data)) {
+	// set user to context after successful request
+	React.useEffect(() => {
+		if (!data || !setUser) {
+			return;
+		}
+		setUserToken(data.token);
+		setUser(data);
+		willRedirect(true);
+	}, [data, setUser]);
+
+	// redirect after successful request
+	if (redirect) {
 		return <Redirect to="/member/mentor-group-list" />;
 	}
-
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title="Registration failed" message={error} />}
-			<form
+			<Card className={classes.card}>
+				<form
 				onSubmit={(e) => {
 					e.preventDefault();
 					if (validateInputs(input)) {
@@ -80,6 +107,12 @@ export default function RegisterView() {
 					</Button>
 				</div>
 			</form>
+			<CardContent>
+				<Typography gutterBottom variant="subtitle1" align="center">
+					Already have an account? <Link href="/login" color="primary">Login</Link>
+				</Typography>
+			</CardContent>
+			</Card>
 		</Container>
 	);
 }

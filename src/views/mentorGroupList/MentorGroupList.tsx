@@ -4,6 +4,7 @@ import { Container } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
+import Loader from '../../components/loader/Loader';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -28,15 +29,15 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 	}, [called, queryFn]);
 
 	if (loading || !data) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			<h1>Mentorgroups</h1>
 			<div>
 				{data &&
-					data.map(({ mentors, title, tagline, id }, idx) => {
-						return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={tagline} />;
+					data.map(({ mentors, title, id, description }, idx) => {
+						return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={description} showGroupName={true} showNames={false} showLongBio={false}/>;
 					})}
 			</div>
 		</Container>
