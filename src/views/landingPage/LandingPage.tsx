@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		flexGrow: 1,
-		margin: 'auto',
 		padding: '30px',
 	},
 	card: {
