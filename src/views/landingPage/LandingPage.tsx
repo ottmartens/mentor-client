@@ -32,10 +32,9 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: 'center',
 		flexGrow: 1,
 		margin: 'auto',
-		width: '35%',
+		padding: '30px',
 	},
 	card: {
-		
 		paddingTop: '100px',
 		paddingBottom: '100px',
 		padding: '30px',
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	intro: {
 		letterSpacing: '1px',
-		textAlign: 'center',		
+		textAlign: 'center',
 		marginTop: '2em',
 		marginBottom: '2em',
 		color: '#2a1c6b',
@@ -60,7 +59,7 @@ export default function LandingPageView() {
 					<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
 				</div>
 				<div className={classes.intro}>
-					<Typography variant='h4'>Mat-Inf student society's mentor programme</Typography>
+					<Typography variant="h4">MentorApp</Typography>
 				</div>
 				<div className={classes.buttons}>
 					<div>

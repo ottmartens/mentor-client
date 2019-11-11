@@ -209,7 +209,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 			)}
 
 			{/* Join requests */}
-			{data.requests && data.requests.length !== 0 && (
+			{user.role === UserRole.MENTOR && data.requests && data.requests.length !== 0 && (
 				<div>
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>Applied mentees</h2>
