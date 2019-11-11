@@ -1,5 +1,6 @@
 import React from 'react';
 import { CircularProgress, makeStyles } from '@material-ui/core';
+import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
 	loader: {
@@ -7,7 +8,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Loader() {
+interface Props {
+	className?: string;
+	size?: string;
+}
+
+export default function Loader({ className, size }: Props) {
 	const classes = useStyles();
-	return <CircularProgress className={classes.loader} />;
+	return <CircularProgress size={size} className={classNames(classes.loader, className)} />;
 }

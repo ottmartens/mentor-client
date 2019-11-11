@@ -1,28 +1,30 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Container, Card, makeStyles, Typography } from '@material-ui/core';
+import { Container, Card, makeStyles, Typography, CardMedia } from '@material-ui/core';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
+import { BASE_URL } from '../../services/variables';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
 		marginTop: '1em',
 	},
 	container: {
-        textAlign: 'center',
-        padding: '2em',
-        marginTop: '2em',
-    },
-    image:{
-        width: '100%',
-        marginBottom: '1em',
-    },
-    bio:{
-        marginTop: '1em',
-    },
-    email:{
-        marginTop: '1em',
-    },
+		textAlign: 'center',
+		padding: '2em',
+		marginTop: '2em',
+	},
+	image: {
+		width: '100%',
+		height: '150px',
+		marginBottom: '1em',
+	},
+	bio: {
+		marginTop: '1em',
+	},
+	email: {
+		marginTop: '1em',
+	},
 }));
 
 interface Props extends HasUserProps {
@@ -58,9 +60,12 @@ export default function UserView({ match, user }: Props) {
 		<Container maxWidth="sm">
 			<div className={classes.container}>
 				<Card>
-					<img src="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg"></img>
+					<CardMedia
+						image={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
+						className={classes.image}
+					/>
 					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
-						{data.firstName}' '{data.lastName}
+						{data.firstName} {data.lastName}
 					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
 						{data.bio}

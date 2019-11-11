@@ -99,7 +99,7 @@ export default function ProfileView({ user }: HasUserProps) {
 					/>
 					<label className={classes.imageButtonContainer}>
 						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
-						<span className={classes.imageButton}>Upload{isloadingImage && <Loader />}</span>
+						<span className={classes.imageButton}>Upload {isloadingImage && <Loader size="0.975rem" />}</span>
 					</label>
 				</div>
 

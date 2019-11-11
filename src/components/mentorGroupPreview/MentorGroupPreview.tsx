@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Card, CardMedia, CardContent, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { BASE_URL } from '../../services/variables';
 
 export interface Mentor {
 	imageUrl: string;
@@ -80,7 +81,7 @@ export default function MentorGroupPreview({
 							<CardMedia
 								key={idx}
 								className={classes.image}
-								image={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+								image={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
 							/>
 						);
 					})}
