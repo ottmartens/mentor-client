@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
+	const [imagePreview, setImagePreview] = React.useState<string |undefined>()
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -94,7 +95,7 @@ export default function ProfileView({ user }: HasUserProps) {
 			<div>
 				<div>
 					<CardMedia
-						image={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
+						image={imagePreview ? imagePreview : user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 						className={classes.image}
 					/>
 					<label className={classes.imageButtonContainer}>
@@ -126,8 +127,9 @@ export default function ProfileView({ user }: HasUserProps) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
+		const file = event.target.files[0]
 		var formData = new FormData();
-		formData.append('file', event.target.files[0]);
+		formData.append('file', file);
 		setIsLoadingImage(true);
 		axios({
 			method: 'post',
@@ -140,6 +142,7 @@ export default function ProfileView({ user }: HasUserProps) {
 			})
 			.finally(() => {
 				setIsLoadingImage(false);
+				setImagePreview(URL.createObjectURL(file))
 			});
 	}
 }
