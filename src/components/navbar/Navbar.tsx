@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
 		right: 0,
 	},
 	name: {
-		position: 'absolute',
-		right: 70,
+		marginLeft: 'auto',
+		marginRight: '50px',
 	},
 	profileIcon: {
 		color: '#ffffff',
@@ -68,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
 		color: '#fff',
 		textDecoration: 'none',
 	},
+	role: {
+		color: '#6e6e6e',
+		display: 'inline',
+	},
 }));
 
 type NavItem = {
@@ -90,7 +94,18 @@ export default function Navbar({ user }: HasUserProps) {
 					<MenuIcon />
 				</Button>
 				<Typography className={classes.name}>
-					{user.firstName ? user.firstName : ''} {user.lastName ? user.lastName : ''}
+				{user.firstName ? user.firstName : ''} {user.lastName ? user.lastName : ''}
+				<div className={classes.role}>
+					{user.role === UserRole.MENTEE && (
+						' (Mentee)'
+					)}
+					{user.role === UserRole.MENTOR && (
+						' (Mentor)'
+					)}
+					{user.role === UserRole.ADMIN && (
+						' (Admin)'
+					)}
+				</div>
 				</Typography>
 				<Button className={classes.profileButton}>
 					<Link to="/member/profile">
