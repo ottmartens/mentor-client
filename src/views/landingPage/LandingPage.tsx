@@ -22,22 +22,24 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 	},
 	button: {
-		marginTop: '1em',
+		marginTop: '0.4em',
 		minWidth: '128px',
 		margin: '4px',
 	},
 	container: {
 		display: 'flex',
+		flexGrow: 1,
 		flexDirection: 'column',
 		justifyContent: 'center',
-		flexGrow: 1,
-		padding: '30px',
+		padding: 0,
 	},
 	card: {
 		paddingTop: '100px',
 		paddingBottom: '100px',
-		padding: '30px',
-		borderRadius: '10px',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		margin: '12px',
 	},
 	intro: {
 		letterSpacing: '1px',
@@ -52,7 +54,7 @@ export default function LandingPageView() {
 	const classes = useStyles();
 
 	return (
-		<div className={classes.container}>
+		<Container maxWidth="sm" className={classes.container}>
 			<Card className={classes.card}>
 				<div className={classes.logoContainer}>
 					<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
@@ -73,6 +75,6 @@ export default function LandingPageView() {
 					</div>
 				</div>
 			</Card>
-		</div>
+		</Container>
 	);
 }

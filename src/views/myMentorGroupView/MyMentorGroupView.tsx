@@ -69,15 +69,12 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '12px',
 		marginTop: '20px',
 	},
-	loader: {
-		height: '20px',
-	},
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const [isEditable, setIsEditable] = React.useState(false);
-	const [getGroupInfo, { data, loading, error, called }] = useBackend({
+	const [getGroupInfo, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.MY_GROUP,
 		authToken: user.token,
@@ -111,7 +108,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 	});
 
 	if (!data || loading) {
-		return <Loader className={classes.loader} />;
+		return <Loader />;
 	}
 
 	return (

@@ -15,20 +15,24 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		display: 'flex',
 		flexGrow: 1,
-		padding: '30px',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		padding: 0,
 	},
 	form: {
 		textAlign: 'center',
 	},
 	button: {
-		marginTop: '20px',
+		marginTop: '12px',
 		marginBottom: '20px',
 	},
 	card: {
+		paddingTop: '40px',
+		paddingBottom: '40px',
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		flexGrow: 1,
+		margin: '12px',
 	},
 }));
 
@@ -82,36 +86,39 @@ export default function RegisterView() {
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title="Registration failed" message={error} />}
 			<Card className={classes.card}>
-				<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					if (validateInputs(input)) {
-						requestFn();
-					}
-				}}
-				className={classes.form}
-			>
-				<h2>Registration</h2>
-				<div>
-					<Field {...input.email} label="E-mail" type="text" />
-				</div>
-				<div>
-					<Field {...input.password} label="Password" type="password" />
-				</div>
-				<div>
-					<RadioButtonField {...input.role} options={radioButtonOptions} />
-				</div>
-				<div className={classes.button}>
-					<Button type="submit" variant="contained" color="primary">
-						REGISTER
-					</Button>
-				</div>
-			</form>
-			<CardContent>
-				<Typography gutterBottom variant="subtitle1" align="center">
-					Already have an account? <Link href="/login" color="primary">Login</Link>
-				</Typography>
-			</CardContent>
+				<CardContent>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							if (validateInputs(input)) {
+								requestFn();
+							}
+						}}
+						className={classes.form}
+					>
+						<h2>Registration</h2>
+						<div>
+							<RadioButtonField {...input.role} options={radioButtonOptions} />
+						</div>
+						<div>
+							<Field {...input.email} label="E-mail" type="text" />
+						</div>
+						<div>
+							<Field {...input.password} label="Password" type="password" />
+						</div>
+						<Typography gutterBottom variant="subtitle2" align="center">
+							Already have an account?{' '}
+							<Link href="/login" color="primary">
+								Login
+							</Link>
+						</Typography>
+						<div className={classes.button}>
+							<Button type="submit" variant="contained" color="primary">
+								REGISTER
+							</Button>
+						</div>
+					</form>
+				</CardContent>
 			</Card>
 		</Container>
 	);
