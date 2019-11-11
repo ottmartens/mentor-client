@@ -16,6 +16,7 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../services/variables';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -134,7 +135,7 @@ export default function MentorGroupView({ match, user }: Props) {
 												<ListItemAvatar>
 													<Avatar
 														className={classes.listImage}
-														src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+														src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
 													/>
 												</ListItemAvatar>
 												<ListItemText primary={`${firstName} ${lastName}`} />

@@ -179,6 +179,35 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					)}
 				</div>
 			</form>
+
+			{/* Accepted mentees */}
+			{data.mentees && data.mentees.length !== 0 && (
+				<Card className={classes.menteeCard}>
+					<h2 className={classes.title}>Approved mentees</h2>
+					<List>
+						{data.mentees.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+							return (
+								<div key={idx}>
+									{idx === 0 && <Divider variant="inset" component="li" />}
+									<ListItem key={idx}>
+										<Link to={`/member/user/${userId}`} className={classes.listLink}>
+											<ListItemAvatar>
+												<Avatar
+													className={classes.listImage}
+													src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+												/>
+											</ListItemAvatar>
+											<ListItemText primary={`${firstName} ${lastName}`} />
+										</Link>
+									</ListItem>
+									<Divider variant="inset" component="li" />
+								</div>
+							);
+						})}
+					</List>
+				</Card>
+			)}
+
 			{/* Join requests */}
 			{data.requests && data.requests.length !== 0 && (
 				<div>
@@ -194,7 +223,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 												<ListItemAvatar>
 													<Avatar
 														className={classes.listImage}
-														src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+														src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
 													></Avatar>
 												</ListItemAvatar>
 												<ListItemText primary={`${firstName} ${lastName}`} />

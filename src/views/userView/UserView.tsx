@@ -65,7 +65,7 @@ export default function UserView({ match, user }: Props) {
 						className={classes.image}
 					/>
 					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
-						{data.firstName}' '{data.lastName}
+						{data.firstName} {data.lastName}
 					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
 						{data.bio}

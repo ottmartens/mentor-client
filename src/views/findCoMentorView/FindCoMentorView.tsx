@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
+import { BASE_URL } from '../../services/variables';
 
 type Mentor = {
 	userId: number;
@@ -92,7 +93,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 								<ListItemAvatar>
 									<Avatar
 										className={classes.requestImage}
-										src={imageUrl ? imageUrl : '/images/avatar_placeholder.webp'}
+										src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
 									/>
 								</ListItemAvatar>
 								<ListItemText primary={`${firstName} ${lastName}`} />
