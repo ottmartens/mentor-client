@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 		textDecoration: 'none',
 	},
 	role: {
-		color: '#6e6e6e',
+		color: '#BACDF8',
 		display: 'inline',
 	},
 }));
