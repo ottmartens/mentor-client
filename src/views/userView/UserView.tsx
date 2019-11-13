@@ -67,6 +67,12 @@ export default function UserView({ match, user }: Props) {
 					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
 						{data.firstName} {data.lastName}
 					</Typography>
+					<Typography variant="h5" component="h2">
+						{data.degree}
+					</Typography>
+					<Typography variant="h5" component="h2">
+						Year {data.year}
+					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
 						{data.bio}
 					</Typography>
