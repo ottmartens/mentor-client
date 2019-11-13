@@ -5,15 +5,11 @@ import {
 	makeStyles,
 	Divider,
 	List,
-	ListItem,
-	ListItemAvatar,
-	Avatar,
-	ListItemText,
 	Button,
 } from '@material-ui/core';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
-import { BASE_URL } from '../../services/variables';
+import Person from '../../components/person/Person';
 
 type Mentor = {
 	userId: number;
@@ -22,6 +18,7 @@ type Mentor = {
 	hasRequestedYou: boolean;
 	youHaveRequested: boolean;
 	imageUrl: string;
+	tagline: string;
 };
 
 const useStyles = makeStyles(() => ({
@@ -85,18 +82,11 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	return (
 		<Container maxWidth="sm">
 			<List>
-				{sortedData.map(({ userId, firstName, lastName, hasRequestedYou, youHaveRequested, imageUrl }, idx) => {
+				{sortedData.map(({ userId, firstName, lastName, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
 					return (
 						<div key={idx}>
 							{idx === 0 && <Divider variant="inset" component="li" />}
-							<ListItem key={idx}>
-								<ListItemAvatar>
-									<Avatar
-										className={classes.requestImage}
-										src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-									/>
-								</ListItemAvatar>
-								<ListItemText primary={`${firstName} ${lastName}`} />
+							<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 								{hasRequestedYou ? (
 									<div>
 										<Button
@@ -154,7 +144,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 										</Button>
 									</div>
 								)}
-							</ListItem>
+							</Person>
 							<Divider variant="inset" component="li" />
 						</div>
 					);

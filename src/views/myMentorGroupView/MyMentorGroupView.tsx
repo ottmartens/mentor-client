@@ -12,14 +12,10 @@ import {
 	Card,
 	List,
 	Divider,
-	ListItem,
-	ListItemAvatar,
-	Avatar,
-	ListItemText,
 } from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
-import { Link } from 'react-router-dom';
+import Person from '../../components/person/Person';
 
 const useStyles = makeStyles((theme) => ({
 	wrapper: {
@@ -182,21 +178,11 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.title}>Approved mentees</h2>
 					<List>
-						{data.mentees.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+						{data.mentees.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
 							return (
 								<div key={idx}>
 									{idx === 0 && <Divider variant="inset" component="li" />}
-									<ListItem key={idx}>
-										<Link to={`/member/user/${userId}`} className={classes.listLink}>
-											<ListItemAvatar>
-												<Avatar
-													className={classes.listImage}
-													src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-												/>
-											</ListItemAvatar>
-											<ListItemText primary={`${firstName} ${lastName}`} />
-										</Link>
-									</ListItem>
+									<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
 									<Divider variant="inset" component="li" />
 								</div>
 							);
@@ -211,20 +197,11 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>Applied mentees</h2>
 						<List>
-							{data.requests.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+							{data.requests.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItem key={idx}>
-											<Link to={`/member/user/${userId}`} className={classes.listLink}>
-												<ListItemAvatar>
-													<Avatar
-														className={classes.listImage}
-														src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-													></Avatar>
-												</ListItemAvatar>
-												<ListItemText primary={`${firstName} ${lastName}`} />
-											</Link>
+										<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 											<Button
 												variant="contained"
 												className={classes.acceptButton}
@@ -257,7 +234,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 											>
 												DECLINE
 											</Button>
-										</ListItem>
+										</Person>
 										<Divider variant="inset" component="li" />
 									</div>
 								);

@@ -11,8 +11,6 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
-import { Link } from 'react-router-dom';
-import { BASE_URL } from '../../services/variables';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
