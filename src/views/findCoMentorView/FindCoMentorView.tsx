@@ -14,6 +14,8 @@ import {
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 type Mentor = {
 	userId: number;
@@ -47,6 +49,7 @@ const useStyles = makeStyles(() => ({
 
 export default function MentorPairingView({ user }: HasUserProps) {
 	const classes = useStyles();
+	const t = useTranslator();
 
 	//get data
 	const [queryFreeMentorsData, { data, loading, called }] = useBackend({
@@ -113,7 +116,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 												await queryFreeMentorsData();
 											}}
 										>
-											ACCEPT
+											{t(Translation.ACCEPT)}
 										</Button>
 										{'  '}
 										<Button
@@ -130,11 +133,11 @@ export default function MentorPairingView({ user }: HasUserProps) {
 												await queryFreeMentorsData();
 											}}
 										>
-											DECLINE
+											{t(Translation.DECLINE)}
 										</Button>
 									</div>
 								) : youHaveRequested ? (
-									<div>Request pending</div>
+									<div>{t(Translation.WAITING_RESPONSE)}</div>
 								) : (
 									<div>
 										<Button
@@ -150,7 +153,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 												await queryFreeMentorsData();
 											}}
 										>
-											REQUEST
+											{t(Translation.REQUEST)}
 										</Button>
 									</div>
 								)}

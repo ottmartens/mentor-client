@@ -13,6 +13,8 @@ import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -59,6 +61,7 @@ interface Props extends HasUserProps {
 export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
+	const t = useTranslator();
 
 	const [queryMentorGroupData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -112,7 +115,7 @@ export default function MentorGroupView({ match, user }: Props) {
 								await queryMentorGroupData();
 							}}
 						>
-							APPLY
+							{t(Translation.JOIN_GROUP)}
 						</Button>
 					</div>
 				)}
@@ -120,7 +123,7 @@ export default function MentorGroupView({ match, user }: Props) {
 				{/* Accepted mentees */}
 				{data.mentees && data.mentees.length !== 0 && (
 					<Card className={classes.menteeCard}>
-						<h2 className={classes.title}>Approved mentees</h2>
+						<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
 						<List>
 							{data.mentees.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
 								return (

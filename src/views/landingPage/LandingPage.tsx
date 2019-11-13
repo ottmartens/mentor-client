@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, Container, makeStyles, Card, Typography } from '@material-ui/core';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	logo: {
@@ -60,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LandingPageView() {
 	const classes = useStyles();
+	const t = useTranslator();
 
 	return (
 		<Container maxWidth="sm" className={classes.container}>
@@ -71,17 +74,17 @@ export default function LandingPageView() {
 					<Typography variant='h4'>MentorApp</Typography>
 				</div>
 				<div className={classes.desc}>
-					<Typography variant='subtitle2'>Mat-Inf student society's mentor programme</Typography>
+					<Typography variant='subtitle2'>{t(Translation.MENTOR_PROGRAMME)}</Typography>
 				</div>
 				<div className={classes.buttons}>
 					<div>
 						<Button href="/login" className={classes.button} variant="contained" color="primary">
-							LOG IN
+						{t(Translation.LOGIN)}
 						</Button>
 					</div>
 					<div>
 						<Button href="/register" className={classes.button} variant="contained" color="primary">
-							REGISTER
+						{t(Translation.REGISTER)}
 						</Button>
 					</div>
 				</div>

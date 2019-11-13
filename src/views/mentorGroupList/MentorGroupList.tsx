@@ -5,6 +5,8 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -20,6 +22,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 		endPoint: EndPoint.GROUPS,
 		authToken: user.token,
 	});
+	const t = useTranslator();
 
 	React.useEffect(() => {
 		if (called) {
@@ -33,7 +36,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 	}
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			<h1>Mentorgroups</h1>
+			<h1>{t(Translation.MENTORGROUPS)}</h1>
 			<div>
 				{data &&
 					data.map(({ mentors, title, id, description }, idx) => {

@@ -10,6 +10,8 @@ import Notice from '../../components/notice/Notice';
 import { validateInputs, isSet, isEmail } from '../../services/validators';
 import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -46,6 +48,7 @@ export default function RegisterView() {
 	// context
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
+	const t = useTranslator();
 
 	// input options
 	const radioButtonOptions = [{ value: 'MENTOR', label: 'Mentor' }, { value: 'MENTEE', label: 'Mentee' }];
@@ -84,7 +87,7 @@ export default function RegisterView() {
 	}
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			{error && <Notice variant="error" title="Registration failed" message={error} />}
+			{error && <Notice variant="error" title={t(Translation.REGISTRATION_ERROR)} message={error} />}
 			<Card className={classes.card}>
 				<CardContent>
 					<form
@@ -96,7 +99,7 @@ export default function RegisterView() {
 						}}
 						className={classes.form}
 					>
-						<h2>Registration</h2>
+						<h2>{t(Translation.REGISTRATION)}</h2>
 						<div>
 							<RadioButtonField {...input.role} options={radioButtonOptions} />
 						</div>
@@ -104,17 +107,17 @@ export default function RegisterView() {
 							<Field {...input.email} label="E-mail" type="text" />
 						</div>
 						<div>
-							<Field {...input.password} label="Password" type="password" />
+							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
-							Already have an account?{' '}
+							{t(Translation.YES_ACCOUNT)}{' '}
 							<Link href="/login" color="primary">
-								Login
+								{t(Translation.LOGIN)}
 							</Link>
 						</Typography>
 						<div className={classes.button}>
 							<Button type="submit" variant="contained" color="primary">
-								REGISTER
+								{t(Translation.REGISTER)}
 							</Button>
 						</div>
 					</form>

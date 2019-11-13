@@ -10,6 +10,8 @@ import { HasUserProps } from '../../types';
 import axios from 'axios';
 import { BASE_URL, queryPrefix } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation, TRANSLATIONS } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -64,6 +66,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		endPoint: EndPoint.USER,
 		authToken: user.token,
 	});
+	const t = useTranslator();
 
 	React.useEffect(() => {
 		if (called) {
@@ -101,8 +104,7 @@ export default function ProfileView({ user }: HasUserProps) {
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			<h2>Profile</h2>
-
+			<h2>{t(Translation.PROFILE)}</h2>
 			<div>
 				<div>
 					<CardMedia
@@ -111,7 +113,7 @@ export default function ProfileView({ user }: HasUserProps) {
 					/>
 					<label className={classes.imageButtonContainer}>
 						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
-						<span className={classes.imageButton}>Upload {isloadingImage && <Loader size="0.975rem" />}</span>
+						<span className={classes.imageButton}>{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}</span>
 					</label>
 				</div>
 
@@ -123,14 +125,14 @@ export default function ProfileView({ user }: HasUserProps) {
 						}
 					}}
 				>
-					<Field className={classes.largeWidth} {...input.firstName} label="First name" />
-					<Field className={classes.largeWidth} {...input.lastName} label="Last name" />
-					<Field className={classes.largeWidth} {...input.degree} label="Degree" />
-					<Field className={classes.largeWidth} {...input.year} label="Year" />
-					<Field className={classes.largeWidth} {...input.tagline} label="Tagline" />
-					<Field className={classes.largeWidth} {...input.bio} label="Bio" multiline />
+					<Field className={classes.largeWidth} {...input.firstName} label={t(Translation.FIRST_NAME)} />
+					<Field className={classes.largeWidth} {...input.lastName} label={t(Translation.LAST_NAME)} />
+					<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
+					<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
+					<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
+					<Field className={classes.largeWidth} {...input.bio} label={t(Translation.USER_DESCRIPTION)} multiline />
 					<Button variant="contained" color="primary" type="submit" className={classes.button}>
-						SAVE
+						{t(Translation.SAVE_CHANGES)}
 					</Button>
 				</form>
 			</div>
