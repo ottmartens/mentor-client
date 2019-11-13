@@ -1,18 +1,14 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import {
-	Container,
 	Card,
 	makeStyles,
 	Divider,
 	List,
-	ListItem,
-	ListItemAvatar,
-	Avatar,
-	ListItemText,
 	Button,
 } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
+import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { Link } from 'react-router-dom';
@@ -126,21 +122,11 @@ export default function MentorGroupView({ match, user }: Props) {
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>Approved mentees</h2>
 						<List>
-							{data.mentees.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+							{data.mentees.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItem key={idx}>
-											<Link to={`/member/user/${userId}`} className={classes.listLink}>
-												<ListItemAvatar>
-													<Avatar
-														className={classes.listImage}
-														src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-													/>
-												</ListItemAvatar>
-												<ListItemText primary={`${firstName} ${lastName}`} />
-											</Link>
-										</ListItem>
+										<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
 										<Divider variant="inset" component="li" />
 									</div>
 								);
