@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	button: {
 		color: '#ffffff',
+		'&:hover': {
+			backgroundColor: 'transparent',
+		},
 	},
 	profileButton: {
 		position: 'absolute',
@@ -32,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	name: {
 		marginLeft: 'auto',
-		marginRight: '50px',
+		marginRight: '40px',
 	},
 	profileIcon: {
 		color: '#ffffff',
@@ -50,19 +53,10 @@ const useStyles = makeStyles((theme) => ({
 		margin: 10,
 	},
 	logo: {
-		display: 'block',
+		display: 'flex',
 		width: '40px',
 		height: '40px',
 		margin: 'auto',
-	},
-	logoContainer: {
-		display: 'flex',
-		width: '50px',
-		height: '50px',
-		background: theme.palette.secondary.main,
-		margin: 'auto',
-		borderRadius: '50%',
-		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
 	},
 	listText: {
 		color: '#fff',
@@ -94,20 +88,14 @@ export default function Navbar({ user }: HasUserProps) {
 					<MenuIcon />
 				</Button>
 				<Typography className={classes.name}>
-				{user.firstName ? user.firstName : ''} {user.lastName ? user.lastName : ''}
-				<div className={classes.role}>
-					{user.role === UserRole.MENTEE && (
-						' (Mentee)'
-					)}
-					{user.role === UserRole.MENTOR && (
-						' (Mentor)'
-					)}
-					{user.role === UserRole.ADMIN && (
-						' (Admin)'
-					)}
-				</div>
+					{user.firstName ? user.firstName : ''} {user.lastName ? user.lastName : ''}
+					<div className={classes.role}>
+						{user.role === UserRole.MENTEE && ' (Mentee)'}
+						{user.role === UserRole.MENTOR && ' (Mentor)'}
+						{user.role === UserRole.ADMIN && ' (Admin)'}
+					</div>
 				</Typography>
-				<Button className={classes.profileButton}>
+				<div className={classes.profileButton}>
 					<Link to="/member/profile">
 						<Avatar
 							src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
@@ -116,7 +104,7 @@ export default function Navbar({ user }: HasUserProps) {
 							GB
 						</Avatar>
 					</Link>
-				</Button>
+				</div>
 				<SwipeableDrawer open={isDrawerOpen} onClose={showDrawer(false)} onOpen={showDrawer(true)}>
 					<div className={classes.list} onClick={showDrawer(false)}>
 						<List>
