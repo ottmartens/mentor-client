@@ -6,6 +6,7 @@ import { getUserToken } from '../../services/auth';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import Loader from '../loader/Loader';
 import { UserRole } from '../../types';
+import { StaticContext, RouteComponentProps } from 'react-router';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	const userContext = React.useContext(UserContext);
@@ -51,25 +52,43 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 					return null;
 				}
 
+				// redirect if something is missing
+				redirectToSteps(routeProps, user);
+
 				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}
 		/>
 	);
 }
 
-// https://github.com/ReactTraining/react-router/issues/4105
-function renderMergedProps(component, ...rest) {
-	const finalProps = Object.assign({}, ...rest);
-	return React.createElement(component, finalProps);
-}
-
-function redirectToSteps(routeProps: RouteProps, user: UserContextUser) {
+function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any>, user: UserContextUser) {
 	switch (user.role) {
 		case UserRole.MENTEE:
+			if (
+				(!user.firstName || !user.lastName || !user.imageUrl) &&
+				routeProps.location &&
+				routeProps.location.pathname !== '/member/profile'
+			) {
+				routeProps.history.push({ pathname: '/member/profile', state: { redirected: true } });
+			}
 			break;
 		case UserRole.MENTOR:
+			if (
+				(!user.firstName || !user.lastName || !user.imageUrl) &&
+				routeProps.location &&
+				routeProps.location.pathname !== '/member/profile'
+			) {
+				routeProps.history.push({ pathname: '/member/profile', state: { redirected: true } });
+			}
+
 			break;
 		case UserRole.ADMIN:
 			break;
 	}
+}
+
+// https://github.com/ReactTraining/react-router/issues/4105
+function renderMergedProps(component, ...rest) {
+	const finalProps = Object.assign({}, ...rest);
+	return React.createElement(component, finalProps);
 }
