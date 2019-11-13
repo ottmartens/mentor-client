@@ -9,6 +9,7 @@ import Notice from '../../components/notice/Notice';
 import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -98,7 +99,7 @@ export default function LoginView() {
 							<Field {...input.email} label="E-mail" type="text" />
 						</div>
 						<div>
-							<Field {...input.password} label={t.PASSWORD} type="password" />
+							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
 							Don't have an account?{' '}
@@ -108,7 +109,7 @@ export default function LoginView() {
 						</Typography>
 						<div className={classes.button}>
 							<Button type="submit" variant="contained" color="primary">
-								{t.LOGIN}
+								{t(Translation.LOGIN)}
 							</Button>
 						</div>
 					</form>
