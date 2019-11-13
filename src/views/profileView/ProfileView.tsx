@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '-14px',
 		marginBottom: '14px',
 	},
+	declineButton: {
+		backgroundColor: '#B40404',
+		marginBottom: '8px',
+		color: '#fff',
+	},
 }));
 
 export default function ProfileView({ user }: HasUserProps) {
@@ -70,6 +75,7 @@ export default function ProfileView({ user }: HasUserProps) {
 	const input: { [s: string]: UseInput } = {
 		firstName: useInput({ validators: [isSet], initialValue: (userData && userData.firstName) || '' }),
 		lastName: useInput({ validators: [isSet], initialValue: (userData && userData.lastName) || '' }),
+		tagline: useInput({ validators: [isSet], initialValue: (userData && userData.tagline) || '' }),
 		bio: useInput({ validators: [isSet], initialValue: (userData && userData.bio) || '' }),
 	};
 
@@ -79,6 +85,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		variables: {
 			firstName: input.firstName.value,
 			lastName: input.lastName.value,
+			tagline: input.tagline.value,
 			bio: input.bio.value,
 		},
 		authToken: user.token,
@@ -114,12 +121,17 @@ export default function ProfileView({ user }: HasUserProps) {
 				>
 					<Field className={classes.largeWidth} {...input.firstName} label="First name" />
 					<Field className={classes.largeWidth} {...input.lastName} label="Last name" />
+					<Field className={classes.largeWidth} {...input.tagline} label="Tagline" />
 					<Field className={classes.largeWidth} {...input.bio} label="Bio" multiline />
 					<Button variant="contained" color="primary" type="submit" className={classes.button}>
 						SAVE
 					</Button>
 				</form>
 			</div>
+
+			<Button variant="contained" type="submit" className={classes.declineButton}>
+				DELETE
+			</Button>
 		</Container>
 	);
 
