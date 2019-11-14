@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
@@ -11,7 +11,8 @@ import axios from 'axios';
 import { BASE_URL, queryPrefix } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
-import { Translation, TRANSLATIONS } from '../../translations';
+import { Translation } from '../../translations';
+import { UserContext } from '../../contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -58,8 +59,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
+	const userContext = React.useContext(UserContext);
+	const setUser = userContext && userContext.setUser;
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
-	const [imagePreview, setImagePreview] = React.useState<string |undefined>()
+	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -84,7 +87,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		bio: useInput({ validators: [isSet], initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile] = useBackend({
+	const [updateProfile, { data: updateProfileData, called: updateCalled }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
@@ -98,6 +101,13 @@ export default function ProfileView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	React.useEffect(() => {
+		if (!updateCalled || !updateCalled || !setUser) {
+			return;
+		}
+		setUser({ ...user, ...updateProfileData });
+	}, [updateProfileData, setUser]);
+
 	if (loading || !userData) {
 		return <Loader />;
 	}
@@ -108,7 +118,13 @@ export default function ProfileView({ user }: HasUserProps) {
 			<div>
 				<div>
 					<CardMedia
-						image={imagePreview ? imagePreview : user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
+						image={
+							imagePreview
+								? imagePreview
+								: user.imageUrl
+								? `${BASE_URL}${user.imageUrl}`
+								: '/images/avatar_placeholder.webp'
+						}
 						className={classes.image}
 					/>
 					<label className={classes.imageButtonContainer}>
@@ -147,7 +163,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
-		const file = event.target.files[0]
+		const file = event.target.files[0];
 		var formData = new FormData();
 		formData.append('file', file);
 		setIsLoadingImage(true);
@@ -162,7 +178,14 @@ export default function ProfileView({ user }: HasUserProps) {
 			})
 			.finally(() => {
 				setIsLoadingImage(false);
-				setImagePreview(URL.createObjectURL(file))
+				setImagePreview(URL.createObjectURL(file));
 			});
+	}
+	function ValidateSize(file) {
+		var FileSize = file.files[0].size / 1024 / 1024; // in MB
+		if (FileSize > 5) {
+			alert('File size exceeds 5 MB');
+			// $(file).val(''); //for clearing with Jquery
+		}
 	}
 }
