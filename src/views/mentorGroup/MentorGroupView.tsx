@@ -1,22 +1,14 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import {
-	Container,
-	Card,
-	makeStyles,
-	Divider,
-	List,
-	ListItem,
-	ListItemAvatar,
-	Avatar,
-	ListItemText,
-	Button,
-} from '@material-ui/core';
+import { Card, makeStyles, Divider, List, Button } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
+import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -63,6 +55,7 @@ interface Props extends HasUserProps {
 export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
+	const t = useTranslator();
 
 	const [queryMentorGroupData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -116,7 +109,7 @@ export default function MentorGroupView({ match, user }: Props) {
 								await queryMentorGroupData();
 							}}
 						>
-							APPLY
+							{t(Translation.JOIN_GROUP)}
 						</Button>
 					</div>
 				)}
@@ -124,23 +117,13 @@ export default function MentorGroupView({ match, user }: Props) {
 				{/* Accepted mentees */}
 				{data.mentees && data.mentees.length !== 0 && (
 					<Card className={classes.menteeCard}>
-						<h2 className={classes.title}>Approved mentees</h2>
+						<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
 						<List>
-							{data.mentees.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+							{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItem key={idx}>
-											<Link to={`/member/user/${userId}`} className={classes.listLink}>
-												<ListItemAvatar>
-													<Avatar
-														className={classes.listImage}
-														src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-													/>
-												</ListItemAvatar>
-												<ListItemText primary={`${firstName} ${lastName}`} />
-											</Link>
-										</ListItem>
+										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
 										<Divider variant="inset" component="li" />
 									</div>
 								);

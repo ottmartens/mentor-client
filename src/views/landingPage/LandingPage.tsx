@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, Container, makeStyles, Card, Typography } from '@material-ui/core';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	logo: {
@@ -32,8 +34,10 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		padding: 0,
+
 	},
 	card: {
+		
 		paddingTop: '100px',
 		paddingBottom: '100px',
 		display: 'flex',
@@ -43,15 +47,22 @@ const useStyles = makeStyles((theme) => ({
 	},
 	intro: {
 		letterSpacing: '1px',
-		textAlign: 'center',
+		textAlign: 'center',		
 		marginTop: '2em',
-		marginBottom: '2em',
+		marginBottom: '1em',
 		color: '#2a1c6b',
+	},
+	desc: {
+		letterSpacing: '1px',
+		textAlign: 'center',		
+		marginBottom: '2em',
+		color: '#848484',
 	},
 }));
 
 export default function LandingPageView() {
 	const classes = useStyles();
+	const t = useTranslator();
 
 	return (
 		<Container maxWidth="sm" className={classes.container}>
@@ -60,17 +71,20 @@ export default function LandingPageView() {
 					<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
 				</div>
 				<div className={classes.intro}>
-					<Typography variant="h4">MentorApp</Typography>
+					<Typography variant='h4'>MentorApp</Typography>
+				</div>
+				<div className={classes.desc}>
+					<Typography variant='subtitle2'>{t(Translation.MENTOR_PROGRAMME)}</Typography>
 				</div>
 				<div className={classes.buttons}>
 					<div>
 						<Button href="/login" className={classes.button} variant="contained" color="primary">
-							LOG IN
+						{t(Translation.LOGIN)}
 						</Button>
 					</div>
 					<div>
 						<Button href="/register" className={classes.button} variant="contained" color="primary">
-							REGISTER
+						{t(Translation.REGISTER)}
 						</Button>
 					</div>
 				</div>

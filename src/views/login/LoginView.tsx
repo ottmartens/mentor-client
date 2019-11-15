@@ -8,6 +8,8 @@ import { isSet, isEmail, validateInputs } from '../../services/validators';
 import Notice from '../../components/notice/Notice';
 import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -35,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginView() {
+	// translations
+	const t = useTranslator();
 	// css classes
 	const classes = useStyles();
 
@@ -90,22 +94,22 @@ export default function LoginView() {
 						}}
 						className={classes.form}
 					>
-						<h2>Login</h2>
+						<h2>{t(Translation.LOGIN)}</h2>
 						<div>
 							<Field {...input.email} label="E-mail" type="text" />
 						</div>
 						<div>
-							<Field {...input.password} label="Password" type="password" />
+							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
-							Don't have an account?{' '}
+							{t(Translation.NO_ACCOUNT)}{' '}
 							<Link href="/register" color="primary">
-								Register
+							{t(Translation.REGISTER)}
 							</Link>
 						</Typography>
 						<div className={classes.button}>
 							<Button type="submit" variant="contained" color="primary">
-								LOG IN
+								{t(Translation.LOGIN)}
 							</Button>
 						</div>
 					</form>

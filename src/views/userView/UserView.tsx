@@ -4,6 +4,8 @@ import { Container, Card, makeStyles, Typography, CardMedia } from '@material-ui
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
@@ -16,11 +18,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 	image: {
 		width: '100%',
-		height: '150px',
+		height: '15em',
 		marginBottom: '1em',
 	},
 	bio: {
-		marginTop: '1em',
+		margin: '1em',
 	},
 	email: {
 		marginTop: '1em',
@@ -38,6 +40,7 @@ interface Props extends HasUserProps {
 export default function UserView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
+	const t = useTranslator();
 
 	const [queryUserData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -65,9 +68,15 @@ export default function UserView({ match, user }: Props) {
 						className={classes.image}
 					/>
 					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
-						{data.firstName} {data.lastName}
+						{data.name}
 					</Typography>
-					<Typography variant="body2" color="textSecondary" component="p">
+					<Typography variant="body2">
+						{data.degree}
+					</Typography>
+					<Typography variant="body2">
+						{data.year}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p" className={classes.bio}>
 						{data.bio}
 					</Typography>
 					<Typography variant="h5" component="h2">

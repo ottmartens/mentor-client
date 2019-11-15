@@ -1,27 +1,20 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import {
-	Container,
-	makeStyles,
-	Divider,
-	List,
-	ListItem,
-	ListItemAvatar,
-	Avatar,
-	ListItemText,
-	Button,
-} from '@material-ui/core';
+import { Container, makeStyles, Divider, List, Button } from '@material-ui/core';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
+import Person from '../../components/person/Person';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 type Mentor = {
-	userId: number;
-	firstName: string;
-	lastName: string;
+	userId: string;
+	name: string;
 	hasRequestedYou: boolean;
 	youHaveRequested: boolean;
 	imageUrl: string;
+	tagline: string;
 };
 
 const useStyles = makeStyles(() => ({
@@ -47,6 +40,7 @@ const useStyles = makeStyles(() => ({
 
 export default function MentorPairingView({ user }: HasUserProps) {
 	const classes = useStyles();
+	const t = useTranslator();
 
 	//get data
 	const [queryFreeMentorsData, { data, loading, called }] = useBackend({
@@ -85,18 +79,11 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	return (
 		<Container maxWidth="sm">
 			<List>
-				{sortedData.map(({ userId, firstName, lastName, hasRequestedYou, youHaveRequested, imageUrl }, idx) => {
+				{sortedData.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
 					return (
 						<div key={idx}>
 							{idx === 0 && <Divider variant="inset" component="li" />}
-							<ListItem key={idx}>
-								<ListItemAvatar>
-									<Avatar
-										className={classes.requestImage}
-										src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-									/>
-								</ListItemAvatar>
-								<ListItemText primary={`${firstName} ${lastName}`} />
+							<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 								{hasRequestedYou ? (
 									<div>
 										<Button
@@ -113,7 +100,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 												await queryFreeMentorsData();
 											}}
 										>
-											ACCEPT
+											{t(Translation.ACCEPT)}
 										</Button>
 										{'  '}
 										<Button
@@ -130,11 +117,11 @@ export default function MentorPairingView({ user }: HasUserProps) {
 												await queryFreeMentorsData();
 											}}
 										>
-											DECLINE
+											{t(Translation.DECLINE)}
 										</Button>
 									</div>
 								) : youHaveRequested ? (
-									<div>Request pending</div>
+									<div>{t(Translation.WAITING_RESPONSE)}</div>
 								) : (
 									<div>
 										<Button
@@ -150,11 +137,11 @@ export default function MentorPairingView({ user }: HasUserProps) {
 												await queryFreeMentorsData();
 											}}
 										>
-											REQUEST
+											{t(Translation.REQUEST)}
 										</Button>
 									</div>
 								)}
-							</ListItem>
+							</Person>
 							<Divider variant="inset" component="li" />
 						</div>
 					);

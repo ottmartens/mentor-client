@@ -5,21 +5,12 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import {
-	Button,
-	CardMedia,
-	Typography,
-	Card,
-	List,
-	Divider,
-	ListItem,
-	ListItemAvatar,
-	Avatar,
-	ListItemText,
-} from '@material-ui/core';
+import { Button, CardMedia, Typography, Card, List, Divider } from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
-import { Link } from 'react-router-dom';
+import Person from '../../components/person/Person';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	wrapper: {
@@ -79,6 +70,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 		endPoint: EndPoint.MY_GROUP,
 		authToken: user.token,
 	});
+	const t = useTranslator();
 
 	React.useEffect(() => {
 		if (called) {
@@ -113,7 +105,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 
 	return (
 		<div className={classes.wrapper}>
-			<h2>My mentorgroup view</h2>
+			<h2>{t(Translation.MY_MENTORGROUP)}</h2>
 			<div className={classes.mentors}>
 				{data &&
 					data.mentors.map(({ imageUrl }, idx) => {
@@ -137,7 +129,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				}}
 			>
 				{isEditable ? (
-					<Field {...input.title} label="Group name" disabled={!isEditable} />
+					<Field {...input.title} label={t(Translation.GROUP_NAME)} disabled={!isEditable} />
 				) : (
 					<Typography gutterBottom variant="h5" component="h2">
 						{(data && data.title) || ''}
@@ -146,7 +138,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				{isEditable ? (
 					<Field
 						{...input.description}
-						label="description"
+						label={t(Translation.GROUP_DESCRIPTION)}
 						disabled={!isEditable}
 						multiline
 						className={classes.largeWidth}
@@ -166,12 +158,12 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 								setIsEditable(!isEditable);
 							}}
 						>
-							{isEditable ? 'CANCEL' : 'EDIT'}
+							{isEditable ? t(Translation.CANCEL) : t(Translation.SAVE_CHANGES)}
 						</Button>
 					)}
 					{isEditable && (
 						<Button variant="contained" color="primary" type="submit" className={classes.button}>
-							SAVE
+							{t(Translation.EDIT_GROUP)}
 						</Button>
 					)}
 				</div>
@@ -180,23 +172,13 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 			{/* Accepted mentees */}
 			{data.mentees && data.mentees.length !== 0 && (
 				<Card className={classes.menteeCard}>
-					<h2 className={classes.title}>Approved mentees</h2>
+					<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
 					<List>
-						{data.mentees.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+						{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 							return (
 								<div key={idx}>
 									{idx === 0 && <Divider variant="inset" component="li" />}
-									<ListItem key={idx}>
-										<Link to={`/member/user/${userId}`} className={classes.listLink}>
-											<ListItemAvatar>
-												<Avatar
-													className={classes.listImage}
-													src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-												/>
-											</ListItemAvatar>
-											<ListItemText primary={`${firstName} ${lastName}`} />
-										</Link>
-									</ListItem>
+									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
 									<Divider variant="inset" component="li" />
 								</div>
 							);
@@ -209,22 +191,13 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 			{user.role === UserRole.MENTOR && data.requests && data.requests.length !== 0 && (
 				<div>
 					<Card className={classes.menteeCard}>
-						<h2 className={classes.title}>Applied mentees</h2>
+						<h2 className={classes.title}>{t(Translation.APPLIED_MENTEES)}</h2>
 						<List>
-							{data.requests.map(({ imageUrl, firstName, lastName, userId }, idx) => {
+							{data.requests.map(({ imageUrl, name, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<ListItem key={idx}>
-											<Link to={`/member/user/${userId}`} className={classes.listLink}>
-												<ListItemAvatar>
-													<Avatar
-														className={classes.listImage}
-														src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-													></Avatar>
-												</ListItemAvatar>
-												<ListItemText primary={`${firstName} ${lastName}`} />
-											</Link>
+										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 											<Button
 												variant="contained"
 												className={classes.acceptButton}
@@ -239,7 +212,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 													await getGroupInfo();
 												}}
 											>
-												APPROVE
+												{t(Translation.APPROVE)}
 											</Button>{' '}
 											<Button
 												variant="contained"
@@ -255,9 +228,9 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 													await getGroupInfo();
 												}}
 											>
-												DECLINE
+												{t(Translation.DECLINE)}
 											</Button>
-										</ListItem>
+										</Person>
 										<Divider variant="inset" component="li" />
 									</div>
 								);
