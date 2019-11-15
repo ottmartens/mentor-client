@@ -5,14 +5,7 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import {
-	Button,
-	CardMedia,
-	Typography,
-	Card,
-	List,
-	Divider,
-} from '@material-ui/core';
+import { Button, CardMedia, Typography, Card, List, Divider } from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import Person from '../../components/person/Person';
@@ -165,7 +158,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 								setIsEditable(!isEditable);
 							}}
 						>
-							{isEditable ?  t(Translation.CANCEL) : t(Translation.SAVE_CHANGES)}
+							{isEditable ? t(Translation.CANCEL) : t(Translation.SAVE_CHANGES)}
 						</Button>
 					)}
 					{isEditable && (
@@ -181,11 +174,11 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
 					<List>
-						{data.mentees.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
+						{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 							return (
 								<div key={idx}>
 									{idx === 0 && <Divider variant="inset" component="li" />}
-									<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
+									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
 									<Divider variant="inset" component="li" />
 								</div>
 							);
@@ -200,11 +193,11 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>{t(Translation.APPLIED_MENTEES)}</h2>
 						<List>
-							{data.requests.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
+							{data.requests.map(({ imageUrl, name, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
+										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 											<Button
 												variant="contained"
 												className={classes.acceptButton}
