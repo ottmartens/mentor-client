@@ -1,12 +1,6 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import {
-	Card,
-	makeStyles,
-	Divider,
-	List,
-	Button,
-} from '@material-ui/core';
+import { Card, makeStyles, Divider, List, Button } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
@@ -125,11 +119,11 @@ export default function MentorGroupView({ match, user }: Props) {
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
 						<List>
-							{data.mentees.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
+							{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
+										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
 										<Divider variant="inset" component="li" />
 									</div>
 								);

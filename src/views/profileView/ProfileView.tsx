@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Container, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
@@ -79,20 +79,18 @@ export default function ProfileView({ user }: HasUserProps) {
 	}, [called, getUserInfo]);
 
 	const input: { [s: string]: UseInput } = {
-		firstName: useInput({ validators: [isSet], initialValue: (userData && userData.firstName) || '' }),
-		lastName: useInput({ validators: [isSet], initialValue: (userData && userData.lastName) || '' }),
+		name: useInput({ validators: [isSet], initialValue: (userData && userData.name) || '' }),
 		degree: useInput({ validators: [isSet], initialValue: (userData && userData.degree) || '' }),
 		year: useInput({ validators: [isSet], initialValue: (userData && userData.year) || '' }),
-		tagline: useInput({ validators: [isSet], initialValue: (userData && userData.tagline) || '' }),
-		bio: useInput({ validators: [isSet], initialValue: (userData && userData.bio) || '' }),
+		tagline: useInput({ initialValue: (userData && userData.tagline) || '' }),
+		bio: useInput({ initialValue: (userData && userData.bio) || '' }),
 	};
 
 	const [updateProfile, { data: updateProfileData, called: updateCalled }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
-			firstName: input.firstName.value,
-			lastName: input.lastName.value,
+			name: input.name.value,
 			degree: input.degree.value,
 			year: input.year.value,
 			tagline: input.tagline.value,
@@ -143,8 +141,7 @@ export default function ProfileView({ user }: HasUserProps) {
 						}
 					}}
 				>
-					<Field className={classes.largeWidth} {...input.firstName} label={t(Translation.FIRST_NAME)} />
-					<Field className={classes.largeWidth} {...input.lastName} label={t(Translation.LAST_NAME)} />
+					<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
 					<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
 					<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
 					<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />

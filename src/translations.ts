@@ -40,6 +40,7 @@ export enum Translation {
 	DEGREE = 'DEGREE',
 	YEAR = 'YEAR',
 	TAGLINE = 'TAGLINE',
+	NAME = 'NAME',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -64,8 +65,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		FIRST_NAME: 'Eesnimi',
 		LAST_NAME: 'Perenimi',
 		USER_DESCRIPTION: 'Kirjelda ennast',
-		YES_ACCOUNT: 'On juba kasutaja olemas? Vajuta siia',
-		NO_ACCOUNT: 'Pole kasutajat? Vajuta siia',
+		YES_ACCOUNT: 'On juba kasutaja olemas?',
+		NO_ACCOUNT: 'Pole kasutajat?',
 		GROUP_NAME: 'Grupi nimi:',
 		GROUP_DESCRIPTION: 'Kirjelda gruppi:',
 		CANCEL: 'Tühista',
@@ -80,9 +81,10 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		GRADE_ACTIVITIES: 'Hinda tegevusi',
 		DEADLINES: 'Tähtajad',
 		VERIFY_USERS: 'Kinnita kasutajad',
-		DEGREE: 'Teaduskraad',
+		DEGREE: 'Eriala',
 		YEAR: 'Õppeaasta',
-		TAGLINE: 'Lööksõnad',
+		TAGLINE: 'Iseloomustavad sõnad',
+		NAME: 'Nimi',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -105,8 +107,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		FIRST_NAME: 'First Name',
 		LAST_NAME: 'Last Name',
 		USER_DESCRIPTION: 'Desribe yourself',
-		YES_ACCOUNT: "Already have an account? Click here",
-		NO_ACCOUNT: "Don't have an account? Click here",
+		YES_ACCOUNT: 'Already have an account?',
+		NO_ACCOUNT: "Don't have an account?",
 		GROUP_NAME: 'Group name:',
 		GROUP_DESCRIPTION: 'Describe the group:',
 		CANCEL: 'Discard',
@@ -124,5 +126,6 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		DEGREE: 'Degree',
 		YEAR: 'Year',
 		TAGLINE: 'Tagline',
+		NAME: 'Name',
 	},
 };
