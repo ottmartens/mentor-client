@@ -9,7 +9,7 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 
 type Mentor = {
-	userId: number;
+	userId: string;
 	name: string;
 	hasRequestedYou: boolean;
 	youHaveRequested: boolean;

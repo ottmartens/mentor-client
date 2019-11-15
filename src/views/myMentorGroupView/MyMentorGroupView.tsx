@@ -178,7 +178,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 							return (
 								<div key={idx}>
 									{idx === 0 && <Divider variant="inset" component="li" />}
-									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
+									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
 									<Divider variant="inset" component="li" />
 								</div>
 							);

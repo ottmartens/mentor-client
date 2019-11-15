@@ -153,7 +153,7 @@ export default function ProfileView({ user }: HasUserProps) {
 			</div>
 
 			<Button variant="contained" type="submit" className={classes.declineButton}>
-				DELETE
+				KUSTUTA KASUTAJA
 			</Button>
 		</Container>
 	);
