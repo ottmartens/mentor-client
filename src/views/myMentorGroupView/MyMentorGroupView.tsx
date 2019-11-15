@@ -181,11 +181,11 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
 					<List>
-						{data.mentees.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
+						{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 							return (
 								<div key={idx}>
 									{idx === 0 && <Divider variant="inset" component="li" />}
-									<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
+									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}/>
 									<Divider variant="inset" component="li" />
 								</div>
 							);
@@ -200,11 +200,11 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					<Card className={classes.menteeCard}>
 						<h2 className={classes.title}>{t(Translation.APPLIED_MENTEES)}</h2>
 						<List>
-							{data.requests.map(({ imageUrl, firstName, lastName, userId, tagline }, idx) => {
+							{data.requests.map(({ imageUrl, name, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
+										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 											<Button
 												variant="contained"
 												className={classes.acceptButton}

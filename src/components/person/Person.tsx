@@ -8,7 +8,7 @@ interface Props {
     tagline: string;
     imageUrl: string;
     userId: string;
-    key?: string;
+    key?: string | number;
     children?: React.ReactNode;
 }
 

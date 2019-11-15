@@ -15,9 +15,8 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 
 type Mentor = {
-	userId: number;
-	firstName: string;
-	lastName: string;
+	userId: string;
+	name: string;
 	hasRequestedYou: boolean;
 	youHaveRequested: boolean;
 	imageUrl: string;
@@ -86,11 +85,11 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	return (
 		<Container maxWidth="sm">
 			<List>
-				{sortedData.map(({ userId, firstName, lastName, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
+				{sortedData.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
 					return (
 						<div key={idx}>
 							{idx === 0 && <Divider variant="inset" component="li" />}
-							<Person firstName={firstName} lastName={lastName} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
+							<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
 								{hasRequestedYou ? (
 									<div>
 										<Button
