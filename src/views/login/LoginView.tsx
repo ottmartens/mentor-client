@@ -94,7 +94,7 @@ export default function LoginView() {
 						}}
 						className={classes.form}
 					>
-						<h2>Login</h2>
+						<h2>{t(Translation.LOGIN)}</h2>
 						<div>
 							<Field {...input.email} label="E-mail" type="text" />
 						</div>
@@ -102,9 +102,9 @@ export default function LoginView() {
 							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
-							Don't have an account?{' '}
+							{t(Translation.NO_ACCOUNT)}{' '}
 							<Link href="/register" color="primary">
-								Register
+							{t(Translation.REGISTER)}
 							</Link>
 						</Typography>
 						<div className={classes.button}>

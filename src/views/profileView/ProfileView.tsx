@@ -10,6 +10,9 @@ import { HasUserProps } from '../../types';
 import axios from 'axios';
 import { BASE_URL, queryPrefix } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
+import { UserContext } from '../../contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -56,14 +59,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
+	const userContext = React.useContext(UserContext);
+	const setUser = userContext && userContext.setUser;
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
-	const [imagePreview, setImagePreview] = React.useState<string |undefined>()
+	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.USER,
 		authToken: user.token,
 	});
+	const t = useTranslator();
 
 	React.useEffect(() => {
 		if (called) {
@@ -73,20 +79,18 @@ export default function ProfileView({ user }: HasUserProps) {
 	}, [called, getUserInfo]);
 
 	const input: { [s: string]: UseInput } = {
-		firstName: useInput({ validators: [isSet], initialValue: (userData && userData.firstName) || '' }),
-		lastName: useInput({ validators: [isSet], initialValue: (userData && userData.lastName) || '' }),
+		name: useInput({ validators: [isSet], initialValue: (userData && userData.name) || '' }),
 		degree: useInput({ validators: [isSet], initialValue: (userData && userData.degree) || '' }),
 		year: useInput({ validators: [isSet], initialValue: (userData && userData.year) || '' }),
-		tagline: useInput({ validators: [isSet], initialValue: (userData && userData.tagline) || '' }),
-		bio: useInput({ validators: [isSet], initialValue: (userData && userData.bio) || '' }),
+		tagline: useInput({ initialValue: (userData && userData.tagline) || '' }),
+		bio: useInput({ initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile] = useBackend({
+	const [updateProfile, { data: updateProfileData, called: updateCalled }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
-			firstName: input.firstName.value,
-			lastName: input.lastName.value,
+			name: input.name.value,
 			degree: input.degree.value,
 			year: input.year.value,
 			tagline: input.tagline.value,
@@ -95,23 +99,37 @@ export default function ProfileView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	React.useEffect(() => {
+		if (!updateCalled || !updateCalled || !setUser) {
+			return;
+		}
+		setUser({ ...user, ...updateProfileData });
+	}, [updateProfileData, setUser]);
+
 	if (loading || !userData) {
 		return <Loader />;
 	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			<h2>Profile</h2>
-
+			<h2>{t(Translation.PROFILE)}</h2>
 			<div>
 				<div>
 					<CardMedia
-						image={imagePreview ? imagePreview : user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
+						image={
+							imagePreview
+								? imagePreview
+								: user.imageUrl
+								? `${BASE_URL}${user.imageUrl}`
+								: '/images/avatar_placeholder.webp'
+						}
 						className={classes.image}
 					/>
 					<label className={classes.imageButtonContainer}>
 						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
-						<span className={classes.imageButton}>Upload {isloadingImage && <Loader size="0.975rem" />}</span>
+						<span className={classes.imageButton}>
+							{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
+						</span>
 					</label>
 				</div>
 
@@ -123,14 +141,13 @@ export default function ProfileView({ user }: HasUserProps) {
 						}
 					}}
 				>
-					<Field className={classes.largeWidth} {...input.firstName} label="First name" />
-					<Field className={classes.largeWidth} {...input.lastName} label="Last name" />
-					<Field className={classes.largeWidth} {...input.degree} label="Degree" />
-					<Field className={classes.largeWidth} {...input.year} label="Year" />
-					<Field className={classes.largeWidth} {...input.tagline} label="Tagline" />
-					<Field className={classes.largeWidth} {...input.bio} label="Bio" multiline />
+					<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+					<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
+					<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
+					<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
+					<Field className={classes.largeWidth} {...input.bio} label={t(Translation.USER_DESCRIPTION)} multiline />
 					<Button variant="contained" color="primary" type="submit" className={classes.button}>
-						SAVE
+						{t(Translation.SAVE_CHANGES)}
 					</Button>
 				</form>
 			</div>
@@ -145,7 +162,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
-		const file = event.target.files[0]
+		const file = event.target.files[0];
 		var formData = new FormData();
 		formData.append('file', file);
 		setIsLoadingImage(true);
@@ -160,7 +177,14 @@ export default function ProfileView({ user }: HasUserProps) {
 			})
 			.finally(() => {
 				setIsLoadingImage(false);
-				setImagePreview(URL.createObjectURL(file))
+				setImagePreview(URL.createObjectURL(file));
 			});
+	}
+	function ValidateSize(file) {
+		var FileSize = file.files[0].size / 1024 / 1024; // in MB
+		if (FileSize > 5) {
+			alert('File size exceeds 5 MB');
+			// $(file).val(''); //for clearing with Jquery
+		}
 	}
 }

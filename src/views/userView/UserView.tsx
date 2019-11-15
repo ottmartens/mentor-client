@@ -4,6 +4,8 @@ import { Container, Card, makeStyles, Typography, CardMedia } from '@material-ui
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
@@ -38,6 +40,7 @@ interface Props extends HasUserProps {
 export default function UserView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
+	const t = useTranslator();
 
 	const [queryUserData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,

@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../services/variables';
 
 interface Props {
-	firstName: string;
-	lastName: string;
+	name: string;
     tagline: string;
     imageUrl: string;
     userId: string;
     key?: string;
+    children?: React.ReactNode;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Person({userId, imageUrl, firstName, lastName, tagline, key}: Props) {
+export default function Person({userId, imageUrl, name, tagline, key, children}: Props) {
 	const classes = useStyles();
 
 	return (
@@ -39,10 +39,9 @@ export default function Person({userId, imageUrl, firstName, lastName, tagline, 
                         src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
                     />
                 </ListItemAvatar>
-                <ListItemText primary={`${firstName} ${lastName}`}
-                secondary={`${tagline? tagline:''}`}
-                />
+                <ListItemText primary={name} secondary={`${tagline? tagline : ''}`} />
             </Link>
+            {children}
         </ListItem>
     );
 }

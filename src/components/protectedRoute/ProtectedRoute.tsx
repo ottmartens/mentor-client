@@ -64,20 +64,12 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any>, user: UserContextUser) {
 	switch (user.role) {
 		case UserRole.MENTEE:
-			if (
-				(!user.firstName || !user.lastName || !user.imageUrl) &&
-				routeProps.location &&
-				routeProps.location.pathname !== '/member/profile'
-			) {
+			if ((!user.name || !user.imageUrl) && routeProps.location && routeProps.location.pathname !== '/member/profile') {
 				routeProps.history.push({ pathname: '/member/profile', state: { redirected: true } });
 			}
 			break;
 		case UserRole.MENTOR:
-			if (
-				(!user.firstName || !user.lastName || !user.imageUrl) &&
-				routeProps.location &&
-				routeProps.location.pathname !== '/member/profile'
-			) {
+			if ((!user.name || !user.imageUrl) && routeProps.location && routeProps.location.pathname !== '/member/profile') {
 				routeProps.history.push({ pathname: '/member/profile', state: { redirected: true } });
 			}
 

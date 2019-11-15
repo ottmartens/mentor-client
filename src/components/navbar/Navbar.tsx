@@ -12,6 +12,8 @@ import { Toolbar, AppBar, Avatar, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 import { UserContextUser } from '../../contexts/UserContext';
 import { BASE_URL } from '../../services/variables';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
 	list: {
@@ -75,6 +77,7 @@ type NavItem = {
 
 export default function Navbar({ user }: HasUserProps) {
 	const classes = useStyles();
+	const t = useTranslator();
 	const routes = getPossibleRoutes(user);
 	const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(false);
 
@@ -88,21 +91,19 @@ export default function Navbar({ user }: HasUserProps) {
 					<MenuIcon />
 				</Button>
 				<Typography className={classes.name}>
-					{user.firstName ? user.firstName : ''} {user.lastName ? user.lastName : ''}
-					<div className={classes.role}>
+					{user.name ? user.name : ''}
+					<span className={classes.role}>
 						{user.role === UserRole.MENTEE && ' (Mentee)'}
 						{user.role === UserRole.MENTOR && ' (Mentor)'}
 						{user.role === UserRole.ADMIN && ' (Admin)'}
-					</div>
+					</span>
 				</Typography>
 				<div className={classes.profileButton}>
 					<Link to="/member/profile">
 						<Avatar
 							src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 							className={classes.avatar}
-						>
-							GB
-						</Avatar>
+						></Avatar>
 					</Link>
 				</div>
 				<SwipeableDrawer open={isDrawerOpen} onClose={showDrawer(false)} onOpen={showDrawer(true)}>
@@ -129,37 +130,36 @@ export default function Navbar({ user }: HasUserProps) {
 			</Toolbar>
 		</AppBar>
 	);
-}
+	function getPossibleRoutes(user: UserContextUser): NavItem[] {
+		switch (user.role) {
+			case UserRole.MENTEE:
+				return [
+					{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
+					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
+					{ label: t(Translation.ACTIVITIES), url: '/member/acitivities' },
+					{ label: t(Translation.LOGOUT), url: '/logout' },
+				];
 
-function getPossibleRoutes(user: UserContextUser): NavItem[] {
-	switch (user.role) {
-		case UserRole.MENTEE:
-			return [
-				{ label: 'My group', url: `/member/my-mentor-group/` },
-				{ label: 'All groups', url: '/member/mentor-group-list' },
-				{ label: 'Activities', url: '/member/acitivities' },
-				{ label: 'Logout', url: '/logout' },
-			];
+			case UserRole.MENTOR:
+				return [
+					{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
+					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
+					{ label: t(Translation.ACTIVITIES), url: '/member/acitivities' },
+					{ label: t(Translation.FIND_MENTOR), url: '/member/find-co-mentor' },
+					{ label: t(Translation.LOGOUT), url: '/logout' },
+				];
 
-		case UserRole.MENTOR:
-			return [
-				{ label: 'My group', url: `/member/my-mentor-group/` },
-				{ label: 'All groups', url: '/member/mentor-group-list' },
-				{ label: 'Activities', url: '/member/acitivities' },
-				{ label: 'Find co-mentor', url: '/member/find-co-mentor' },
-				{ label: 'Logout', url: '/logout' },
-			];
-
-		case UserRole.ADMIN:
-			return [
-				{ label: 'Groups', url: '/admin/mentor-groups' },
-				{ label: 'Grade activities', url: '/admin/grade-activities' },
-				{ label: 'Activities', url: '/admin/acitivities' },
-				{ label: 'Deadlines', url: '/admin/deadlines' },
-				{ label: 'Vefify Users', url: '/admin/verify-users' },
-				{ label: 'Logout', url: '/admin/logout' },
-			];
-		default:
-			return [];
+			case UserRole.ADMIN:
+				return [
+					{ label: t(Translation.GROUPS), url: '/admin/mentor-groups' },
+					{ label: t(Translation.GRADE_ACTIVITIES), url: '/admin/grade-activities' },
+					{ label: t(Translation.ACTIVITIES), url: '/admin/acitivities' },
+					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
+					{ label: t(Translation.VERIFY_USERS), url: '/admin/verify-users' },
+					{ label: t(Translation.LOGOUT), url: '/admin/logout' },
+				];
+			default:
+				return [];
+		}
 	}
 }
