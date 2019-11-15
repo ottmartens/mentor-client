@@ -5,13 +5,10 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
-<<<<<<< HEAD
-=======
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
->>>>>>> 93f874234e8e5b878cf316b663684f69cad58677
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
