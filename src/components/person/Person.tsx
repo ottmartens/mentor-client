@@ -5,18 +5,18 @@ import { BASE_URL } from '../../services/variables';
 
 interface Props {
 	name: string;
-    tagline: string;
-    imageUrl: string;
-    userId: string;
-    key?: string | number;
-    children?: React.ReactNode;
+	tagline: string;
+	imageUrl: string;
+	userId: string | number;
+	key?: string | number;
+	children?: React.ReactNode;
 }
 
 const useStyles = makeStyles((theme) => ({
 	container: {
 		marginBottom: '12px',
-    },
-    listLink: {
+	},
+	listLink: {
 		display: 'flex',
 		flexGrow: 1,
 		textDecoration: 'none',
@@ -27,21 +27,21 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Person({userId, imageUrl, name, tagline, key, children}: Props) {
+export default function Person({ userId, imageUrl, name, tagline, key, children }: Props) {
 	const classes = useStyles();
 
 	return (
-        <ListItem key={key}>
-            <Link to={`/member/user/${userId}`} className={classes.listLink}>
-                <ListItemAvatar>
-                    <Avatar
-                        className={classes.listImage}
-                        src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-                    />
-                </ListItemAvatar>
-                <ListItemText primary={name} secondary={`${tagline? tagline : ''}`} />
-            </Link>
-            {children}
-        </ListItem>
-    );
+		<ListItem key={key}>
+			<Link to={`/member/user/${userId}`} className={classes.listLink}>
+				<ListItemAvatar>
+					<Avatar
+						className={classes.listImage}
+						src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+					/>
+				</ListItemAvatar>
+				<ListItemText primary={name} secondary={`${tagline ? tagline : ''}`} />
+			</Link>
+			{children}
+		</ListItem>
+	);
 }

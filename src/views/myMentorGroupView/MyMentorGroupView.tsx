@@ -5,14 +5,7 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import {
-	Button,
-	CardMedia,
-	Typography,
-	Card,
-	List,
-	Divider,
-} from '@material-ui/core';
+import { Button, CardMedia, Typography, Card, List, Divider } from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import Person from '../../components/person/Person';
@@ -165,7 +158,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 								setIsEditable(!isEditable);
 							}}
 						>
-							{isEditable ?  t(Translation.CANCEL) : t(Translation.SAVE_CHANGES)}
+							{isEditable ? t(Translation.CANCEL) : t(Translation.SAVE_CHANGES)}
 						</Button>
 					)}
 					{isEditable && (
