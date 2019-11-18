@@ -13,6 +13,8 @@ import Person from '../../components/person/Person';
 import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
+import { error } from 'console';
+import Notice from '../../components/notice/Notice';
 
 type Mentor = {
 	userId: string;
@@ -47,6 +49,8 @@ const useStyles = makeStyles(() => ({
 export default function MentorPairingView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const t = useTranslator();
+	const [requested, isRequesting] = React.useState(false);
+
 
 	//get data
 	const [queryFreeMentorsData, { data, loading, called }] = useBackend({
@@ -56,7 +60,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	});
 
 	//request to pair up w free mentor
-	const [requestPairUpFn] = useBackend({
+	const [requestPairUpFn, { called: requestSendingCalled, error}] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.MAKE_GROUP_CREATE_REQUEST,
 		authToken: user.token,
@@ -76,6 +80,14 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		queryFreeMentorsData();
 	}, [called, queryFreeMentorsData]);
 
+	React.useEffect(() => {
+		if ( !requestPairUpFn || !requestSendingCalled) {
+			return;
+		}
+		requestPairUpFn();
+		isRequesting(true);
+	}, [requestSendingCalled, requestPairUpFn]);
+
 	if (loading || !data) {
 		return <Loader />;
 	}
@@ -84,6 +96,8 @@ export default function MentorPairingView({ user }: HasUserProps) {
 
 	return (
 		<Container maxWidth="sm">
+			{error && <Notice variant="error" title="Request sending failed" message={error} />}
+			{requested && <Notice variant="success" title="Request sent" message={error} />}
 			<List>
 				{sortedData.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
 					return (

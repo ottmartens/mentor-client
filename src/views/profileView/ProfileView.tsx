@@ -13,6 +13,7 @@ import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
+import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -62,6 +63,8 @@ export default function ProfileView({ user }: HasUserProps) {
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
+	const [edited, isEdited] = React.useState(false);
+
 	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
@@ -86,7 +89,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		bio: useInput({ initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile, { data: updateProfileData, called: updateCalled }] = useBackend({
+	const [updateProfile, { data: updateProfileData, called: updateCalled, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
@@ -104,6 +107,7 @@ export default function ProfileView({ user }: HasUserProps) {
 			return;
 		}
 		setUser({ ...user, ...updateProfileData });
+		isEdited(true);
 	}, [updateProfileData, setUser]);
 
 	if (loading || !userData) {
@@ -112,6 +116,8 @@ export default function ProfileView({ user }: HasUserProps) {
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
+			{error && <Notice variant="error" title="Profile updating failed" message={error} />}
+			{edited && <Notice variant="success" title="Profile updated successfully" message={error} />}
 			<h2>{t(Translation.PROFILE)}</h2>
 			<div>
 				<div>

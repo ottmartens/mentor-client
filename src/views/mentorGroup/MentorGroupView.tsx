@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
+import { error } from 'console';
+import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -56,6 +58,8 @@ export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
 	const t = useTranslator();
+	const [applied, isApplying] = React.useState(false);
+
 
 	const [queryMentorGroupData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -64,7 +68,7 @@ export default function MentorGroupView({ match, user }: Props) {
 		authToken: user.token,
 	});
 
-	const [requestGroupJoinFn] = useBackend({
+	const [requestGroupJoinFn, { called: joinGroupCalled, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.JOIN_GROUP,
 		variables: { groupId: Number(params.id) },
@@ -78,11 +82,21 @@ export default function MentorGroupView({ match, user }: Props) {
 		queryMentorGroupData();
 	}, [called, queryMentorGroupData]);
 
+	React.useEffect(() => {
+		if (!requestGroupJoinFn || !joinGroupCalled) {
+			return;
+		}
+		requestGroupJoinFn();
+		isApplying(true);
+	}, [joinGroupCalled, requestGroupJoinFn]);
+
 	if (loading || !data) {
 		return <Loader />;
 	}
 	return (
 		<>
+			{error && <Notice variant="error" title="Application sending failed" message={error} />}
+			{applied && <Notice variant="success" title="Application sent" message={error} />}
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
