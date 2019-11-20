@@ -41,6 +41,10 @@ export enum Translation {
 	YEAR = 'YEAR',
 	TAGLINE = 'TAGLINE',
 	NAME = 'NAME',
+	ADD = 'ADD',
+	ADD_ACTIVITY = 'ADD_ACTIVITY',
+	POINTS = 'POINTS',
+	MIN_MEMBERS = 'MIN_MEMBERS',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -85,6 +89,10 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		YEAR: 'Õppeaasta',
 		TAGLINE: 'Sind iseloomustavad sõnad:',
 		NAME: 'Nimi',
+		ADD: 'Lisa',
+		ADD_ACTIVITY: 'Lisa tegevus',
+		POINTS: 'Punktid',
+		MIN_MEMBERS: 'Minimaalne osalejate arv',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -127,5 +135,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		YEAR: 'Year',
 		TAGLINE: 'Tagline',
 		NAME: 'Name',
+		ADD: 'Add',
+		ADD_ACTIVITY: 'Add activity',
+		POINTS: 'Points',
+		MIN_MEMBERS: 'Minimum number of participants',
 	},
 };
