@@ -16,6 +16,7 @@ import LogoutView from './views/logout/LogoutView';
 import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
 import { UserContext, UserContextValue, UserContextUser } from './contexts/UserContext';
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
+import ActivitiesView from './views/activities/ActivitiesView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -48,6 +49,7 @@ function Root() {
 						<ProtectedRoute exact path="/member/profile" component={ProfileView} />
 						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
+						<ProtectedRoute exact path="/member/activities" component={ActivitiesView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
 					</Switch>
 				</Router>

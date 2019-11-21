@@ -3,11 +3,11 @@ import { makeStyles, Card, CardMedia, CardContent, Typography } from '@material-
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { BASE_URL } from '../../services/variables';
+import Image from '../image/Image';
 
 export interface Mentor {
 	imageUrl: string;
-	firstName: string;
-	lastName: string;
+	name: string;
 }
 
 interface Props {
@@ -24,12 +24,6 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		marginBottom: '12px',
 	},
-	mentors: {
-		display: 'flex',
-		justifyContent: 'space-around',
-	},
-
-	image: { width: '100%', height: '150px' },
 	link: {
 		textDecoration: 'none',
 		color: 'inherit',
@@ -56,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
 	noPointer: {
 		cursor: 'default',
 	},
+	image: {
+		display: 'inline-block',
+		width: '50%',
+	},
 }));
 
 export default function MentorGroupPreview({
@@ -75,13 +73,13 @@ export default function MentorGroupPreview({
 				to={id ? `/member/mentor-group/${id}` : '#'}
 				className={classNames(classes.link, { [classes.noPointer]: !id })}
 			>
-				<div className={classes.mentors}>
+				<div>
 					{mentors.map(({ imageUrl }, idx) => {
 						return (
-							<CardMedia
+							<Image
 								key={idx}
 								className={classes.image}
-								image={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+								src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
 							/>
 						);
 					})}
@@ -90,10 +88,10 @@ export default function MentorGroupPreview({
 				<CardContent>
 					{showNames && (
 						<div className={classes.names}>
-							{mentors.map(({ firstName, lastName }, idx) => {
+							{mentors.map(({ name }, idx) => {
 								return (
 									<Typography key={idx} gutterBottom variant="h5" component="h2" className={classes.name}>
-										{firstName} {lastName}
+										{name}
 									</Typography>
 								);
 							})}

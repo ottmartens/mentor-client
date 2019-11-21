@@ -1,11 +1,11 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Container, Card, makeStyles, Typography, CardMedia } from '@material-ui/core';
-import { HasUserProps, UserRole } from '../../types';
+import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
-import { Translation } from '../../translations';
+import Image from '../../components/image/Image';
 
 const useStyles = makeStyles((theme) => ({
 	title: {
@@ -13,19 +13,28 @@ const useStyles = makeStyles((theme) => ({
 	},
 	container: {
 		textAlign: 'center',
-		padding: '2em',
-		marginTop: '2em',
 	},
 	image: {
-		width: '100%',
-		height: '15em',
-		marginBottom: '1em',
-	},
-	bio: {
-		margin: '1em',
+		width: '80%',
+		paddingBottom: '80%',
+		backgroundSize: 'cover',
+		backgroundPosition: 'center',
+		marginLeft: 'auto',
+		marginRight: 'auto',
 	},
 	email: {
 		marginTop: '1em',
+	},
+	table: {
+		width: '100%',
+		fontSize: '1.275rem',
+		fontWeight: 400,
+		lineHeight: 1.43,
+		letterSpacing: '0.01071em',
+	},
+	info: {
+		textAlign: 'left',
+		marginLeft: '8px',
 	},
 }));
 
@@ -60,30 +69,34 @@ export default function UserView({ match, user }: Props) {
 		return <Loader />;
 	}
 	return (
-		<Container maxWidth="sm">
-			<div className={classes.container}>
-				<Card>
-					<CardMedia
-						image={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
-						className={classes.image}
-					/>
-					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
-						{data.name}
-					</Typography>
-					<Typography variant="body2">
-						{data.degree}
-					</Typography>
-					<Typography variant="body2">
-						{data.year}
-					</Typography>
-					<Typography variant="body2" color="textSecondary" component="p" className={classes.bio}>
-						{data.bio}
-					</Typography>
-					<Typography variant="h5" component="h2">
-						{data.email}
-					</Typography>
-				</Card>
-			</div>
-		</Container>
+		<div className={classes.container}>
+			<Card>
+				<Image src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'} />
+				<table className={classes.table}>
+					<tbody>
+						<tr>
+							<td>name:</td>
+							<td className={classes.info}>{data.name}</td>
+						</tr>
+						<tr>
+							<td>degree:</td>
+							<td className={classes.info}>{data.degree}</td>
+						</tr>
+						<tr>
+							<td>year:</td>
+							<td className={classes.info}>{data.year}</td>
+						</tr>
+						<tr>
+							<td>tagline:</td>
+							<td className={classes.info}>{data.tagline}</td>
+						</tr>
+						<tr>
+							<td>bio:</td>
+							<td className={classes.info}>{data.bio}</td>
+						</tr>
+					</tbody>
+				</table>
+			</Card>
+		</div>
 	);
 }

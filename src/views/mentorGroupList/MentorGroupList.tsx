@@ -9,8 +9,7 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
-	container: {
-		flexGrow: 1,
+	alignCenter: {
 		textAlign: 'center',
 	},
 }));
@@ -35,14 +34,25 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 		return <Loader />;
 	}
 	return (
-		<Container className={classes.container} maxWidth="sm">
+		<div className={classes.alignCenter}>
 			<h1>{t(Translation.MENTORGROUPS)}</h1>
 			<div>
 				{data &&
 					data.map(({ mentors, title, id, description }, idx) => {
-						return <MentorGroupPreview id={id} key={idx} mentors={mentors} groupName={title} bio={description} showGroupName={true} showNames={false} showLongBio={false}/>;
+						return (
+							<MentorGroupPreview
+								id={id}
+								key={idx}
+								mentors={mentors}
+								groupName={title}
+								bio={description}
+								showGroupName={true}
+								showNames={false}
+								showLongBio={false}
+							/>
+						);
 					})}
 			</div>
-		</Container>
+		</div>
 	);
 }

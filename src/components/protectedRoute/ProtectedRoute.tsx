@@ -7,6 +7,7 @@ import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import Loader from '../loader/Loader';
 import { UserRole } from '../../types';
 import { StaticContext, RouteComponentProps } from 'react-router';
+import assertNever from '../../services/assertNever';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	const userContext = React.useContext(UserContext);
@@ -76,6 +77,8 @@ function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any
 			break;
 		case UserRole.ADMIN:
 			break;
+		default:
+			assertNever(user.role);
 	}
 }
 
