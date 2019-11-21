@@ -47,7 +47,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 								groupName={title}
 								bio={description}
 								showGroupName={true}
-								showNames={false}
+								showNames={true}
 								showLongBio={false}
 							/>
 						);

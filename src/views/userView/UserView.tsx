@@ -14,27 +14,35 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		textAlign: 'center',
 	},
-	image: {
-		width: '80%',
-		paddingBottom: '80%',
-		backgroundSize: 'cover',
-		backgroundPosition: 'center',
+	imageContainer: {
+		display: 'block',
 		marginLeft: 'auto',
 		marginRight: 'auto',
+		maxHeight: '336px',
+		maxWidth: '336px',
 	},
 	email: {
 		marginTop: '1em',
 	},
 	table: {
-		width: '100%',
-		fontSize: '1.275rem',
-		fontWeight: 400,
+		width: '336px',
+		marginRight: 'auto',
+		marginLeft: 'auto',
+		marginBottom: '20px',
+		marginTop: '12px',
 		lineHeight: 1.43,
 		letterSpacing: '0.01071em',
 	},
 	info: {
+		fontWeight: 400,
 		textAlign: 'left',
 		marginLeft: '8px',
+		color: '#616060',
+		fontSize: '0.975rem',
+	},
+	infoLabel: {
+		fontWeight: 700,
+		fontSize: '1.175rem',
 	},
 }));
 
@@ -71,27 +79,29 @@ export default function UserView({ match, user }: Props) {
 	return (
 		<div className={classes.container}>
 			<Card>
-				<Image src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'} />
+				<div className={classes.imageContainer}>
+					<Image src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'} />
+				</div>
 				<table className={classes.table}>
 					<tbody>
 						<tr>
-							<td>name:</td>
+							<td className={classes.infoLabel}>name:</td>
 							<td className={classes.info}>{data.name}</td>
 						</tr>
 						<tr>
-							<td>degree:</td>
+							<td className={classes.infoLabel}>degree:</td>
 							<td className={classes.info}>{data.degree}</td>
 						</tr>
 						<tr>
-							<td>year:</td>
+							<td className={classes.infoLabel}>year:</td>
 							<td className={classes.info}>{data.year}</td>
 						</tr>
 						<tr>
-							<td>tagline:</td>
+							<td className={classes.infoLabel}>tagline:</td>
 							<td className={classes.info}>{data.tagline}</td>
 						</tr>
 						<tr>
-							<td>bio:</td>
+							<td className={classes.infoLabel}>bio:</td>
 							<td className={classes.info}>{data.bio}</td>
 						</tr>
 					</tbody>

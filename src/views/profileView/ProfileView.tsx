@@ -1,9 +1,8 @@
 import React from 'react';
-import { Container, Button } from '@material-ui/core';
+import { Container, Button, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
-import { CardMedia } from '@material-ui/core';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
@@ -14,25 +13,27 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
 import Notice from '../../components/notice/Notice';
+import Image from '../../components/image/Image';
 
 const useStyles = makeStyles((theme) => ({
-	container: {
-		flexGrow: 1,
+	card: {
 		textAlign: 'center',
-		marginBottom: '16px',
+		marginBottom: '8px',
 	},
 	button: { marginBottom: '8px' },
-	image: {
+	imageContainer: {
 		display: 'block',
 		marginLeft: 'auto',
 		marginRight: 'auto',
-		height: '224px',
-		width: '224px',
+		maxHeight: '336px',
+		maxWidth: '336px',
 	},
 	largeWidth: {
 		width: '224px',
 	},
 	imageButton: {
+		position: 'relative',
+		zIndex: 2,
 		color: '#fff',
 		background: '#3185FC',
 		padding: '6px 16px',
@@ -49,12 +50,35 @@ const useStyles = makeStyles((theme) => ({
 	imageButtonContainer: {
 		display: 'block',
 		marginTop: '-14px',
-		marginBottom: '14px',
+		marginBottom: '12px',
 	},
 	declineButton: {
 		backgroundColor: '#B40404',
 		marginBottom: '8px',
 		color: '#fff',
+	},
+	table: {
+		width: '336px',
+		marginRight: 'auto',
+		marginLeft: 'auto',
+		marginBottom: '20px',
+		marginTop: '12px',
+		lineHeight: 1.43,
+		letterSpacing: '0.01071em',
+	},
+	info: {
+		display: 'block',
+		textAlign: 'left',
+		fontWeight: 400,
+		marginLeft: '12px',
+		marginTop: '4px',
+		color: '#616060',
+		fontSize: '0.975rem',
+	},
+	infoLabel: {
+		textAlign: 'right',
+		fontWeight: 700,
+		fontSize: '1.175rem',
 	},
 }));
 
@@ -63,7 +87,8 @@ export default function ProfileView({ user }: HasUserProps) {
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
-	const [edited, isEdited] = React.useState(false);
+	const [isEdited, setIsEdited] = React.useState(false);
+	const [isEditable, setIsEditable] = React.useState(false);
 
 	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
 
@@ -103,11 +128,11 @@ export default function ProfileView({ user }: HasUserProps) {
 	});
 
 	React.useEffect(() => {
-		if (!updateCalled || !updateCalled || !setUser) {
+		if (!updateCalled || !setUser) {
 			return;
 		}
 		setUser({ ...user, ...updateProfileData });
-		isEdited(true);
+		setIsEdited(true);
 	}, [updateProfileData, setUser]);
 
 	if (loading || !userData) {
@@ -115,22 +140,23 @@ export default function ProfileView({ user }: HasUserProps) {
 	}
 
 	return (
-		<Container className={classes.container} maxWidth="sm">
+		<Card className={classes.card}>
 			{error && <Notice variant="error" title="Profile updating failed" message={error} />}
-			{edited && <Notice variant="success" title="Profile updated successfully" message={error} />}
+			{isEdited && <Notice variant="success" title="Profile updated successfully" message={error} />}
 			<h2>{t(Translation.PROFILE)}</h2>
 			<div>
 				<div>
-					<CardMedia
-						image={
-							imagePreview
-								? imagePreview
-								: user.imageUrl
-								? `${BASE_URL}${user.imageUrl}`
-								: '/images/avatar_placeholder.webp'
-						}
-						className={classes.image}
-					/>
+					<div className={classes.imageContainer}>
+						<Image
+							src={
+								imagePreview
+									? imagePreview
+									: user.imageUrl
+									? `${BASE_URL}${user.imageUrl}`
+									: '/images/avatar_placeholder.webp'
+							}
+						/>
+					</div>
 					<label className={classes.imageButtonContainer}>
 						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
 						<span className={classes.imageButton}>
@@ -140,28 +166,75 @@ export default function ProfileView({ user }: HasUserProps) {
 				</div>
 
 				<form
-					onSubmit={(e) => {
+					onSubmit={async (e) => {
 						e.preventDefault();
 						if (validateInputs(input)) {
-							updateProfile();
+							await updateProfile();
+							await getUserInfo();
+							setIsEditable(false);
+							setIsEdited(false);
 						}
 					}}
 				>
-					<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-					<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
-					<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
-					<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
-					<Field className={classes.largeWidth} {...input.bio} label={t(Translation.USER_DESCRIPTION)} multiline />
-					<Button variant="contained" color="primary" type="submit" className={classes.button}>
-						{t(Translation.SAVE_CHANGES)}
-					</Button>
+					{isEditable ? (
+						<>
+							<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+							<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
+							<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
+							<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
+							<Field className={classes.largeWidth} {...input.bio} label={t(Translation.USER_DESCRIPTION)} multiline />
+						</>
+					) : (
+						<table className={classes.table}>
+							<tbody>
+								<tr>
+									<td className={classes.infoLabel}>name:</td>
+									<td className={classes.info}>{userData.name}</td>
+								</tr>
+								<tr>
+									<td className={classes.infoLabel}>degree:</td>
+									<td className={classes.info}>{userData.degree}</td>
+								</tr>
+								<tr>
+									<td className={classes.infoLabel}>year:</td>
+									<td className={classes.info}>{userData.year}</td>
+								</tr>
+								<tr>
+									<td className={classes.infoLabel}>tagline:</td>
+									<td className={classes.info}>{userData.tagline}</td>
+								</tr>
+								<tr>
+									<td className={classes.infoLabel}>bio:</td>
+									<td className={classes.info}>{userData.bio}</td>
+								</tr>
+							</tbody>
+						</table>
+					)}
+					<div>
+						<Button
+							variant="contained"
+							color="secondary"
+							type="button"
+							className={classes.button}
+							onClick={() => {
+								setIsEditable(!isEditable);
+							}}
+						>
+							{t(Translation.EDIT_GROUP)}
+						</Button>
+						{isEditable && (
+							<Button variant="contained" color="primary" type="submit" className={classes.button}>
+								{t(Translation.SAVE_CHANGES)}
+							</Button>
+						)}
+					</div>
 				</form>
 			</div>
 
 			<Button variant="contained" type="submit" className={classes.declineButton}>
 				KUSTUTA KASUTAJA
 			</Button>
-		</Container>
+		</Card>
 	);
 
 	function onChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {

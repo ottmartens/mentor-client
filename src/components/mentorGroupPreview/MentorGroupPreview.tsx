@@ -22,7 +22,7 @@ interface Props {
 
 const useStyles = makeStyles((theme) => ({
 	container: {
-		marginBottom: '12px',
+		marginBottom: '8px',
 	},
 	link: {
 		textDecoration: 'none',
@@ -44,14 +44,17 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 	},
-	name: {
-		display: 'inline-block',
-	},
 	noPointer: {
 		cursor: 'default',
 	},
 	image: {
 		display: 'inline-block',
+		width: '100%',
+		marginBottom: 'auto',
+	},
+	mentor: {
+		display: 'inline-flex',
+		flexDirection: 'column',
 		width: '50%',
 	},
 }));
@@ -74,29 +77,24 @@ export default function MentorGroupPreview({
 				className={classNames(classes.link, { [classes.noPointer]: !id })}
 			>
 				<div>
-					{mentors.map(({ imageUrl }, idx) => {
+					{mentors.map(({ imageUrl, name }, idx) => {
 						return (
-							<Image
-								key={idx}
-								className={classes.image}
-								src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-							/>
+							<div key={idx} className={classes.mentor}>
+								<Image
+									className={classes.image}
+									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+								/>
+								{showNames && (
+									<Typography key={idx} gutterBottom variant="body2" component="h6">
+										{name}
+									</Typography>
+								)}
+							</div>
 						);
 					})}
 				</div>
 
 				<CardContent>
-					{showNames && (
-						<div className={classes.names}>
-							{mentors.map(({ name }, idx) => {
-								return (
-									<Typography key={idx} gutterBottom variant="h5" component="h2" className={classes.name}>
-										{name}
-									</Typography>
-								);
-							})}
-						</div>
-					)}
 					{showGroupName && (
 						<Typography gutterBottom variant="h5" component="h2">
 							{groupName}

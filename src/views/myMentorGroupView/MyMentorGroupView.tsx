@@ -12,6 +12,7 @@ import Person from '../../components/person/Person';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import classNames from 'classnames';
+import Image from '../../components/image/Image';
 
 const useStyles = makeStyles((theme) => ({
 	smallMargin: {
@@ -115,13 +116,9 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					{data &&
 						data.mentors.map(({ imageUrl, name }, idx) => {
 							return (
-								<div className={classes.mentor}>
-									<CardMedia
-										key={idx}
-										className={classes.image}
-										image={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-									/>
-									<Typography key={idx} gutterBottom variant="h6" component="h2">
+								<div className={classes.mentor} key={idx}>
+									<Image src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'} />
+									<Typography gutterBottom variant="h6" component="h2">
 										{name}
 									</Typography>
 								</div>
