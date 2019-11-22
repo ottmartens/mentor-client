@@ -46,6 +46,8 @@ export enum Translation {
 	GRADE_ACTIVITY = 'GRADE_ACTIVITY',
 	POINTS = 'POINTS',
 	MIN_MEMBERS = 'MIN_MEMBERS',
+	APPROVE_ACTIVITY = 'APPROVE_ACTIVITY',
+	DECLINE_ACTIVITY = 'DECLINE_ACTIVITY',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -95,6 +97,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		GRADE_ACTIVITY: 'Hinda tegevust',
 		POINTS: 'Punktid',
 		MIN_MEMBERS: 'Minimaalne osalejate arv',
+		APPROVE_ACTIVITY: 'Kinnita',
+		DECLINE_ACTIVITY: 'Keeldu',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -142,5 +146,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		GRADE_ACTIVITY: 'Grade activity',
 		POINTS: 'Points',
 		MIN_MEMBERS: 'Minimum number of participants',
+		APPROVE_ACTIVITY: 'Approve',
+		DECLINE_ACTIVITY: 'Decline',
 	},
 };
