@@ -25,7 +25,9 @@ export enum EndPoint {
 	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
 	MY_GROUP = '/groups/my-group',
 	UPDATE_ACTIVITIES = '/activities/add-activity',
-	COMPLETED_ACTIVITIES = '/activities/completed-activities'
+	COMPLETED_ACTIVITIES = '/activities/completed-activities',
+	ACTIVITY = '/activities/get-activity',
+	ACCEPT_ACTIVITY_REQUEST = '/activities/accept-activity',
 }
 
 interface Props {

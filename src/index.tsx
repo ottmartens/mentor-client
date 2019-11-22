@@ -18,6 +18,7 @@ import { UserContext, UserContextValue, UserContextUser } from './contexts/UserC
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
 import AddActivityView from './views/addActivityView/AddActivityView';
 import CompletedActivitiesView from './views/completedActivities/CompletedActivitiesView';
+import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -51,6 +52,7 @@ function Root() {
 						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
 						<ProtectedRoute exact path="/activities/add-activity" component={AddActivityView} />
+						<ProtectedRoute exact path="/activities/grade-activity" component={GradeActivityView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
 						<ProtectedRoute exact path="/activities/completed-activities" component={CompletedActivitiesView} />
 					</Switch>

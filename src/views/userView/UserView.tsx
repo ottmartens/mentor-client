@@ -8,24 +8,28 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 
 const useStyles = makeStyles((theme) => ({
-	title: {
-		marginTop: '1em',
-	},
 	container: {
 		textAlign: 'center',
 		padding: '2em',
 		marginTop: '2em',
 	},
 	image: {
-		width: '100%',
+		width: '50%',
 		height: '15em',
-		marginBottom: '1em',
+		margin: '2em auto',
+	},
+	card: {
+		minHeight: '15em',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'column',
 	},
 	bio: {
-		margin: '1em',
+		marginBottom: '2em',
 	},
-	email: {
-		marginTop: '1em',
+	desc: {
+		color: '#979797',
 	},
 }));
 
@@ -62,25 +66,25 @@ export default function UserView({ match, user }: Props) {
 	return (
 		<Container maxWidth="sm">
 			<div className={classes.container}>
-				<Card>
+				<Card className={classes.card}>
 					<CardMedia
 						image={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 						className={classes.image}
 					/>
-					<Typography gutterBottom variant="h5" component="h2" className={classes.title}>
+					<Typography gutterBottom variant="h5" component="h2" >
 						{data.name}
 					</Typography>
 					<Typography variant="body2">
+						<span className={classes.desc}>Eriala:    </span>
 						{data.degree}
 					</Typography>
 					<Typography variant="body2">
+						<span className={classes.desc}>Kursuse aasta:    </span>
 						{data.year}
 					</Typography>
-					<Typography variant="body2" color="textSecondary" component="p" className={classes.bio}>
+					<Typography variant="body2" className={classes.bio}>
+						<span className={classes.desc}>Mõni sõna minust:    </span>
 						{data.bio}
-					</Typography>
-					<Typography variant="h5" component="h2">
-						{data.email}
 					</Typography>
 				</Card>
 			</div>

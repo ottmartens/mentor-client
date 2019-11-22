@@ -147,6 +147,7 @@ export default function Navbar({ user }: HasUserProps) {
 					{ label: t(Translation.ACTIVITIES), url: '/member/acitivities' },
 					{ label: t(Translation.FIND_MENTOR), url: '/member/find-co-mentor' },
 					{ label: t(Translation.ADD_ACTIVITY), url: '/activities/add-activity' },
+					{ label: t(Translation.GRADE_ACTIVITY), url: '/activities/grade-activity' },
 					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
 

@@ -43,6 +43,7 @@ export enum Translation {
 	NAME = 'NAME',
 	ADD = 'ADD',
 	ADD_ACTIVITY = 'ADD_ACTIVITY',
+	GRADE_ACTIVITY = 'GRADE_ACTIVITY',
 	POINTS = 'POINTS',
 	MIN_MEMBERS = 'MIN_MEMBERS',
 }
@@ -91,6 +92,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		NAME: 'Nimi',
 		ADD: 'Lisa',
 		ADD_ACTIVITY: 'Lisa tegevus',
+		GRADE_ACTIVITY: 'Hinda tegevust',
 		POINTS: 'Punktid',
 		MIN_MEMBERS: 'Minimaalne osalejate arv',
 	},
@@ -137,6 +139,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		NAME: 'Name',
 		ADD: 'Add',
 		ADD_ACTIVITY: 'Add activity',
+		GRADE_ACTIVITY: 'Grade activity',
 		POINTS: 'Points',
 		MIN_MEMBERS: 'Minimum number of participants',
 	},
