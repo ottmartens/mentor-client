@@ -22,8 +22,8 @@ const useStyles = makeStyles(() => ({
 		textAlign: 'center',
 	},
 	title: {
-		marginLeft: '16px',
-		marginTop: '0',
+		color: '#2c4d7f',
+		textAlign: 'center',
 	},
 	buttonContainer: {
 		textAlign: 'center',
@@ -77,84 +77,91 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	//const sortedData: Mentor[] = data.sort((_, b) => (b.hasRequestedYou ? 1 : b.youHaveRequested ? 1 : -1));
 
 	return (
-		<Card className={classes.card}>
-			{hasRequested && <Notice variant="success" title="Request sent" message={'request sent'} />}
-			{hasAccepted !== undefined && (
-				<Notice variant="success" title="Request sent" message={hasAccepted ? 'request accepted' : 'request denied'} />
-			)}
-			<h2>Find co-mentor</h2>
-			<List>
-				{data.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
-					return (
-						<div key={idx}>
-							{idx === 0 && <Divider variant="inset" component="li" />}
-							<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
-								{hasRequestedYou ? (
-									<div>
-										<Button
-											variant="contained"
-											color="primary"
-											className={classes.requestButton}
-											onClick={async () => {
-												await replyToRequestsFn({
-													overrideVariables: {
-														userId,
-														accept: true,
-													},
-												});
-												await queryFreeMentorsData();
-												setHasAccepted(true);
-											}}
-										>
-											{t(Translation.ACCEPT)}
-										</Button>
-										{'  '}
-										<Button
-											variant="contained"
-											color="primary"
-											className={classes.requestButton}
-											onClick={async () => {
-												await replyToRequestsFn({
-													overrideVariables: {
-														userId,
-														accept: false,
-													},
-												});
-												await queryFreeMentorsData();
-												setHasAccepted(false);
-											}}
-										>
-											{t(Translation.DECLINE)}
-										</Button>
-									</div>
-								) : youHaveRequested ? (
-									<div>{t(Translation.WAITING_RESPONSE)}</div>
-								) : (
-									<div>
-										<Button
-											variant="contained"
-											color="primary"
-											className={classes.requestButton}
-											onClick={async () => {
-												await requestPairUpFn({
-													overrideVariables: {
-														userId,
-													},
-												});
-												await queryFreeMentorsData();
-												setHasRequested(true);
-											}}
-										>
-											{t(Translation.REQUEST)}
-										</Button>
-									</div>
-								)}
-							</Person>
-							<Divider variant="inset" component="li" />
-						</div>
-					);
-				})}
-			</List>
-		</Card>
+		<>
+			<h1 className={classes.title}>Find co-mentor</h1>
+			<Card className={classes.card}>
+				{hasRequested && <Notice variant="success" title="Request sent" message={'request sent'} />}
+				{hasAccepted !== undefined && (
+					<Notice
+						variant="success"
+						title="Request sent"
+						message={hasAccepted ? 'request accepted' : 'request denied'}
+					/>
+				)}
+
+				<List>
+					{data.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
+						return (
+							<div key={idx}>
+								{idx === 0 && <Divider variant="inset" component="li" />}
+								<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
+									{hasRequestedYou ? (
+										<div>
+											<Button
+												variant="contained"
+												color="primary"
+												className={classes.requestButton}
+												onClick={async () => {
+													await replyToRequestsFn({
+														overrideVariables: {
+															userId,
+															accept: true,
+														},
+													});
+													await queryFreeMentorsData();
+													setHasAccepted(true);
+												}}
+											>
+												{t(Translation.ACCEPT)}
+											</Button>
+											{'  '}
+											<Button
+												variant="contained"
+												color="primary"
+												className={classes.requestButton}
+												onClick={async () => {
+													await replyToRequestsFn({
+														overrideVariables: {
+															userId,
+															accept: false,
+														},
+													});
+													await queryFreeMentorsData();
+													setHasAccepted(false);
+												}}
+											>
+												{t(Translation.DECLINE)}
+											</Button>
+										</div>
+									) : youHaveRequested ? (
+										<div>{t(Translation.WAITING_RESPONSE)}</div>
+									) : (
+										<div>
+											<Button
+												variant="contained"
+												color="primary"
+												className={classes.requestButton}
+												onClick={async () => {
+													await requestPairUpFn({
+														overrideVariables: {
+															userId,
+														},
+													});
+													await queryFreeMentorsData();
+													setHasRequested(true);
+												}}
+											>
+												{t(Translation.REQUEST)}
+											</Button>
+										</div>
+									)}
+								</Person>
+								<Divider variant="inset" component="li" />
+							</div>
+						);
+					})}
+				</List>
+			</Card>
+		</>
 	);
 }

@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 		marginBottom: '8px',
 	},
+	title: {
+		color: '#2c4d7f',
+		textAlign: 'center',
+	},
 	button: { marginBottom: '8px' },
 	imageContainer: {
 		display: 'block',
@@ -49,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	imageButtonContainer: {
 		display: 'block',
-		marginTop: '-14px',
+		marginTop: '-22px',
 		marginBottom: '12px',
 	},
 	declineButton: {
@@ -79,6 +83,9 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'right',
 		fontWeight: 700,
 		fontSize: '1.175rem',
+	},
+	image: {
+		margin: '8px',
 	},
 }));
 
@@ -140,101 +147,109 @@ export default function ProfileView({ user }: HasUserProps) {
 	}
 
 	return (
-		<Card className={classes.card}>
-			{error && <Notice variant="error" title="Profile updating failed" message={error} />}
-			{isEdited && <Notice variant="success" title="Profile updated successfully" message={error} />}
-			<h2>{t(Translation.PROFILE)}</h2>
-			<div>
+		<>
+			<h1 className={classes.title}>{t(Translation.PROFILE)}</h1>
+			<Card className={classes.card}>
+				{error && <Notice variant="error" title="Profile updating failed" message={error} />}
+				{isEdited && <Notice variant="success" title="Profile updated successfully" message={error} />}
 				<div>
-					<div className={classes.imageContainer}>
-						<Image
-							src={
-								imagePreview
-									? imagePreview
-									: user.imageUrl
-									? `${BASE_URL}${user.imageUrl}`
-									: '/images/avatar_placeholder.webp'
-							}
-						/>
+					<div>
+						<div className={classes.imageContainer}>
+							<Image
+								className={classes.image}
+								src={
+									imagePreview
+										? imagePreview
+										: user.imageUrl
+										? `${BASE_URL}${user.imageUrl}`
+										: '/images/avatar_placeholder.webp'
+								}
+							/>
+						</div>
+						<label className={classes.imageButtonContainer}>
+							<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
+							<span className={classes.imageButton}>
+								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
+							</span>
+						</label>
 					</div>
-					<label className={classes.imageButtonContainer}>
-						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
-						<span className={classes.imageButton}>
-							{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
-						</span>
-					</label>
+
+					<form
+						onSubmit={async (e) => {
+							e.preventDefault();
+							if (validateInputs(input)) {
+								await updateProfile();
+								await getUserInfo();
+								setIsEditable(false);
+								setIsEdited(false);
+							}
+						}}
+					>
+						{isEditable ? (
+							<>
+								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+								<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
+								<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
+								<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
+								<Field
+									className={classes.largeWidth}
+									{...input.bio}
+									label={t(Translation.USER_DESCRIPTION)}
+									multiline
+								/>
+							</>
+						) : (
+							<table className={classes.table}>
+								<tbody>
+									<tr>
+										<td className={classes.infoLabel}>name:</td>
+										<td className={classes.info}>{userData.name}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>degree:</td>
+										<td className={classes.info}>{userData.degree}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>year:</td>
+										<td className={classes.info}>{userData.year}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>tagline:</td>
+										<td className={classes.info}>{userData.tagline}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>bio:</td>
+										<td className={classes.info}>{userData.bio}</td>
+									</tr>
+								</tbody>
+							</table>
+						)}
+						<div>
+							<Button
+								variant="contained"
+								color="secondary"
+								type="button"
+								className={classes.button}
+								onClick={() => {
+									setIsEditable(!isEditable);
+								}}
+							>
+								{t(Translation.EDIT_GROUP)}
+							</Button>
+							{isEditable && (
+								<Button variant="contained" color="primary" type="submit" className={classes.button}>
+									{t(Translation.SAVE_CHANGES)}
+								</Button>
+							)}
+						</div>
+					</form>
 				</div>
 
-				<form
-					onSubmit={async (e) => {
-						e.preventDefault();
-						if (validateInputs(input)) {
-							await updateProfile();
-							await getUserInfo();
-							setIsEditable(false);
-							setIsEdited(false);
-						}
-					}}
-				>
-					{isEditable ? (
-						<>
-							<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-							<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
-							<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
-							<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
-							<Field className={classes.largeWidth} {...input.bio} label={t(Translation.USER_DESCRIPTION)} multiline />
-						</>
-					) : (
-						<table className={classes.table}>
-							<tbody>
-								<tr>
-									<td className={classes.infoLabel}>name:</td>
-									<td className={classes.info}>{userData.name}</td>
-								</tr>
-								<tr>
-									<td className={classes.infoLabel}>degree:</td>
-									<td className={classes.info}>{userData.degree}</td>
-								</tr>
-								<tr>
-									<td className={classes.infoLabel}>year:</td>
-									<td className={classes.info}>{userData.year}</td>
-								</tr>
-								<tr>
-									<td className={classes.infoLabel}>tagline:</td>
-									<td className={classes.info}>{userData.tagline}</td>
-								</tr>
-								<tr>
-									<td className={classes.infoLabel}>bio:</td>
-									<td className={classes.info}>{userData.bio}</td>
-								</tr>
-							</tbody>
-						</table>
-					)}
-					<div>
-						<Button
-							variant="contained"
-							color="secondary"
-							type="button"
-							className={classes.button}
-							onClick={() => {
-								setIsEditable(!isEditable);
-							}}
-						>
-							{t(Translation.EDIT_GROUP)}
-						</Button>
-						{isEditable && (
-							<Button variant="contained" color="primary" type="submit" className={classes.button}>
-								{t(Translation.SAVE_CHANGES)}
-							</Button>
-						)}
-					</div>
-				</form>
-			</div>
-
-			<Button variant="contained" type="submit" className={classes.declineButton}>
-				KUSTUTA KASUTAJA
-			</Button>
-		</Card>
+				<Button variant="contained" type="submit" className={classes.declineButton}>
+					KUSTUTA KASUTAJA
+				</Button>
+			</Card>
+		</>
 	);
 
 	function onChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {

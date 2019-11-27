@@ -1,6 +1,6 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Container, Card, makeStyles, Typography, CardMedia } from '@material-ui/core';
+import { Card, makeStyles } from '@material-ui/core';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: 700,
 		fontSize: '1.175rem',
 	},
+	image: {
+		margin: '8px',
+	},
 }));
 
 interface Props extends HasUserProps {
@@ -80,7 +83,10 @@ export default function UserView({ match, user }: Props) {
 		<div className={classes.container}>
 			<Card>
 				<div className={classes.imageContainer}>
-					<Image src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'} />
+					<Image
+						className={classes.image}
+						src={data.imageUrl ? `${BASE_URL}${data.imageUrl}` : '/images/avatar_placeholder.webp'}
+					/>
 				</div>
 				<table className={classes.table}>
 					<tbody>

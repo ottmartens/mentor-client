@@ -1,6 +1,5 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Container } from '@material-ui/core';
 import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
@@ -11,6 +10,9 @@ import { Translation } from '../../translations';
 const useStyles = makeStyles((theme) => ({
 	alignCenter: {
 		textAlign: 'center',
+	},
+	title: {
+		color: '#2c4d7f',
 	},
 }));
 
@@ -35,7 +37,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 	}
 	return (
 		<div className={classes.alignCenter}>
-			<h1>{t(Translation.MENTORGROUPS)}</h1>
+			<h1 className={classes.title}>{t(Translation.MENTORGROUPS)}</h1>
 			<div>
 				{data &&
 					data.map(({ mentors, title, id, description }, idx) => {

@@ -55,11 +55,10 @@ const useStyles = makeStyles((theme) => ({
 		margin: 10,
 	},
 	logo: {
-		display: 'flex',
 		width: '40px',
 		height: '40px',
-		margin: 'auto',
 	},
+	logoContainer: { display: 'flex', flexDirection: 'row', justifyContent: 'center' },
 	listText: {
 		color: '#fff',
 		textDecoration: 'none',
@@ -67,6 +66,13 @@ const useStyles = makeStyles((theme) => ({
 	role: {
 		color: '#BACDF8',
 		display: 'inline',
+	},
+	largeFont: {
+		fontSize: '1.5rem',
+	},
+	logoText: {
+		marginLeft: '2px',
+		marginTop: '-4px',
 	},
 }));
 
@@ -119,10 +125,14 @@ export default function Navbar({ user }: HasUserProps) {
 									</ListItem>
 								</Link>
 							))}
-							<ListItem button className={classes.listElementContainer}>
+							<ListItem
+								button
+								className={classNames(classes.listElementContainer, classes.logoContainer, classes.largeFont)}
+							>
 								<a href="https://mits.ee">
-									<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
+									<img className={classes.logo} src="/images/logo_valge.webp" alt="MITS LOGO"></img>
 								</a>
+								<label className={classes.logoText}>MITS</label>
 							</ListItem>
 						</List>
 					</div>

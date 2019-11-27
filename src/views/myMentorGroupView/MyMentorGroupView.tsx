@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		textAlign: 'center',
-		margin: '0 0 8px 0',
+		color: '#2c4d7f',
 	},
 	mentors: {
 		display: 'flex',
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	image: { width: '100%', height: '150px' },
 	buttonContainer: {
-		textAlign: 'right',
+		textAlign: 'center',
 		marginTop: '8px',
 	},
 	listImage: {
@@ -109,9 +109,9 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 
 	return (
 		<>
+			<h1 className={classes.title}>{t(Translation.MY_MENTORGROUP)}</h1>
 			{/* Mentorgroup info */}
 			<Card className={classNames(classes.card, classes.alignCenter)}>
-				<h2 className={classes.title}>{t(Translation.MY_MENTORGROUP)}</h2>
 				<div className={classes.mentors}>
 					{data &&
 						data.mentors.map(({ imageUrl, name }, idx) => {
@@ -179,8 +179,8 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 
 			{/* Accepted mentees */}
 			{data.mentees && data.mentees.length !== 0 && (
-				<Card className={classes.card}>
-					<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
+				<Card className={classNames(classes.card, classes.alignCenter)}>
+					<h2>{t(Translation.APPROVED_MENTEES)}</h2>
 					<List>
 						{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 							return (
@@ -197,7 +197,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 
 			{/* Join requests */}
 			{user.role === UserRole.MENTOR && data.requests && data.requests.length !== 0 && (
-				<Card className={classes.card}>
+				<Card className={classNames(classes.card, classes.alignCenter)}>
 					<h2 className={classes.title}>{t(Translation.APPLIED_MENTEES)}</h2>
 					<List>
 						{data.requests.map(({ imageUrl, name, userId, tagline }, idx) => {
