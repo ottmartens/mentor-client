@@ -55,11 +55,10 @@ const useStyles = makeStyles((theme) => ({
 		margin: 10,
 	},
 	logo: {
-		display: 'flex',
 		width: '40px',
 		height: '40px',
-		margin: 'auto',
 	},
+	logoContainer: { display: 'flex', flexDirection: 'row', justifyContent: 'center' },
 	listText: {
 		color: '#fff',
 		textDecoration: 'none',
@@ -67,6 +66,13 @@ const useStyles = makeStyles((theme) => ({
 	role: {
 		color: '#BACDF8',
 		display: 'inline',
+	},
+	largeFont: {
+		fontSize: '1.5rem',
+	},
+	logoText: {
+		marginLeft: '2px',
+		marginTop: '-4px',
 	},
 }));
 
@@ -119,10 +125,14 @@ export default function Navbar({ user }: HasUserProps) {
 									</ListItem>
 								</Link>
 							))}
-							<ListItem button className={classes.listElementContainer}>
+							<ListItem
+								button
+								className={classNames(classes.listElementContainer, classes.logoContainer, classes.largeFont)}
+							>
 								<a href="https://mits.ee">
-									<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
+									<img className={classes.logo} src="/images/logo_valge.webp" alt="MITS LOGO"></img>
 								</a>
+								<label className={classes.logoText}>MITS</label>
 							</ListItem>
 						</List>
 					</div>
@@ -146,13 +156,16 @@ export default function Navbar({ user }: HasUserProps) {
 					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
 					{ label: t(Translation.ACTIVITIES), url: '/member/acitivities' },
 					{ label: t(Translation.FIND_MENTOR), url: '/member/find-co-mentor' },
+					{ label: t(Translation.ADD_ACTIVITY), url: '/admin/add-activity' },
+					{ label: t(Translation.GRADE_ACTIVITY), url: '/admin/grade-activity' },
+					{ label: t(Translation.COMPLETED_ACTIVITIES), url: '/admin/completed-activities' },
 					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
 
 			case UserRole.ADMIN:
 				return [
 					{ label: t(Translation.GROUPS), url: '/admin/mentor-groups' },
-					{ label: t(Translation.GRADE_ACTIVITIES), url: '/admin/grade-activities' },
+					{ label: t(Translation.GRADE_ACTIVITIES), url: '/admin/completed-activities' },
 					{ label: t(Translation.ACTIVITIES), url: '/admin/acitivities' },
 					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
 					{ label: t(Translation.VERIFY_USERS), url: '/admin/verify-users' },

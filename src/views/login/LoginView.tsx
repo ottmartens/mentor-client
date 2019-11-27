@@ -10,6 +10,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
+import useRouter from '../../hooks/useRouter';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -29,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
 	card: {
 		paddingTop: '40px',
 		paddingBottom: '40px',
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
 		margin: '12px',
 	},
 }));
@@ -39,11 +37,12 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginView() {
 	// translations
 	const t = useTranslator();
+
+	// react router
+	const router = useRouter();
+
 	// css classes
 	const classes = useStyles();
-
-	// state
-	const [redirect, willRedirect] = React.useState<boolean>(false);
 
 	// context
 	const userContext = React.useContext(UserContext);
@@ -65,20 +64,15 @@ export default function LoginView() {
 		},
 	});
 
-	// set user to context if request is successful
+	// set user to context and redirect if request is successful
 	React.useEffect(() => {
 		if (!data || !setUser) {
 			return;
 		}
 		setUserToken(data.token);
 		setUser(data);
-		willRedirect(true);
+		router.push('/member/mentor-group-list');
 	}, [data, setUser]);
-
-	// redirect after successful request
-	if (redirect) {
-		return <Redirect to="/member/mentor-group-list" />;
-	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
@@ -104,7 +98,7 @@ export default function LoginView() {
 						<Typography gutterBottom variant="subtitle2" align="center">
 							{t(Translation.NO_ACCOUNT)}{' '}
 							<Link href="/register" color="primary">
-							{t(Translation.REGISTER)}
+								{t(Translation.REGISTER)}
 							</Link>
 						</Typography>
 						<div className={classes.button}>

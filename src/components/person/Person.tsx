@@ -8,7 +8,6 @@ interface Props {
 	tagline: string;
 	imageUrl: string;
 	userId: string | number;
-	key?: string | number;
 	children?: React.ReactNode;
 }
 
@@ -27,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Person({ userId, imageUrl, name, tagline, key, children }: Props) {
+export default function Person({ userId, imageUrl, name, tagline, children }: Props) {
 	const classes = useStyles();
 
 	return (
-		<ListItem key={key}>
+		<ListItem>
 			<Link to={`/member/user/${userId}`} className={classes.listLink}>
 				<ListItemAvatar>
 					<Avatar

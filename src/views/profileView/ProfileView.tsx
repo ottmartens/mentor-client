@@ -1,9 +1,8 @@
 import React from 'react';
-import { Container, Button } from '@material-ui/core';
+import { Container, Button, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
-import { CardMedia } from '@material-ui/core';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
@@ -13,25 +12,32 @@ import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
+import Notice from '../../components/notice/Notice';
+import Image from '../../components/image/Image';
 
 const useStyles = makeStyles((theme) => ({
-	container: {
-		flexGrow: 1,
+	card: {
 		textAlign: 'center',
-		marginBottom: '16px',
+		marginBottom: '8px',
+	},
+	title: {
+		color: '#2c4d7f',
+		textAlign: 'center',
 	},
 	button: { marginBottom: '8px' },
-	image: {
+	imageContainer: {
 		display: 'block',
 		marginLeft: 'auto',
 		marginRight: 'auto',
-		height: '224px',
-		width: '224px',
+		maxHeight: '336px',
+		maxWidth: '336px',
 	},
 	largeWidth: {
 		width: '224px',
 	},
 	imageButton: {
+		position: 'relative',
+		zIndex: 2,
 		color: '#fff',
 		background: '#3185FC',
 		padding: '6px 16px',
@@ -47,13 +53,39 @@ const useStyles = makeStyles((theme) => ({
 	},
 	imageButtonContainer: {
 		display: 'block',
-		marginTop: '-14px',
-		marginBottom: '14px',
+		marginTop: '-22px',
+		marginBottom: '12px',
 	},
 	declineButton: {
 		backgroundColor: '#B40404',
 		marginBottom: '8px',
 		color: '#fff',
+	},
+	table: {
+		width: '336px',
+		marginRight: 'auto',
+		marginLeft: 'auto',
+		marginBottom: '20px',
+		marginTop: '12px',
+		lineHeight: 1.43,
+		letterSpacing: '0.01071em',
+	},
+	info: {
+		display: 'block',
+		textAlign: 'left',
+		fontWeight: 400,
+		marginLeft: '12px',
+		marginTop: '4px',
+		color: '#616060',
+		fontSize: '0.975rem',
+	},
+	infoLabel: {
+		textAlign: 'right',
+		fontWeight: 700,
+		fontSize: '1.175rem',
+	},
+	image: {
+		margin: '8px',
 	},
 }));
 
@@ -62,6 +94,9 @@ export default function ProfileView({ user }: HasUserProps) {
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
+	const [isEdited, setIsEdited] = React.useState(false);
+	const [isEditable, setIsEditable] = React.useState(false);
+
 	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
@@ -86,7 +121,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		bio: useInput({ initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile, { data: updateProfileData, called: updateCalled }] = useBackend({
+	const [updateProfile, { data: updateProfileData, called: updateCalled, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
@@ -100,10 +135,11 @@ export default function ProfileView({ user }: HasUserProps) {
 	});
 
 	React.useEffect(() => {
-		if (!updateCalled || !updateCalled || !setUser) {
+		if (!updateCalled || !setUser) {
 			return;
 		}
 		setUser({ ...user, ...updateProfileData });
+		setIsEdited(true);
 	}, [updateProfileData, setUser]);
 
 	if (loading || !userData) {
@@ -111,51 +147,109 @@ export default function ProfileView({ user }: HasUserProps) {
 	}
 
 	return (
-		<Container className={classes.container} maxWidth="sm">
-			<h2>{t(Translation.PROFILE)}</h2>
-			<div>
+		<>
+			<h1 className={classes.title}>{t(Translation.PROFILE)}</h1>
+			<Card className={classes.card}>
+				{error && <Notice variant="error" title="Profile updating failed" message={error} />}
+				{isEdited && <Notice variant="success" title="Profile updated successfully" message={error} />}
 				<div>
-					<CardMedia
-						image={
-							imagePreview
-								? imagePreview
-								: user.imageUrl
-								? `${BASE_URL}${user.imageUrl}`
-								: '/images/avatar_placeholder.webp'
-						}
-						className={classes.image}
-					/>
-					<label className={classes.imageButtonContainer}>
-						<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
-						<span className={classes.imageButton}>
-							{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
-						</span>
-					</label>
+					<div>
+						<div className={classes.imageContainer}>
+							<Image
+								className={classes.image}
+								src={
+									imagePreview
+										? imagePreview
+										: user.imageUrl
+										? `${BASE_URL}${user.imageUrl}`
+										: '/images/avatar_placeholder.webp'
+								}
+							/>
+						</div>
+						<label className={classes.imageButtonContainer}>
+							<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
+							<span className={classes.imageButton}>
+								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
+							</span>
+						</label>
+					</div>
+
+					<form
+						onSubmit={async (e) => {
+							e.preventDefault();
+							if (validateInputs(input)) {
+								await updateProfile();
+								await getUserInfo();
+								setIsEditable(false);
+								setIsEdited(false);
+							}
+						}}
+					>
+						{isEditable ? (
+							<>
+								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+								<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
+								<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
+								<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
+								<Field
+									className={classes.largeWidth}
+									{...input.bio}
+									label={t(Translation.USER_DESCRIPTION)}
+									multiline
+								/>
+							</>
+						) : (
+							<table className={classes.table}>
+								<tbody>
+									<tr>
+										<td className={classes.infoLabel}>name:</td>
+										<td className={classes.info}>{userData.name}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>degree:</td>
+										<td className={classes.info}>{userData.degree}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>year:</td>
+										<td className={classes.info}>{userData.year}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>tagline:</td>
+										<td className={classes.info}>{userData.tagline}</td>
+									</tr>
+									<tr>
+										<td className={classes.infoLabel}>bio:</td>
+										<td className={classes.info}>{userData.bio}</td>
+									</tr>
+								</tbody>
+							</table>
+						)}
+						<div>
+							<Button
+								variant="contained"
+								color="secondary"
+								type="button"
+								className={classes.button}
+								onClick={() => {
+									setIsEditable(!isEditable);
+								}}
+							>
+								{t(Translation.EDIT_GROUP)}
+							</Button>
+							{isEditable && (
+								<Button variant="contained" color="primary" type="submit" className={classes.button}>
+									{t(Translation.SAVE_CHANGES)}
+								</Button>
+							)}
+						</div>
+					</form>
 				</div>
 
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						if (validateInputs(input)) {
-							updateProfile();
-						}
-					}}
-				>
-					<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-					<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
-					<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
-					<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
-					<Field className={classes.largeWidth} {...input.bio} label={t(Translation.USER_DESCRIPTION)} multiline />
-					<Button variant="contained" color="primary" type="submit" className={classes.button}>
-						{t(Translation.SAVE_CHANGES)}
-					</Button>
-				</form>
-			</div>
-
-			<Button variant="contained" type="submit" className={classes.declineButton}>
-				KUSTUTA KASUTAJA
-			</Button>
-		</Container>
+				<Button variant="contained" type="submit" className={classes.declineButton}>
+					KUSTUTA KASUTAJA
+				</Button>
+			</Card>
+		</>
 	);
 
 	function onChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {

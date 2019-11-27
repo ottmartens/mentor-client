@@ -3,11 +3,11 @@ import { makeStyles, Card, CardMedia, CardContent, Typography } from '@material-
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { BASE_URL } from '../../services/variables';
+import Image from '../image/Image';
 
 export interface Mentor {
 	imageUrl: string;
-	firstName: string;
-	lastName: string;
+	name: string;
 }
 
 interface Props {
@@ -22,14 +22,8 @@ interface Props {
 
 const useStyles = makeStyles((theme) => ({
 	container: {
-		marginBottom: '12px',
+		marginBottom: '8px',
 	},
-	mentors: {
-		display: 'flex',
-		justifyContent: 'space-around',
-	},
-
-	image: { width: '100%', height: '150px' },
 	link: {
 		textDecoration: 'none',
 		color: 'inherit',
@@ -50,11 +44,18 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 	},
-	name: {
-		display: 'inline-block',
-	},
 	noPointer: {
 		cursor: 'default',
+	},
+	image: {
+		display: 'inline-block',
+		width: '100%',
+		marginBottom: 'auto',
+	},
+	mentor: {
+		display: 'inline-flex',
+		flexDirection: 'column',
+		width: '50%',
 	},
 }));
 
@@ -75,30 +76,25 @@ export default function MentorGroupPreview({
 				to={id ? `/member/mentor-group/${id}` : '#'}
 				className={classNames(classes.link, { [classes.noPointer]: !id })}
 			>
-				<div className={classes.mentors}>
-					{mentors.map(({ imageUrl }, idx) => {
+				<div>
+					{mentors.map(({ imageUrl, name }, idx) => {
 						return (
-							<CardMedia
-								key={idx}
-								className={classes.image}
-								image={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-							/>
+							<div key={idx} className={classes.mentor}>
+								<Image
+									className={classes.image}
+									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+								/>
+								{showNames && (
+									<Typography key={idx} gutterBottom variant="body2" component="h6">
+										{name}
+									</Typography>
+								)}
+							</div>
 						);
 					})}
 				</div>
 
 				<CardContent>
-					{showNames && (
-						<div className={classes.names}>
-							{mentors.map(({ firstName, lastName }, idx) => {
-								return (
-									<Typography key={idx} gutterBottom variant="h5" component="h2" className={classes.name}>
-										{firstName} {lastName}
-									</Typography>
-								);
-							})}
-						</div>
-					)}
 					{showGroupName && (
 						<Typography gutterBottom variant="h5" component="h2">
 							{groupName}
