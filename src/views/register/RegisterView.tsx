@@ -12,6 +12,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
+import useRouter from '../../hooks/useRouter';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -42,8 +43,8 @@ export default function RegisterView() {
 	// css classes
 	const classes = useStyles();
 
-	// state
-	const [redirect, willRedirect] = React.useState<boolean>(false);
+	// router
+	const router = useRouter();
 
 	// context
 	const userContext = React.useContext(UserContext);
@@ -51,7 +52,10 @@ export default function RegisterView() {
 	const t = useTranslator();
 
 	// input options
-	const radioButtonOptions = [{ value: 'MENTOR', label: 'Mentor' }, { value: 'MENTEE', label: 'Mentee' }];
+	const radioButtonOptions = [
+		{ value: 'MENTOR', label: 'Mentor' },
+		{ value: 'MENTEE', label: 'Mentee' },
+	];
 
 	// inputs
 	const input: { [s: string]: UseInput } = {
@@ -78,13 +82,9 @@ export default function RegisterView() {
 		}
 		setUserToken(data.token);
 		setUser(data);
-		willRedirect(true);
+		router.push('/member/mentor-group-list');
 	}, [data, setUser]);
 
-	// redirect after successful request
-	if (redirect) {
-		return <Redirect to="/member/mentor-group-list" />;
-	}
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title={t(Translation.REGISTRATION_ERROR)} message={error} />}

@@ -4,9 +4,6 @@ import { UserContext } from '../../contexts/UserContext';
 import { removeUserToken } from '../../services/auth';
 
 export default function LogoutView() {
-	// state
-	const [redirect, willRedirect] = React.useState<boolean>(false);
-
 	// context
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
@@ -18,13 +15,7 @@ export default function LogoutView() {
 		}
 		removeUserToken();
 		setUser(null);
-		willRedirect(true);
 	}, [setUser]);
-
-	// redirect after successful request
-	if (redirect) {
-		return <Redirect to="/" />;
-	}
 
 	return null;
 }
