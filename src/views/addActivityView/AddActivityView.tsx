@@ -1,22 +1,21 @@
 import React from 'react';
-import { Container, Button } from '@material-ui/core';
+import { Button, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
 import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
-	container: {
-		flexGrow: 1,
+	card: {
+		paddingTop: '40px',
+		paddingBottom: '40px',
 		textAlign: 'center',
-		marginBottom: '16px',
 	},
 	button: { margin: '1em 0' },
 	largeWidth: {
@@ -26,14 +25,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddActivityView({ user }: HasUserProps) {
 	const classes = useStyles();
-	const userContext = React.useContext(UserContext);
-	const [added, isAdded] = React.useState(false);
+	const [isAdded, setIsAdded] = React.useState(false);
 	const t = useTranslator();
 
-    const input: { [s: string]: UseInput } = {
-		name: useInput({ validators: [isSet]}),
-		points: useInput({ validators: [isSet]}),
-		minMembers: useInput({ validators: [isSet]}),
+	const input: { [s: string]: UseInput } = {
+		name: useInput({ validators: [isSet] }),
+		points: useInput({ validators: [isSet] }),
+		minMembers: useInput({ validators: [isSet] }),
 	};
 
 	const [updateActivities, { data: updateActivitiesData, called: updateCalled, error }] = useBackend({
@@ -51,13 +49,13 @@ export default function AddActivityView({ user }: HasUserProps) {
 		if (!updateCalled) {
 			return;
 		}
-		isAdded(true);
+		setIsAdded(true);
 	}, [updateActivitiesData]);
 
 	return (
-		<Container className={classes.container} maxWidth="sm">
+		<Card className={classes.card}>
 			{error && <Notice variant="error" title="Adding activity failed" message={error} />}
-			{added && <Notice variant="success" title="Activity added successfully" message={error} />}
+			{isAdded && <Notice variant="success" title="Activity added successfully" message={error} />}
 			<h2>{t(Translation.ADD_ACTIVITY)}</h2>
 			<div>
 				<form
@@ -76,6 +74,6 @@ export default function AddActivityView({ user }: HasUserProps) {
 					</Button>
 				</form>
 			</div>
-		</Container>
+		</Card>
 	);
 }

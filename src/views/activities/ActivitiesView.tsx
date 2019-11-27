@@ -1,6 +1,6 @@
 import React from 'react';
 import { HasUserProps } from '../../types';
-import { Divider } from '@material-ui/core';
+import { Divider, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 
@@ -36,7 +36,7 @@ export default function ActivitiesView({ user }: HasUserProps) {
 	];
 
 	return (
-		<div>
+		<Card>
 			<h1 className={classes.alignCenter}>Activities</h1>
 			{mockActivities.map((activity, idx) => (
 				<div key={idx}>
@@ -51,6 +51,6 @@ export default function ActivitiesView({ user }: HasUserProps) {
 					</Link>
 				</div>
 			))}
-		</div>
+		</Card>
 	);
 }

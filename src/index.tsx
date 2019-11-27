@@ -54,9 +54,9 @@ function Root() {
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
 						<ProtectedRoute exact path="/member/activities" component={ActivitiesView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
-						<ProtectedRoute exact path="/admin/activities/add-activity" component={AddActivityView} />
-						<ProtectedRoute exact path="/admin/activities/grade-activity" component={GradeActivityView} />
-						<ProtectedRoute exact path="/admin/activities/completed-activities" component={CompletedActivitiesView} />
+						<ProtectedRoute exact path="/admin/add-activity" component={AddActivityView} />
+						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
+						<ProtectedRoute exact path="/admin/completed-activities" component={CompletedActivitiesView} />
 					</Switch>
 				</Router>
 			</UserContext.Provider>

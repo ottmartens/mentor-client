@@ -44,6 +44,7 @@ export enum Translation {
 	ADD = 'ADD',
 	ADD_ACTIVITY = 'ADD_ACTIVITY',
 	GRADE_ACTIVITY = 'GRADE_ACTIVITY',
+	COMPLETED_ACTIVITIES = 'COMPLETED_ACTIVITIES',
 	POINTS = 'POINTS',
 	MIN_MEMBERS = 'MIN_MEMBERS',
 	APPROVE_ACTIVITY = 'APPROVE_ACTIVITY',
@@ -99,6 +100,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		MIN_MEMBERS: 'Minimaalne osalejate arv',
 		APPROVE_ACTIVITY: 'Kinnita',
 		DECLINE_ACTIVITY: 'Keeldu',
+		COMPLETED_ACTIVITIES: 'Tehtud tegevused',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -148,5 +150,6 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		MIN_MEMBERS: 'Minimum number of participants',
 		APPROVE_ACTIVITY: 'Approve',
 		DECLINE_ACTIVITY: 'Decline',
+		COMPLETED_ACTIVITIES: 'Completed Activities',
 	},
 };

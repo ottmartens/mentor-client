@@ -32,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
 	card: {
 		paddingTop: '40px',
 		paddingBottom: '40px',
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
 		margin: '12px',
 	},
 }));
