@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container, List, ListItem, Divider, Link, Card, ListItemAvatar, ListItemText, Avatar, Button} from '@material-ui/core';
+import { Container, List, ListItem, Divider, Link, Card, ListItemText} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
+//import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-import Loader from '../../components/loader/Loader';
+//import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
