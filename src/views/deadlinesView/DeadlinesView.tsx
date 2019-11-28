@@ -1,6 +1,6 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Card, makeStyles, Input, CardContent, Button, Typography} from '@material-ui/core';
+import { Card, makeStyles, Input, CardContent, Button, Typography, RadioGroup, FormControlLabel, Radio} from '@material-ui/core';
 import { HasUserProps, UserRole } from '../../types';
 import useTranslator from '../../hooks/useTranslator';
 import { error } from 'console';
@@ -89,7 +89,7 @@ export default function DeadlinesView({ user }: Props) {
 					<h1>{t(Translation.DEADLINES)}</h1>
                         <form>
                             <div className={classes.buttons}>
-						        <RadioButtonField {...input.role} options={radioButtonOptions} />
+							<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={true} />
 					        </div>
                             <div>
 							    <Button type="submit" variant="contained" color="primary">

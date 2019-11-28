@@ -12,15 +12,19 @@ interface Props {
 	value: string | undefined;
 	setValue: (newValue: string) => void;
 	options: Option[];
+	isColumn: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
 	group: {
 		flexDirection: 'row',
 	},
+	columnGroup: {
+		flexDirection: 'column',
+	},
 }));
 
-export default function RadioButtonField({ formLabel, value, options, setValue }: Props) {
+export default function RadioButtonField({ formLabel, value, options, setValue, isColumn }: Props) {
 	const classes = useStyles();
 	return (
 		<FormControl component="fieldset">
@@ -30,7 +34,7 @@ export default function RadioButtonField({ formLabel, value, options, setValue }
 				onChange={(e) => {
 					setValue(e.target.value);
 				}}
-				className={classes.group}
+				className={isColumn ? classes.columnGroup : classes.group}
 			>
 				{options.map((opt, idx) => {
 					return <FormControlLabel key={idx} value={opt.value} control={<Radio />} label={opt.label} />;

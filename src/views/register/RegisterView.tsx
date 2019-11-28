@@ -98,7 +98,7 @@ export default function RegisterView() {
 					>
 						<h2>{t(Translation.REGISTRATION)}</h2>
 						<div>
-							<RadioButtonField {...input.role} options={radioButtonOptions} />
+							<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={false} />
 						</div>
 						<div>
 							<Field {...input.email} label="E-mail" type="text" />
