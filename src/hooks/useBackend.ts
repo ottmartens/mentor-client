@@ -28,6 +28,8 @@ export enum EndPoint {
 	COMPLETED_ACTIVITIES = '/activities/completed-activities',
 	ACTIVITY = '/activities/get-activity',
 	ACCEPT_ACTIVITY_REQUEST = '/activities/accept-activity',
+	CHANGE_DEADLINES_REQUEST = '/admin/change-deadlines',
+	DEADLINE = '/admin/deadlines',
 }
 
 interface Props {

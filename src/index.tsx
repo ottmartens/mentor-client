@@ -20,6 +20,7 @@ import AddActivityView from './views/addActivityView/AddActivityView';
 import CompletedActivitiesView from './views/completedActivities/CompletedActivitiesView';
 import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 import ActivitiesView from './views/activities/ActivitiesView';
+import DeadlinesView from './views/deadlinesView/DeadlinesView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -57,6 +58,7 @@ function Root() {
 						<ProtectedRoute exact path="/admin/add-activity" component={AddActivityView} />
 						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
 						<ProtectedRoute exact path="/admin/completed-activities" component={CompletedActivitiesView} />
+						<ProtectedRoute exact path="/admin/deadlines" component={DeadlinesView} />
 					</Switch>
 				</Router>
 			</UserContext.Provider>

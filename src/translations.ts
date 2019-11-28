@@ -49,6 +49,8 @@ export enum Translation {
 	MIN_MEMBERS = 'MIN_MEMBERS',
 	APPROVE_ACTIVITY = 'APPROVE_ACTIVITY',
 	DECLINE_ACTIVITY = 'DECLINE_ACTIVITY',
+	PARTICIPANTS = 'PARTICIPANTS',
+	CHANGE = 'CHANGE',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -101,6 +103,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPROVE_ACTIVITY: 'Kinnita',
 		DECLINE_ACTIVITY: 'Keeldu',
 		COMPLETED_ACTIVITIES: 'Tehtud tegevused',
+		PARTICIPANTS: 'Osalejad',
+		CHANGE: 'Muuda',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -151,5 +155,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPROVE_ACTIVITY: 'Approve',
 		DECLINE_ACTIVITY: 'Decline',
 		COMPLETED_ACTIVITIES: 'Completed Activities',
+		PARTICIPANTS: 'Participants',
+		CHANGE: 'Change',
 	},
 };

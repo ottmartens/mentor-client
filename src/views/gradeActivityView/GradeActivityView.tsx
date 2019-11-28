@@ -19,14 +19,13 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '20px',
 	},
 	title: {
-		marginLeft: '16px',
-		marginTop: '0',
+        display: 'flex',
+        alignSelf: 'left',
+        marginLeft: '1em',
+        marginTop: '2em',
 	},
 	buttonContainer: {
 		textAlign: 'center',
-	},
-	mentorGroupContainer: {
-		marginTop: '12px',
 	},
 	container: {
 		textAlign: 'center',
@@ -36,8 +35,14 @@ const useStyles = makeStyles((theme) => ({
 		width: '224px',
 	},
 	image: {
-        borderRadius: '5%',
-        maxWidth: '100%',
+        borderRadius: '2%',
+        maxWidth: '90%',
+        marginTop: '1em',
+    },
+    imageList: {
+        justifyContent: 'center',
+        marginTop: '1em',
+        marginBottom: '2em',
     },
 	requestButton: {
 		margin: '1em',
@@ -94,10 +99,11 @@ export default function GradeActivityView({ match, user }: Props) {
 	return (
 		<>
 			{error && <Notice variant="error" title="Grading the activity failed" message={error} />}
-			{graded && <Notice variant="success" title="Activity graded successfully" message={error} />}
+			{graded && <Notice variant="success" title="Activity graded successfully" message=''/>}
 			<div className={classes.container}>
-				<div className={classes.mentorGroupContainer}>
-					{/*{data.name && data.group && data.date && (
+                {/* the real thing
+                <Card>
+					{data.name && data.group && data.date && (
 						<div>
                             <Typography variant="body2">
 						        {data.name}
@@ -109,25 +115,12 @@ export default function GradeActivityView({ match, user }: Props) {
                                 {data.date}
                             </Typography>
                         </div>
-                    )}*/}
-                    </div>
-                    <div className={classes.mentorGroupContainer}>
-                    <Typography variant="h3">
-                        Mitsi pidu
-                    </Typography>
-                    <Typography variant="h6">
-                        Grupp 4
-                    </Typography>
-                    <Typography variant="body2">
-                        31/10/2019
-                    </Typography>
-				</div>
-
-				{/* Participants */}
-				{/*{data.mentees && data.mentees.length !== 0 && (
-					<Card className={classes.menteeCard}>
-						<h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
-						<List>
+                    )}
+                    
+				{data.mentees && data.mentees.length !== 0 && (
+					<div>
+                        <h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
+			    		<List>
 							{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
 								return (
 									<div key={idx}>
@@ -137,21 +130,10 @@ export default function GradeActivityView({ match, user }: Props) {
 									</div>
 								);
 							})}
-						</List>
-					</Card>
-                        )}*/}
-                        <List>
-                            <div key={0}>
-								<Divider variant="inset" component="li" />
-								<Person name='Mentee Heamentee' tagline='kiiremini kõrgemale kaugemale' imageUrl='https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg' userId='3' key='1' />
-								<Divider variant="inset" component="li" />
-                            </div>
-                            <div key={1}>
-								<Person name='Veel Üks' tagline='hipp hipp hurraa' imageUrl='https://www.petmd.com/sites/default/files/petmd-puppy-weight.jpg' userId='2' key='2' />
-								<Divider variant="inset" component="li" />
-                            </div>
-						</List>
-                {/*{data.images && data.images.length !== 0 && (
+                		</List>
+                    </div>)}
+                        
+                {data.images && data.images.length !== 0 && (
                     <List>
                         {data.images.map(({imageUrl}) => {
                         return (
@@ -161,13 +143,36 @@ export default function GradeActivityView({ match, user }: Props) {
 
                     )}
                     </List>
-                )}*/}
-                    <List className={classes.image}>
-                        <img className={classes.image} src='https://i.ytimg.com/vi/8sUOvDzmrks/hqdefault.jpg' alt="Activity image"></img>
-                        <img className={classes.image} src='https://media2.s-nbcnews.com/j/newscms/2018_20/1339477/puppy-cute-today-180515-main_a936531048fdb698635dd1b418abdee9.fit-760w.jpg' alt="Activity image"></img>
+                )}
+                </Card>*/}
+
+                <Card className={classes.menteeCard}>
+                    <Typography variant="h3">
+                        Mitsi pidu
+                    </Typography>
+                    <Typography variant="h6">
+                        Grupp 4
+                    </Typography>
+                    <Typography variant="body2">
+                        31/10/2019
+                    </Typography>
+                    <h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
+                    <List>
+                        <div key={0}>
+							<Divider variant="inset" component="li" />
+							<Person name='Mentee Heamentee' tagline='kiiremini kõrgemale kaugemale' imageUrl='https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg' userId='3' key='1' />								
+                            <Divider variant="inset" component="li" />
+                        </div>
+                        <div key={1}>
+							<Person name='Veel Üks' tagline='hipp hipp hurraa' imageUrl='https://www.petmd.com/sites/default/files/petmd-puppy-weight.jpg' userId='2' key='2' />
+							<Divider variant="inset" component="li" />
+                        </div>
+					</List>
+                    <List className={classes.imageList}>
+                        <img className={classes.image} src='https://images2.minutemediacdn.com/image/upload/c_fill,g_auto,h_1248,w_2220/f_auto,q_auto,w_1100/v1555279313/shape/mentalfloss/istock-598825938.png' alt="Activity image"></img>
+                        <img className={classes.image} src='https://img.buzzfeed.com/buzzfeed-static/static/2018-11/20/13/asset/buzzfeed-prod-web-03/sub-buzz-5195-1542739740-5.jpg?downsize=700%3A%2A&output-quality=auto&output-format=auto&output-quality=auto&output-format=auto&downsize=360:*' alt="Activity image"></img>
                         <img className={classes.image} src='https://www.telegraph.co.uk/content/dam/news/2016/05/06/rexfeatures_4950182a_trans_NvBQzQNjv4Bqeo_i_u9APj8RuoebjoAHt0k9u7HhRJvuo-ZLenGRumA.jpg?imwidth=450' alt="Activity image"></img>
                     </List>
-                <div>
                     <Button
                         variant="contained"
                         color="primary"
@@ -201,8 +206,8 @@ export default function GradeActivityView({ match, user }: Props) {
                     >
                         {t(Translation.DECLINE_ACTIVITY)}
                     </Button>
-                </div>
-			</div>
+                </Card>
+            </div>
 		</>
 	);
 }
