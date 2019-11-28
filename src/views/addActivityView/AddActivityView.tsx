@@ -13,7 +13,7 @@ import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
-		paddingTop: '40px',
+		marginTop: '1em',
 		paddingBottom: '40px',
 		textAlign: 'center',
 	},
@@ -56,7 +56,7 @@ export default function AddActivityView({ user }: HasUserProps) {
 		<Card className={classes.card}>
 			{error && <Notice variant="error" title="Adding activity failed" message={error} />}
 			{isAdded && <Notice variant="success" title="Activity added successfully" message={error} />}
-			<h2>{t(Translation.ADD_ACTIVITY)}</h2>
+			<h1>{t(Translation.ADD_ACTIVITY)}</h1>
 			<div>
 				<form
 					onSubmit={(e) => {
