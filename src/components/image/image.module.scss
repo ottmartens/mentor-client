@@ -13,7 +13,8 @@
   left: 0px;
   background-size: cover;
   background-position: center;
-  filter: blur(10px);
+  filter: blur(20px);
+  transform:scale(1.5)
 }
 
 .wrap :last-child {

@@ -80,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '0.975rem',
 	},
 	infoLabel: {
+		width: '30%',
 		textAlign: 'right',
 		fontWeight: 700,
 		fontSize: '1.175rem',

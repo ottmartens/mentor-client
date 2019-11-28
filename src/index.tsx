@@ -21,6 +21,7 @@ import CompletedActivitiesView from './views/completedActivities/CompletedActivi
 import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 import ActivitiesView from './views/activities/ActivitiesView';
 import DeadlinesView from './views/deadlinesView/DeadlinesView';
+import RedirectInfoView from './views/redirectInfoView/RedirectInfoView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -54,6 +55,7 @@ function Root() {
 						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
 						<ProtectedRoute exact path="/member/activities" component={ActivitiesView} />
+						<ProtectedRoute exact path="/member/redirect-info-view" component={RedirectInfoView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
 						<ProtectedRoute exact path="/admin/add-activity" component={AddActivityView} />
 						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
