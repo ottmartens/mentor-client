@@ -71,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '1.5rem',
 	},
 	logoText: {
+		color: 'inherit',
+		textDecoration: 'none',
 		marginLeft: '2px',
 		marginTop: '-4px',
 	},
@@ -125,15 +127,15 @@ export default function Navbar({ user }: HasUserProps) {
 									</ListItem>
 								</Link>
 							))}
-							<ListItem
-								button
-								className={classNames(classes.listElementContainer, classes.logoContainer, classes.largeFont)}
-							>
-								<a href="https://mits.ee">
+							<a href="https://mits.ee">
+								<ListItem
+									button
+									className={classNames(classes.listElementContainer, classes.logoContainer, classes.largeFont)}
+								>
 									<img className={classes.logo} src="/images/logo_valge.webp" alt="MITS LOGO"></img>
-								</a>
-								<label className={classes.logoText}>MITS</label>
-							</ListItem>
+									<label className={classes.logoText}>MITS</label>
+								</ListItem>
+							</a>
 						</List>
 					</div>
 				</SwipeableDrawer>

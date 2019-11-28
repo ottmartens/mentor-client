@@ -65,13 +65,39 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any>, user: UserContextUser) {
 	switch (user.role) {
 		case UserRole.MENTEE:
-			if ((!user.name || !user.imageUrl) && routeProps.location && routeProps.location.pathname !== '/member/profile') {
-				routeProps.history.push({ pathname: '/member/profile', state: { redirected: true } });
+			if (
+				(!user.name || !user.imageUrl) &&
+				routeProps.location &&
+				routeProps.location.pathname !== '/member/profile' &&
+				routeProps.location.pathname !== '/member/redirect-info-view'
+			) {
+				routeProps.history.push({
+					pathname: '/member/redirect-info-view',
+					state: {
+						title: 'Thank you for joining the program',
+						description:
+							'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
+						urlToRedirect: '/member/profile',
+					},
+				});
 			}
 			break;
 		case UserRole.MENTOR:
-			if ((!user.name || !user.imageUrl) && routeProps.location && routeProps.location.pathname !== '/member/profile') {
-				routeProps.history.push({ pathname: '/member/profile', state: { redirected: true } });
+			if (
+				(!user.name || !user.imageUrl) &&
+				routeProps.location &&
+				routeProps.location.pathname !== '/member/profile' &&
+				routeProps.location.pathname !== '/member/redirect-info-view'
+			) {
+				routeProps.history.push({
+					pathname: '/member/redirect-info-view',
+					state: {
+						title: 'Thank you for joining the program',
+						description:
+							'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
+						urlToRedirect: '/member/profile',
+					},
+				});
 			}
 
 			break;
