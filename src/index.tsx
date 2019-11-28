@@ -17,7 +17,7 @@ import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
 import { UserContext, UserContextValue, UserContextUser } from './contexts/UserContext';
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
 import AddActivityView from './views/addActivityView/AddActivityView';
-import CompletedActivitiesView from './views/completedActivities/CompletedActivitiesView';
+import AdminView from './views/adminView/AdminView';
 import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 import ActivitiesView from './views/activities/ActivitiesView';
 import DeadlinesView from './views/deadlinesView/DeadlinesView';
@@ -57,8 +57,8 @@ function Root() {
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
 						<ProtectedRoute exact path="/admin/add-activity" component={AddActivityView} />
 						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
-						<ProtectedRoute exact path="/admin/completed-activities" component={CompletedActivitiesView} />
 						<ProtectedRoute exact path="/admin/deadlines" component={DeadlinesView} />
+						<ProtectedRoute exact path="/admin/main" component={AdminView} />
 					</Switch>
 				</Router>
 			</UserContext.Provider>

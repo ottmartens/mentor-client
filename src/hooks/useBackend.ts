@@ -25,11 +25,12 @@ export enum EndPoint {
 	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
 	MY_GROUP = '/groups/my-group',
 	UPDATE_ACTIVITIES = '/activities/add-activity',
-	COMPLETED_ACTIVITIES = '/activities/completed-activities',
+	UNVERIFIED_ACTIVITIES = '/unverified-activities',
 	ACTIVITY = '/activities/get-activity',
 	ACCEPT_ACTIVITY_REQUEST = '/activities/accept-activity',
 	CHANGE_DEADLINES_REQUEST = '/admin/change-deadlines',
 	DEADLINE = '/admin/deadlines',
+	ALL_USERS = '/api/users'
 }
 
 interface Props {

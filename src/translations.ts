@@ -51,6 +51,10 @@ export enum Translation {
 	DECLINE_ACTIVITY = 'DECLINE_ACTIVITY',
 	PARTICIPANTS = 'PARTICIPANTS',
 	CHANGE = 'CHANGE',
+	APPROVE_MENTEES = 'APPROVE_MENTEES',
+	APPROVE_USER = 'APPROVE_USER',
+	DECLINE_USER = 'DECLINE_USER',
+	ADMIN_OVERVIEW = 'ADMIN_OVERVIEW'
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -90,7 +94,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		GROUPS: 'Grupid',
 		GRADE_ACTIVITIES: 'Hinda tegevusi',
 		DEADLINES: 'Tähtajad',
-		VERIFY_USERS: 'Kinnita kasutajad',
+		VERIFY_USERS: 'Kinnita kasutajaid',
 		DEGREE: 'Eriala',
 		YEAR: 'Õppeaasta',
 		TAGLINE: 'Sind iseloomustavad sõnad:',
@@ -105,6 +109,10 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		COMPLETED_ACTIVITIES: 'Tehtud tegevused',
 		PARTICIPANTS: 'Osalejad',
 		CHANGE: 'Muuda',
+		APPROVE_MENTEES: 'Kinnita kasutajad',
+		APPROVE_USER: 'Kinnita',
+		DECLINE_USER: 'Lükka tagasi',
+		ADMIN_OVERVIEW: 'Admini ülevaade',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -157,5 +165,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		COMPLETED_ACTIVITIES: 'Completed Activities',
 		PARTICIPANTS: 'Participants',
 		CHANGE: 'Change',
+		APPROVE_MENTEES: 'Unapproved mentees',
+		APPROVE_USER: 'Approve',
+		DECLINE_USER: 'Decline',
+		ADMIN_OVERVIEW: 'Admin Overview',
 	},
 };
