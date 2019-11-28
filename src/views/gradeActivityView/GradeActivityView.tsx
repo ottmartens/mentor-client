@@ -1,15 +1,14 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Card, makeStyles, Divider, List, Button, Typography } from '@material-ui/core';
-import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupPreview';
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
-import Loader from '../../components/loader/Loader';
-import { Link } from 'react-router-dom';
-import { BASE_URL } from '../../services/variables';
+//import Loader from '../../components/loader/Loader';
+//import { Link } from 'react-router-dom';
+//import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
-import { error } from 'console';
+//import { error } from 'console';
 import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 	},
 	container: {
+        marginTop: '1em',
 		textAlign: 'center',
 	},
 	button: { marginBottom: '8px' },
