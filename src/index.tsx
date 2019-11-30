@@ -14,7 +14,7 @@ import UserView from './views/userView/UserView';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import LogoutView from './views/logout/LogoutView';
 import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
-import { UserContext, UserContextValue, UserContextUser } from './contexts/UserContext';
+import { UserContext, UserContextUser } from './contexts/UserContext';
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
 import AddActivityView from './views/addActivityView/AddActivityView';
 import AdminView from './views/adminView/AdminView';

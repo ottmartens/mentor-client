@@ -10,6 +10,7 @@ interface Props extends HasUserProps {
 const useStyles = makeStyles((theme) => ({
 	container: {
 		padding: '8px',
+		height: 'calc(100% - 48px)',
 	},
 	wrap: {
 		height: '100%',

@@ -14,17 +14,20 @@ import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
 import Notice from '../../components/notice/Notice';
 import Image from '../../components/image/Image';
+import classNames from 'classnames';
+import SelectField from '../../components/selectField/SelectField';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
 		textAlign: 'center',
 		marginBottom: '8px',
+		padding: '8px 0',
 	},
 	title: {
 		color: '#2c4d7f',
 		textAlign: 'center',
 	},
-	button: { marginBottom: '8px' },
+	button: { margin: '4px' },
 	imageContainer: {
 		display: 'block',
 		marginLeft: 'auto',
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 		maxWidth: '336px',
 	},
 	largeWidth: {
-		width: '224px',
+		width: '320px',
 	},
 	imageButton: {
 		position: 'relative',
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 		color: '#fff',
 		background: '#3185FC',
 		padding: '6px 16px',
-		fontSize: '0.975rem',
+		fontSize: '0.85rem',
 		minWidth: '64px',
 		boxSizing: 'border-box',
 		fontWeight: 500,
@@ -77,16 +80,19 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: '12px',
 		marginTop: '4px',
 		color: '#616060',
-		fontSize: '0.975rem',
+		fontSize: '0.775rem',
 	},
 	infoLabel: {
 		width: '30%',
 		textAlign: 'right',
-		fontWeight: 700,
-		fontSize: '1.175rem',
+		fontSize: '0.875rem',
 	},
 	image: {
 		margin: '8px',
+	},
+	select: {
+		display: 'flex',
+		margin: '16px auto 8px auto',
 	},
 }));
 
@@ -189,8 +195,32 @@ export default function ProfileView({ user }: HasUserProps) {
 						{isEditable ? (
 							<>
 								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-								<Field className={classes.largeWidth} {...input.degree} label={t(Translation.DEGREE)} />
-								<Field className={classes.largeWidth} {...input.year} label={t(Translation.YEAR)} />
+								<SelectField
+									labelWidth={42}
+									options={[
+										{ value: t(Translation.PROFILE_COMPUTER_SCIENCE), label: t(Translation.PROFILE_COMPUTER_SCIENCE) },
+										{ value: t(Translation.PROFILE_MATHEMATICS), label: t(Translation.PROFILE_MATHEMATICS) },
+										{ value: t(Translation.PROFILE_STATISTICS), label: t(Translation.PROFILE_STATISTICS) },
+										{ value: t(Translation.OTHER), label: t(Translation.OTHER) },
+									]}
+									className={classNames(classes.largeWidth, classes.select)}
+									{...input.degree}
+									label={t(Translation.DEGREE)}
+								/>
+								<SelectField
+									labelWidth={80}
+									options={[
+										{ value: `${t(Translation.PROFILE_BACHELOR)} 1.`, label: `${t(Translation.PROFILE_BACHELOR)} 1.` },
+										{ value: `${t(Translation.PROFILE_BACHELOR)} 2.`, label: `${t(Translation.PROFILE_BACHELOR)} 2.` },
+										{ value: `${t(Translation.PROFILE_BACHELOR)} 3.`, label: `${t(Translation.PROFILE_BACHELOR)} 3.` },
+										{ value: `${t(Translation.PROFILE_MASTERS)} 4.`, label: `${t(Translation.PROFILE_MASTERS)} 1.` },
+										{ value: `${t(Translation.PROFILE_MASTERS)} 5.`, label: `${t(Translation.PROFILE_MASTERS)} 2.` },
+										{ value: t(Translation.OTHER), label: t(Translation.OTHER) },
+									]}
+									className={classNames(classes.largeWidth, classes.select)}
+									{...input.year}
+									label={t(Translation.YEAR)}
+								/>
 								<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
 								<Field
 									className={classes.largeWidth}
@@ -203,23 +233,23 @@ export default function ProfileView({ user }: HasUserProps) {
 							<table className={classes.table}>
 								<tbody>
 									<tr>
-										<td className={classes.infoLabel}>name:</td>
+										<td className={classes.infoLabel}>{t(Translation.NAME)}</td>
 										<td className={classes.info}>{userData.name}</td>
 									</tr>
 									<tr>
-										<td className={classes.infoLabel}>degree:</td>
+										<td className={classes.infoLabel}>{t(Translation.DEGREE)}</td>
 										<td className={classes.info}>{userData.degree}</td>
 									</tr>
 									<tr>
-										<td className={classes.infoLabel}>year:</td>
+										<td className={classes.infoLabel}>{t(Translation.YEAR)}</td>
 										<td className={classes.info}>{userData.year}</td>
 									</tr>
 									<tr>
-										<td className={classes.infoLabel}>tagline:</td>
+										<td className={classes.infoLabel}>{t(Translation.PROFILE_CHARACTERIZATION)}</td>
 										<td className={classes.info}>{userData.tagline}</td>
 									</tr>
 									<tr>
-										<td className={classes.infoLabel}>bio:</td>
+										<td className={classes.infoLabel}>{t(Translation.BIO)}</td>
 										<td className={classes.info}>{userData.bio}</td>
 									</tr>
 								</tbody>
@@ -235,20 +265,22 @@ export default function ProfileView({ user }: HasUserProps) {
 									setIsEditable(!isEditable);
 								}}
 							>
-								{t(Translation.EDIT_GROUP)}
+								{isEditable ? t(Translation.CANCEL) : t(Translation.PROFILE_CHANGE)}
 							</Button>
 							{isEditable && (
 								<Button variant="contained" color="primary" type="submit" className={classes.button}>
-									{t(Translation.SAVE_CHANGES)}
+									{t(Translation.SAVE)}
 								</Button>
 							)}
 						</div>
 					</form>
 				</div>
 
-				<Button variant="contained" type="submit" className={classes.declineButton}>
-					KUSTUTA KASUTAJA
-				</Button>
+				{isEditable && (
+					<Button variant="contained" type="submit" className={classNames(classes.button, classes.declineButton)}>
+						KUSTUTA KASUTAJA
+					</Button>
+				)}
 			</Card>
 		</>
 	);
