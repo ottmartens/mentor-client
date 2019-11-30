@@ -71,10 +71,12 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '1.5rem',
 	},
 	logoText: {
-		color: 'inherit',
-		textDecoration: 'none',
 		marginLeft: '2px',
 		marginTop: '-4px',
+	},
+	mitsLink: {
+		color: 'inherit',
+		textDecoration: 'none',
 	},
 }));
 
@@ -127,7 +129,7 @@ export default function Navbar({ user }: HasUserProps) {
 									</ListItem>
 								</Link>
 							))}
-							<a href="https://mits.ee">
+							<a href="https://mits.ee" className={classes.mitsLink}>
 								<ListItem
 									button
 									className={classNames(classes.listElementContainer, classes.logoContainer, classes.largeFont)}
