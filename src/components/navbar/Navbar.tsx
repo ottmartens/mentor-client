@@ -148,7 +148,7 @@ export default function Navbar({ user }: HasUserProps) {
 				return [
 					{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
 					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
-					{ label: t(Translation.ACTIVITIES), url: '/member/acitivities' },
+					{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
 					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
 
@@ -156,23 +156,19 @@ export default function Navbar({ user }: HasUserProps) {
 				return [
 					{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
 					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
-					{ label: t(Translation.ACTIVITIES), url: '/member/acitivities' },
+					{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
 					{ label: t(Translation.FIND_MENTOR), url: '/member/find-co-mentor' },
-					{ label: t(Translation.ADD_ACTIVITY), url: '/admin/add-activity' },
-					{ label: t(Translation.GRADE_ACTIVITY), url: '/admin/grade-activity' },
-					{ label: t(Translation.COMPLETED_ACTIVITIES), url: '/admin/completed-activities' },
 					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
 					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
 
 			case UserRole.ADMIN:
 				return [
-					{ label: t(Translation.GROUPS), url: '/admin/mentor-groups' },
-					{ label: t(Translation.GRADE_ACTIVITIES), url: '/admin/completed-activities' },
-					{ label: t(Translation.ACTIVITIES), url: '/admin/acitivities' },
+					{ label: t(Translation.ADMIN_OVERVIEW), url: '/admin/main'},
+					{ label: t(Translation.GROUPS), url: '/member/mentor-group-list' },
+					{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
 					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
-					{ label: t(Translation.VERIFY_USERS), url: '/admin/verify-users' },
-					{ label: t(Translation.LOGOUT), url: '/admin/logout' },
+					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
 			default:
 				return [];

@@ -54,7 +54,9 @@ export enum Translation {
 	APPROVE_MENTEES = 'APPROVE_MENTEES',
 	APPROVE_USER = 'APPROVE_USER',
 	DECLINE_USER = 'DECLINE_USER',
-	ADMIN_OVERVIEW = 'ADMIN_OVERVIEW'
+	ADMIN_OVERVIEW = 'ADMIN_OVERVIEW',
+	ACTIVITIES_INSTRUCTION = 'ACTIVITIES_INSTRUCTION',
+	MAKE_NEW_ONE = 'MAKE_NEW_ONE'
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -113,6 +115,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPROVE_USER: 'Kinnita',
 		DECLINE_USER: 'Lükka tagasi',
 		ADMIN_OVERVIEW: 'Admini ülevaade',
+		ACTIVITIES_INSTRUCTION: 'Vali nimekirjast tegevus mida lisada või kui ei leia siis',
+		MAKE_NEW_ONE: 'LISA ENDA TEGEVUS',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -169,5 +173,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPROVE_USER: 'Approve',
 		DECLINE_USER: 'Decline',
 		ADMIN_OVERVIEW: 'Admin Overview',
+		ACTIVITIES_INSTRUCTION: 'Choose from the list or',
+		MAKE_NEW_ONE: 'MAKE A NEW ONE',
 	},
 };

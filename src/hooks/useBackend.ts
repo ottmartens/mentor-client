@@ -30,7 +30,8 @@ export enum EndPoint {
 	ACCEPT_ACTIVITY_REQUEST = '/activities/accept-activity',
 	CHANGE_DEADLINES_REQUEST = '/admin/change-deadlines',
 	DEADLINE = '/admin/deadlines',
-	ALL_USERS = '/api/users'
+	ALL_USERS = '/api/users',
+	GET_MOCK_ACTIVITIES = '/template-activities',
 }
 
 interface Props {
