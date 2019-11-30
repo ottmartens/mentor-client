@@ -101,7 +101,6 @@ export default function GradeActivityView({ match, user }: Props) {
 			{error && <Notice variant="error" title="Grading the activity failed" message={error} />}
 			{graded && <Notice variant="success" title="Activity graded successfully" message=''/>}
 			<div className={classes.container}>
-                {/* the real thing
                 <Card>
 					{data.name && data.group && data.date && (
 						<div>
@@ -136,43 +135,12 @@ export default function GradeActivityView({ match, user }: Props) {
                 {data.images && data.images.length !== 0 && (
                     <List>
                         {data.images.map(({imageUrl}) => {
-                        return (
-                            <img className={classes.image} src={imageUrl} alt="Activity image"></img>
-                            );
-                    }
-
-                    )}
+                            return (
+                                <img className={classes.image} src={imageUrl} alt="Activity image"></img>
+                            );}
+                        )}
                     </List>
                 )}
-                </Card>*/}
-
-                <Card className={classes.menteeCard}>
-                    <Typography variant="h3">
-                        Mitsi pidu
-                    </Typography>
-                    <Typography variant="h6">
-                        Grupp 4
-                    </Typography>
-                    <Typography variant="body2">
-                        31/10/2019
-                    </Typography>
-                    <h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
-                    <List>
-                        <div key={0}>
-							<Divider variant="inset" component="li" />
-							<Person name='Mentee Heamentee' tagline='kiiremini kõrgemale kaugemale' imageUrl='https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg' userId='3' key='1' />								
-                            <Divider variant="inset" component="li" />
-                        </div>
-                        <div key={1}>
-							<Person name='Veel Üks' tagline='hipp hipp hurraa' imageUrl='https://www.petmd.com/sites/default/files/petmd-puppy-weight.jpg' userId='2' key='2' />
-							<Divider variant="inset" component="li" />
-                        </div>
-					</List>
-                    <List className={classes.imageList}>
-                        <img className={classes.image} src='https://images2.minutemediacdn.com/image/upload/c_fill,g_auto,h_1248,w_2220/f_auto,q_auto,w_1100/v1555279313/shape/mentalfloss/istock-598825938.png' alt="Activity image"></img>
-                        <img className={classes.image} src='https://img.buzzfeed.com/buzzfeed-static/static/2018-11/20/13/asset/buzzfeed-prod-web-03/sub-buzz-5195-1542739740-5.jpg?downsize=700%3A%2A&output-quality=auto&output-format=auto&output-quality=auto&output-format=auto&downsize=360:*' alt="Activity image"></img>
-                        <img className={classes.image} src='https://www.telegraph.co.uk/content/dam/news/2016/05/06/rexfeatures_4950182a_trans_NvBQzQNjv4Bqeo_i_u9APj8RuoebjoAHt0k9u7HhRJvuo-ZLenGRumA.jpg?imwidth=450' alt="Activity image"></img>
-                    </List>
                     <Button
                         variant="contained"
                         color="primary"
@@ -206,7 +174,7 @@ export default function GradeActivityView({ match, user }: Props) {
                     >
                         {t(Translation.DECLINE_ACTIVITY)}
                     </Button>
-                </Card>
+                </Card>    
             </div>
 		</>
 	);
