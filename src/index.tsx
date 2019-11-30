@@ -14,13 +14,14 @@ import UserView from './views/userView/UserView';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import LogoutView from './views/logout/LogoutView';
 import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
-import { UserContext, UserContextValue, UserContextUser } from './contexts/UserContext';
+import { UserContext, UserContextUser } from './contexts/UserContext';
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
 import AddActivityView from './views/addActivityView/AddActivityView';
-import CompletedActivitiesView from './views/completedActivities/CompletedActivitiesView';
+import AdminView from './views/adminView/AdminView';
 import GradeActivityView from './views/gradeActivityView/GradeActivityView';
-import ActivitiesView from './views/activities/ActivitiesView';
+import MentorActivitiesView from './views/mentorActivities/MentorActivitiesView';
 import DeadlinesView from './views/deadlinesView/DeadlinesView';
+import RedirectInfoView from './views/redirectInfoView/RedirectInfoView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -53,12 +54,13 @@ function Root() {
 						<ProtectedRoute exact path="/member/profile" component={ProfileView} />
 						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
-						<ProtectedRoute exact path="/member/activities" component={ActivitiesView} />
+						<ProtectedRoute exact path="/member/activities" component={MentorActivitiesView} />
+						<ProtectedRoute exact path="/member/redirect-info-view" component={RedirectInfoView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
-						<ProtectedRoute exact path="/admin/add-activity" component={AddActivityView} />
+						<ProtectedRoute exact path="/member/add-activity" component={AddActivityView} />
 						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
-						<ProtectedRoute exact path="/admin/completed-activities" component={CompletedActivitiesView} />
 						<ProtectedRoute exact path="/admin/deadlines" component={DeadlinesView} />
+						<ProtectedRoute exact path="/admin/main" component={AdminView} />
 					</Switch>
 				</Router>
 			</UserContext.Provider>

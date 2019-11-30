@@ -10,13 +10,17 @@ interface Props extends HasUserProps {
 const useStyles = makeStyles((theme) => ({
 	container: {
 		padding: '8px',
+		height: 'calc(100% - 48px)',
+	},
+	wrap: {
+		height: '100%',
 	},
 }));
 
 export default function WithNavigation({ children, user }: Props) {
 	const classes = useStyles();
 	return (
-		<div>
+		<div className={classes.wrap}>
 			<Navbar user={user} />
 			<Container className={classes.container} maxWidth="sm">
 				{children}

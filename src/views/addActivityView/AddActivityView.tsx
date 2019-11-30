@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function AddActivityView({ user }: HasUserProps) {
+export default function AddActivityView({ user}: HasUserProps) {
 	const classes = useStyles();
 	const [isAdded, setIsAdded] = React.useState(false);
 	const t = useTranslator();
