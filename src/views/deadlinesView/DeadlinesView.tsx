@@ -1,9 +1,9 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Card, makeStyles, Input, CardContent, Button, Typography, RadioGroup, FormControlLabel, Radio} from '@material-ui/core';
-import { HasUserProps, UserRole } from '../../types';
+import { Card, makeStyles, CardContent, Button, Checkbox, FormControl, FormLabel, FormGroup, FormControlLabel, FormHelperText} from '@material-ui/core';
+import { HasUserProps } from '../../types';
 import useTranslator from '../../hooks/useTranslator';
-import { error } from 'console';
+//import { error } from 'console';
 import Notice from '../../components/notice/Notice';
 import RadioButtonField from '../../components/radioButtonField/RadioButtonField';
 import useInput, { UseInput } from '../../hooks/useInput';
@@ -32,40 +32,50 @@ interface Props extends HasUserProps {
 			id: string;
 		};
 	};
+	setValue: (newValue: string) => void;
 }
 
 export default function DeadlinesView({ user }: Props) {
 	const classes = useStyles();
 	const t = useTranslator();
     const [changed, isChanging] = React.useState(false);
-    const radioButtonOptions = [{ value: 'MENTORS', label: 'Registration open for mentors' }, { value: 'MENTEES', label: 'Registration open for mentees' }, { value: 'CLOSED', label: 'Registration closed' }];
 
-    const input: { [s: string]: UseInput } = {
-		role: useInput({ initialValue: radioButtonOptions[0].value }),
-    };
-    
+	const [state, setState] = React.useState({
+		mentor: false,
+		mentee: false,
+	  });
+
+	const { mentor, mentee } = state;
+
+
     const [queryDeadlineData, { data: currentDeadlineData, loading, called: currentDeadlineCalled }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.DEADLINE,
 		authToken: user.token,
-    });
-    
-	//accept or reject activity
-	const [changeDeadlinesFn, { data , called, error }] = useBackend({
-		requestMethod: RequestMethod.POST,
-        endPoint: EndPoint.CHANGE_DEADLINES_REQUEST,
-        variables: {
-			role: input.role.value,
-		},
-		authToken: user.token,
 	});
 
+	
     React.useEffect(() => {
 		if (currentDeadlineCalled) {
 			return;
 		}
 		queryDeadlineData();
     }, [currentDeadlineCalled, queryDeadlineData]);
+	
+    const input: { [s: string]: UseInput } = {
+		mentor: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentor) || '' }),
+		mentee: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentee) || '' }),
+    };
+    
+	const [changeDeadlinesFn, { data , called, error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+        endPoint: EndPoint.CHANGE_DEADLINES_REQUEST,
+        variables: {
+			mentor: input.mentor.value,
+			mentee: input.mentee.value
+		},
+		authToken: user.token,
+	});
     
 	React.useEffect(() => {
 		if (!changeDeadlinesFn || !called) {
@@ -74,6 +84,11 @@ export default function DeadlinesView({ user }: Props) {
         changeDeadlinesFn();
 		isChanging(true);
 	}, [called, changeDeadlinesFn]);
+
+	const handleChange = name => event => {
+		setState({ ...state, [name]: event.target.checked });
+		//changeDeadlinesFn();
+	};
 
     /*if (loading || !currentDeadlineData) {
 		return <Loader />;
@@ -86,17 +101,19 @@ export default function DeadlinesView({ user }: Props) {
 			<div className={classes.container}>
                 <Card className={classes.card}>
                     <CardContent>
-					<h1>{t(Translation.DEADLINES)}</h1>
-                        <form>
-                            <div className={classes.buttons}>
-							<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={true} />
-					        </div>
-                            <div>
-							    <Button type="submit" variant="contained" color="primary">
-								    {t(Translation.CHANGE)}
-							    </Button>
-						    </div>
-                        </form>
+						<FormControl component="fieldset">
+							<h1>{t(Translation.DEADLINES)}</h1>
+							<FormGroup>
+							<FormControlLabel
+								control={<Checkbox checked={mentor} onChange={handleChange('mentor')} value={true}/>} //{currentDeadlineData.mentor} />}
+								label="Registreerimine mentorite jaoks avatud"
+							/>
+							<FormControlLabel
+control={<Checkbox checked={mentee} onChange={handleChange('mentee')} value={true}/>} //{currentDeadlineData.mentee} />}
+								label="Registreerimine menteede jaoks avatud"
+							/>
+							</FormGroup>
+						</FormControl>
                     </CardContent>
                 </Card>
             </div>
