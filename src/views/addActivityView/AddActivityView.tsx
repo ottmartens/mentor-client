@@ -8,7 +8,6 @@ import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
-import { UserContext } from '../../contexts/UserContext';
 import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
