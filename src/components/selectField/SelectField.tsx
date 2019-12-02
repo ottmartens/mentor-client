@@ -3,15 +3,15 @@ import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 import { FieldError } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
 
-interface Option {
+export interface Option {
 	value: string;
 	label: string;
 }
 
 interface Props {
 	label: string;
-	setValue: (value: string | string[]) => void;
-	value: string | string[] | undefined;
+	setValue: (value: any) => void;
+	value: any;
 	error: FieldError | undefined;
 	className?: string;
 	disabled?: boolean;
@@ -51,7 +51,9 @@ export default function SelectField({
 				multiple={multiple}
 			>
 				{options.map(({ value, label }) => (
-					<MenuItem value={value}>{label}</MenuItem>
+					<MenuItem key={value} value={value}>
+						{label}
+					</MenuItem>
 				))}
 			</Select>
 			<span className={classes.error}>{error}</span>

@@ -108,7 +108,7 @@ export default function ProfileView({ user }: HasUserProps) {
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
 	const [isOpen, setOpen] = React.useState(false);
-	const [imageSizeError, setImageSizeError] = React.useState<string | undefined>();
+	const [imageUploadError, setImageUploadError] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -185,7 +185,7 @@ export default function ProfileView({ user }: HasUserProps) {
 			<h1 className={classes.title}>{t(Translation.PROFILE)}</h1>
 			<Card className={classes.card}>
 				{error && <Notice variant="error" title="Profile updating failed" message={error} />}
-				{imageSizeError && <Notice variant="error" title="Image upload failed" message={imageSizeError} />}
+				{imageUploadError && <Notice variant="error" title="Image upload failed" message={imageUploadError} />}
 				{isEdited && <Notice variant="success" title="Profile updated successfully" />}
 				<div>
 					<div>
@@ -196,7 +196,12 @@ export default function ProfileView({ user }: HasUserProps) {
 							/>
 						</div>
 						<label className={classes.imageButtonContainer}>
-							<input accept="image/*;capture=camera" type="file" onChange={onChange} style={{ display: 'none' }} />
+							<input
+								accept="image/*;capture=camera"
+								type="file"
+								onChange={uploadImageOnChange}
+								style={{ display: 'none' }}
+							/>
 							<span className={classes.imageButton}>
 								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
 							</span>
@@ -316,18 +321,18 @@ export default function ProfileView({ user }: HasUserProps) {
 		</>
 	);
 
-	async function onChange(event: React.ChangeEvent<HTMLInputElement>) {
+	async function uploadImageOnChange(event: React.ChangeEvent<HTMLInputElement>) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
 		const file = event.target.files[0];
 		const validationError = validateImage(file, 10);
-		setImageSizeError(validationError);
+		setImageUploadError(validationError);
 		if (validationError) {
 			return;
 		}
 		setIsLoadingImage(true);
-		const result = await uploadImage(file, user.token);
+		const result = await uploadImage(file, '/api/user/image', user.token);
 		setIsLoadingImage(false);
 		await getUserInfo();
 		const imageUrl = result && result.data && result.data.data && result.data.data.imageUrl;

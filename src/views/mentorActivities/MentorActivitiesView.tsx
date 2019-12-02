@@ -30,10 +30,10 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		flexGrow: 1,
 		textAlign: 'center',
-        marginBottom: '16px',
+		marginBottom: '16px',
 	},
 	title2: {
-		color: '#2c4d7f'
+		color: '#2c4d7f',
 	},
 	makeButton: {
 		marginBottom: '20px',
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	instr: {
 		display: 'inline-block',
-	}
+	},
 }));
 
 export default function MentorActivitiesView({ user }: HasUserProps) {
@@ -66,37 +66,29 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 
 	if (loading || !data) {
 		return <Loader />;
-    }
+	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			<h1 className={classes.title2}>
-				{t(Translation.ACTIVITIES)}
-			</h1>
+			<h1 className={classes.title2}>{t(Translation.ACTIVITIES)}</h1>
 			<Card>
 				{user.role === UserRole.MENTOR && (
 					<div>
 						<h3 className={classes.instr}>{t(Translation.ACTIVITIES_INSTRUCTION)}</h3>
-						<Link
-						to='/member/add-activity/new'>
-							<Button
-							variant="contained"
-							className={classes.makeButton}
-							>
+						<Link to="/member/add-activity/new">
+							<Button variant="contained" className={classes.makeButton}>
 								{t(Translation.MAKE_NEW_ONE)}
 							</Button>
 						</Link>
 					</div>
 				)}
-				{data.map(({name, points, requiredParticipants, ID}) => (
+				{data.map(({ name, points, requiredParticipants, ID }) => (
 					<div>
 						<Divider />
-						<Link to={`/member/add-activity/${ID}`} className={classes.link}>
+						<Link to={`/member/complete-activities/${ID}`} className={classes.link}>
 							<div className={classes.listElement}>
 								<h2 className={classes.title}>{name}</h2>
-								<span
-									className={classes.description}
-								>{`${points} points | ${requiredParticipants}+ members`}</span>
+								<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
 							</div>
 						</Link>
 					</div>
