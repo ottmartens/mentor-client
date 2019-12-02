@@ -117,7 +117,7 @@ function redirectToSteps(
 }
 
 // https://github.com/ReactTraining/react-router/issues/4105
-function renderMergedProps(component, ...rest) {
+export function renderMergedProps(component, ...rest) {
 	const finalProps = Object.assign({}, ...rest);
 	return React.createElement(component, finalProps);
 }

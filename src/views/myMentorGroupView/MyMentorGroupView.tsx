@@ -165,12 +165,12 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 									setIsEditable(!isEditable);
 								}}
 							>
-								{isEditable ? t(Translation.CANCEL) : t(Translation.SAVE)}
+								{isEditable ? t(Translation.CANCEL) : t(Translation.EDIT_GROUP)}
 							</Button>
 						)}
 						{isEditable && (
 							<Button variant="contained" color="primary" type="submit" className={classes.smallMargin}>
-								{t(Translation.EDIT_GROUP)}
+								{t(Translation.SAVE)}
 							</Button>
 						)}
 					</div>

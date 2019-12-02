@@ -6,7 +6,7 @@ import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-import { BASE_URL} from '../../services/variables';
+import { BASE_URL } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
@@ -15,9 +15,9 @@ import Notice from '../../components/notice/Notice';
 import Image from '../../components/image/Image';
 import classNames from 'classnames';
 import SelectField from '../../components/selectField/SelectField';
-import { validateSize, uploadImage } from '../../services/uploadImage';
 import ConfirmationModal from '../../components/confirmationModal/ConfirmationModal';
 import { removeUserToken } from '../../services/auth';
+import { uploadImage, validateImage } from '../../services/uploadImage';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -98,11 +98,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-
-
 export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
-	
+
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
 
@@ -110,6 +108,7 @@ export default function ProfileView({ user }: HasUserProps) {
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
 	const [isOpen, setOpen] = React.useState(false);
+	const [imageSizeError, setImageSizeError] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -168,32 +167,32 @@ export default function ProfileView({ user }: HasUserProps) {
 
 	const handleClickOpen = () => {
 		setOpen(true);
-	  };
+	};
 
 	const handleClickClose = () => {
 		setOpen(false);
 	};
 
 	const handleSubmit = async () => {
-		await selfDeleteFn()
-		setOpen(false)
+		await selfDeleteFn();
+		setOpen(false);
 		removeUserToken();
 		setUser && setUser(null);
-
-	}
+	};
 
 	return (
 		<>
 			<h1 className={classes.title}>{t(Translation.PROFILE)}</h1>
 			<Card className={classes.card}>
 				{error && <Notice variant="error" title="Profile updating failed" message={error} />}
-				{isEdited && <Notice variant="success" title="Profile updated successfully" message={error} />}
+				{imageSizeError && <Notice variant="error" title="Image upload failed" message={imageSizeError} />}
+				{isEdited && <Notice variant="success" title="Profile updated successfully" />}
 				<div>
 					<div>
 						<div className={classes.imageContainer}>
 							<Image
 								className={classes.image}
-								src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
+								src={userData.imageUrl ? `${BASE_URL}${userData.imageUrl}` : '/images/avatar_placeholder.webp'}
 							/>
 						</div>
 						<label className={classes.imageButtonContainer}>
@@ -299,12 +298,20 @@ export default function ProfileView({ user }: HasUserProps) {
 					</form>
 				</div>
 
-				
-				<Button variant="contained" onClick={handleClickOpen} className={classNames(classes.button, classes.declineButton)}>
+				<Button
+					variant="contained"
+					onClick={handleClickOpen}
+					className={classNames(classes.button, classes.declineButton)}
+				>
 					KUSTUTA KASUTAJA
 				</Button>
-				<ConfirmationModal title="" description="Kas oled kindel et soovid oma kasutaja kustutada?" isOpen={isOpen} onSubmit={handleSubmit} onClose={handleClickClose} ></ConfirmationModal>
-			
+				<ConfirmationModal
+					title=""
+					description="Kas oled kindel et soovid oma kasutaja kustutada?"
+					isOpen={isOpen}
+					onSubmit={handleSubmit}
+					onClose={handleClickClose}
+				></ConfirmationModal>
 			</Card>
 		</>
 	);
@@ -314,11 +321,19 @@ export default function ProfileView({ user }: HasUserProps) {
 			return;
 		}
 		const file = event.target.files[0];
-		if (validateSize(file, 10)) {
-			setIsLoadingImage(true);
-			await uploadImage(file, user.token);
-			setIsLoadingImage(false);
-			await getUserInfo();
+		const validationError = validateImage(file, 10);
+		setImageSizeError(validationError);
+		if (validationError) {
+			return;
 		}
+		setIsLoadingImage(true);
+		const result = await uploadImage(file, user.token);
+		setIsLoadingImage(false);
+		await getUserInfo();
+		const imageUrl = result && result.data && result.data.data && result.data.data.imageUrl;
+		if (!imageUrl || !setUser) {
+			return;
+		}
+		setUser({ ...user, imageUrl });
 	}
 }
