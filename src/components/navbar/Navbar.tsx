@@ -91,6 +91,9 @@ export default function Navbar({ user }: HasUserProps) {
 	const routes = getPossibleRoutes(user);
 	const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(false);
 
+	const isInGroup = user.groupId!==null;
+	console.log(isInGroup);
+
 	const showDrawer = (open) => (e) => {
 		setIsDrawerOpen(open);
 	};
@@ -147,22 +150,37 @@ export default function Navbar({ user }: HasUserProps) {
 	function getPossibleRoutes(user: UserContextUser): NavItem[] {
 		switch (user.role) {
 			case UserRole.MENTEE:
-				return [
-					{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
-					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
-					{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
-					{ label: t(Translation.LOGOUT), url: '/logout' },
-				];
+				switch (user.groupId) {
+					case null:
+							return [
+								{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
+								{ label: t(Translation.LOGOUT), url: '/logout' },
+							];
+					default:
+							return [
+								{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
+								{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
+								{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
+								{ label: t(Translation.LOGOUT), url: '/logout' },
+							];
+				}
 
 			case UserRole.MENTOR:
-				return [
-					{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
-					{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
-					{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
-					{ label: t(Translation.FIND_MENTOR), url: '/member/find-co-mentor' },
-					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
-					{ label: t(Translation.LOGOUT), url: '/logout' },
-				];
+				switch (user.groupId){
+					case null:
+						return [
+							{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
+							{ label: t(Translation.FIND_MENTOR), url: '/member/find-co-mentor' },
+							{ label: t(Translation.LOGOUT), url: '/logout' },
+						];
+					default:
+						return [
+							{ label: t(Translation.MY_MENTORGROUP), url: `/member/my-mentor-group/` },
+							{ label: t(Translation.ALL_GROUPS), url: '/member/mentor-group-list' },
+							{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
+							{ label: t(Translation.LOGOUT), url: '/logout' },
+						];
+				}
 
 			case UserRole.ADMIN:
 				return [
@@ -172,6 +190,7 @@ export default function Navbar({ user }: HasUserProps) {
 					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
 					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
+
 			default:
 				return [];
 		}
