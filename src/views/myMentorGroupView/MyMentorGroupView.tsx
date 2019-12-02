@@ -5,7 +5,7 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import { Button, CardMedia, Typography, Card, List, Divider } from '@material-ui/core';
+import { Button, Typography, Card, List, Divider, ListItem, ListItemText} from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import Person from '../../components/person/Person';
@@ -13,6 +13,10 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import classNames from 'classnames';
 import Image from '../../components/image/Image';
+import { Link } from 'react-router-dom';
+import { CheckCircleOutline, ErrorOutline, HelpOutline} from '@material-ui/icons';
+
+
 
 const useStyles = makeStyles((theme) => ({
 	smallMargin: {
@@ -38,9 +42,6 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 		marginTop: '8px',
 	},
-	listImage: {
-		borderRadius: '50%',
-	},
 	acceptButton: {
 		margin: '4px',
 		backgroundColor: '#26c72b',
@@ -64,6 +65,29 @@ const useStyles = makeStyles((theme) => ({
 	alignCenter: {
 		textAlign: 'center',
 	},
+	suuredArvud: {
+		color: 'purple',
+		fontSize: '20px',
+		marginRight: '15px',
+	},
+	punktid: {
+		textAlign: 'right',
+	},
+	questionmark: {
+		marginRight: '20px',
+		fontSize: '32px',
+		color: '#f0c605'
+	},
+	exclamationmark: {
+		color: 'red',
+		marginRight: '20px',
+		fontSize: '32px'
+	},
+	checkmark: {
+		color: 'green',
+		marginRight: '20px',
+		fontSize: '32px'
+	}
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
@@ -103,9 +127,15 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	const pointSum = data && data.activities.reduce((total, current) => {
+		return total + current.points
+	}, 0)
+
+	const activityTotal = data && data.activities.length
+
 	if (!data || loading) {
 		return <Loader />;
-	}
+	};
 
 	return (
 		<>
@@ -245,6 +275,39 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					</List>
 				</Card>
 			)}
+			<Card className={classNames(classes.card, classes.alignCenter)}>
+				<h4>
+					Grupi tegevusi kokku: <span className={classes.suuredArvud}>{activityTotal} </span> Grupi teenitud punktid: <span className={classes.suuredArvud}>{pointSum}</span>
+				</h4>
+				<Divider />
+				<List>
+					{data.activities.map(({ID, name, points, isVerified, time}) => {
+						return (
+						<div key={ID}>
+							<ListItem>
+								{isVerified === null && (
+									<HelpOutline className={classes.questionmark}>
+									</HelpOutline>
+								)}
+								{isVerified === true && (
+									<CheckCircleOutline className={classes.checkmark}>
+									</CheckCircleOutline>
+								)}
+								{isVerified === false && (
+									<ErrorOutline className={classes.exclamationmark}>
+									</ErrorOutline>
+								)}
+								<Link to={`/member/activity/${ID}`} className={classes.listLink}>
+									<ListItemText primary={name} secondary={time} />
+									<p className={classes.punktid}>
+										<span className={classes.suuredArvud}>{points} p</span>
+									</p>
+								</Link>
+							</ListItem>
+						</div>
+					)})}
+				</List>
+			</Card>
 		</>
 	);
 }
