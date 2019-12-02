@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '0',
 	},
 	buttonContainer: {
+		marginTop: '1em',
 		textAlign: 'center',
 	},
 	mentorGroupContainer: {
@@ -68,7 +69,7 @@ export default function MentorGroupView({ match, user }: Props) {
 		authToken: user.token,
 	});
 
-	const [requestGroupJoinFn, { called: joinGroupCalled, error }] = useBackend({
+	const [requestGroupJoinFn, { error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.JOIN_GROUP,
 		variables: { groupId: Number(params.id) },
@@ -82,17 +83,13 @@ export default function MentorGroupView({ match, user }: Props) {
 		queryMentorGroupData();
 	}, [called, queryMentorGroupData]);
 
-	React.useEffect(() => {
-		if (!requestGroupJoinFn || !joinGroupCalled) {
-			return;
-		}
-		requestGroupJoinFn();
-		isApplying(true);
-	}, [joinGroupCalled, requestGroupJoinFn]);
-
 	if (loading || !data) {
 		return <Loader />;
 	}
+
+	const alreadyRequested = data.requests.some(request => 	request.userId===user.id);
+	console.log(alreadyRequested);
+
 	return (
 		<>
 			{error && <Notice variant="error" title="Application sending failed" message={error} />}
@@ -112,10 +109,12 @@ export default function MentorGroupView({ match, user }: Props) {
 					)}
 				</div>
 
-				{/* Mentors */}
+				
+				
 				{user.role === UserRole.MENTEE && (
 					<div className={classes.buttonContainer}>
 						<Button
+							disabled={alreadyRequested}
 							variant="contained"
 							color="primary"
 							onClick={async () => {
@@ -123,7 +122,7 @@ export default function MentorGroupView({ match, user }: Props) {
 								await queryMentorGroupData();
 							}}
 						>
-							{t(Translation.JOIN_GROUP)}
+							{alreadyRequested ? t(Translation.ALREADY_JOINED) : t(Translation.JOIN_GROUP)}
 						</Button>
 					</div>
 				)}

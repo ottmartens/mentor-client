@@ -6,16 +6,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function ConfirmationModal({ title, description, onSubmit, onClose }) {
+export default function ConfirmationModal({ title, description, isOpen, onSubmit, onClose }) {
 	return (
-		<Dialog open>
+		<Dialog open={isOpen}>
 			<DialogTitle id="alert-dialog-slide-title">{title}</DialogTitle>
 			<DialogContent>
 				<DialogContentText id="alert-dialog-slide-description">{description}</DialogContentText>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={onClose} color="primary">
-					Cancel
+					Tühista
 				</Button>
 				<Button onClick={onSubmit} variant="contained" color="secondary">
 					Ok

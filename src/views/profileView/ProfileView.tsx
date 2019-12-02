@@ -1,13 +1,12 @@
 import React from 'react';
-import { Container, Button, Card } from '@material-ui/core';
+import { Button, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-import axios from 'axios';
-import { BASE_URL, queryPrefix } from '../../services/variables';
+import { BASE_URL } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
@@ -16,6 +15,9 @@ import Notice from '../../components/notice/Notice';
 import Image from '../../components/image/Image';
 import classNames from 'classnames';
 import SelectField from '../../components/selectField/SelectField';
+import ConfirmationModal from '../../components/confirmationModal/ConfirmationModal';
+import { removeUserToken } from '../../services/auth';
+import { uploadImage, validateImage } from '../../services/uploadImage';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -98,19 +100,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
+
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
+
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
-
-	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
+	const [isOpen, setOpen] = React.useState(false);
+	const [imageSizeError, setImageSizeError] = React.useState<string | undefined>();
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.USER,
 		authToken: user.token,
 	});
+
 	const t = useTranslator();
 
 	React.useEffect(() => {
@@ -141,6 +146,13 @@ export default function ProfileView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	const [selfDeleteFn] = useBackend({
+		requestMethod: RequestMethod.DELETE,
+		endPoint: EndPoint.SELF_DELETE,
+		endPointUrlParam: user.id,
+		authToken: user.token,
+	});
+
 	React.useEffect(() => {
 		if (!updateCalled || !setUser) {
 			return;
@@ -153,28 +165,38 @@ export default function ProfileView({ user }: HasUserProps) {
 		return <Loader />;
 	}
 
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClickClose = () => {
+		setOpen(false);
+	};
+
+	const handleSubmit = async () => {
+		await selfDeleteFn();
+		setOpen(false);
+		removeUserToken();
+		setUser && setUser(null);
+	};
+
 	return (
 		<>
 			<h1 className={classes.title}>{t(Translation.PROFILE)}</h1>
 			<Card className={classes.card}>
 				{error && <Notice variant="error" title="Profile updating failed" message={error} />}
-				{isEdited && <Notice variant="success" title="Profile updated successfully" message={error} />}
+				{imageSizeError && <Notice variant="error" title="Image upload failed" message={imageSizeError} />}
+				{isEdited && <Notice variant="success" title="Profile updated successfully" />}
 				<div>
 					<div>
 						<div className={classes.imageContainer}>
 							<Image
 								className={classes.image}
-								src={
-									imagePreview
-										? imagePreview
-										: user.imageUrl
-										? `${BASE_URL}${user.imageUrl}`
-										: '/images/avatar_placeholder.webp'
-								}
+								src={userData.imageUrl ? `${BASE_URL}${userData.imageUrl}` : '/images/avatar_placeholder.webp'}
 							/>
 						</div>
 						<label className={classes.imageButtonContainer}>
-							<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
+							<input accept="image/*;capture=camera" type="file" onChange={onChange} style={{ display: 'none' }} />
 							<span className={classes.imageButton}>
 								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
 							</span>
@@ -276,42 +298,42 @@ export default function ProfileView({ user }: HasUserProps) {
 					</form>
 				</div>
 
-				{isEditable && (
-					<Button variant="contained" type="submit" className={classNames(classes.button, classes.declineButton)}>
-						KUSTUTA KASUTAJA
-					</Button>
-				)}
+				<Button
+					variant="contained"
+					onClick={handleClickOpen}
+					className={classNames(classes.button, classes.declineButton)}
+				>
+					KUSTUTA KASUTAJA
+				</Button>
+				<ConfirmationModal
+					title=""
+					description="Kas oled kindel et soovid oma kasutaja kustutada?"
+					isOpen={isOpen}
+					onSubmit={handleSubmit}
+					onClose={handleClickClose}
+				></ConfirmationModal>
 			</Card>
 		</>
 	);
 
-	function onChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
+	async function onChange(event: React.ChangeEvent<HTMLInputElement>) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
 		const file = event.target.files[0];
-		var formData = new FormData();
-		formData.append('file', file);
-		setIsLoadingImage(true);
-		axios({
-			method: 'post',
-			url: `${BASE_URL}${queryPrefix}/user/image`,
-			data: formData,
-			headers: { 'Content-Type': 'multipart/form-data', Authorization: user.token },
-		})
-			.catch((err) => {
-				throw new Error(err);
-			})
-			.finally(() => {
-				setIsLoadingImage(false);
-				setImagePreview(URL.createObjectURL(file));
-			});
-	}
-	function ValidateSize(file) {
-		var FileSize = file.files[0].size / 1024 / 1024; // in MB
-		if (FileSize > 5) {
-			alert('File size exceeds 5 MB');
-			// $(file).val(''); //for clearing with Jquery
+		const validationError = validateImage(file, 10);
+		setImageSizeError(validationError);
+		if (validationError) {
+			return;
 		}
+		setIsLoadingImage(true);
+		const result = await uploadImage(file, user.token);
+		setIsLoadingImage(false);
+		await getUserInfo();
+		const imageUrl = result && result.data && result.data.data && result.data.data.imageUrl;
+		if (!imageUrl || !setUser) {
+			return;
+		}
+		setUser({ ...user, imageUrl });
 	}
 }

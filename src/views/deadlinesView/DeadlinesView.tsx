@@ -8,6 +8,9 @@ import Notice from '../../components/notice/Notice';
 import RadioButtonField from '../../components/radioButtonField/RadioButtonField';
 import useInput, { UseInput } from '../../hooks/useInput';
 import { Translation } from '../../translations';
+import CheckboxField from '../../components/checkboxField/CheckboxField';
+import { createSecureContext } from 'tls';
+
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -45,10 +48,7 @@ export default function DeadlinesView({ user }: Props) {
 		mentee: false,
 	  });
 
-	const { mentor, mentee } = state;
-
-
-    const [queryDeadlineData, { data: currentDeadlineData, loading, called: currentDeadlineCalled }] = useBackend({
+	    const [queryDeadlineData, { data: currentDeadlineData, loading, called: currentDeadlineCalled }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.DEADLINE,
 		authToken: user.token,
@@ -60,8 +60,8 @@ export default function DeadlinesView({ user }: Props) {
 			return;
 		}
 		queryDeadlineData();
-    }, [currentDeadlineCalled, queryDeadlineData]);
-	
+	}, [currentDeadlineCalled, queryDeadlineData]);
+		
     const input: { [s: string]: UseInput } = {
 		mentor: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentor) || '' }),
 		mentee: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentee) || '' }),
@@ -104,14 +104,10 @@ export default function DeadlinesView({ user }: Props) {
 						<FormControl component="fieldset">
 							<h1>{t(Translation.DEADLINES)}</h1>
 							<FormGroup>
-							<FormControlLabel
-								control={<Checkbox checked={mentor} onChange={handleChange('mentor')} value={true}/>} //{currentDeadlineData.mentor} />}
-								label="Registreerimine mentorite jaoks avatud"
-							/>
-							<FormControlLabel
-control={<Checkbox checked={mentee} onChange={handleChange('mentee')} value={true}/>} //{currentDeadlineData.mentee} />}
-								label="Registreerimine menteede jaoks avatud"
-							/>
+								<CheckboxField label='Registreerimine avatud mentoritele' {...input.mentor} value={true}></CheckboxField>
+									{/*value={currentDeadlineData.mentor}>*/}
+								<CheckboxField label='Registreerimine avatud menteedele' {...input.mentor} value={false}></CheckboxField>
+									{/*value={currentDeadlineData.mentee}>*/}
 							</FormGroup>
 						</FormControl>
                     </CardContent>
