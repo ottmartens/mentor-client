@@ -2,7 +2,6 @@ import React from 'react';
 import { RouteProps, Redirect, Route } from 'react-router';
 import { UserContext } from '../../contexts/UserContext';
 import { getUserToken } from '../../services/auth';
-import useTranslator from '../../hooks/useTranslator';
 import Loader from '../loader/Loader';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { renderMergedProps } from '../protectedRoute/ProtectedRoute';

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { BASE_URL, queryPrefix } from './variables';
+import { BASE_URL } from './variables';
 
-export async function uploadImage(file: File, userAuth: string): Promise<any> {
+export async function uploadImage(file: File, url: string, userAuth: string): Promise<any> {
 	var formData = new FormData();
 	formData.append('file', file);
 	return axios({
 		method: 'post',
-		url: `${BASE_URL}${queryPrefix}/user/image`,
+		url: `${BASE_URL}${url}`,
 		data: formData,
 		headers: { 'Content-Type': 'multipart/form-data', Authorization: userAuth },
 	}).catch((err) => {

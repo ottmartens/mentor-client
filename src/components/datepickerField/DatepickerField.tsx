@@ -23,23 +23,21 @@ const useStyles = makeStyles((theme) => ({
 export default function DatepickerField({ error, label, value, setValue, className }: Props) {
 	const classes = useStyles();
 	return (
-		<>
-			<MuiPickersUtilsProvider utils={DateFnsUtils}>
-				<KeyboardDatePicker
-					className={className}
-					disableToolbar
-					variant="inline"
-					format="dd/MM/yyyy"
-					margin="normal"
-					label={label}
-					value={value || new Date()}
-					inputVariant="outlined"
-					disableFuture
-					onChange={handleDateChange}
-				/>
-			</MuiPickersUtilsProvider>
+		<MuiPickersUtilsProvider utils={DateFnsUtils}>
+			<KeyboardDatePicker
+				className={className}
+				disableToolbar
+				variant="inline"
+				format="dd/MM/yyyy"
+				margin="normal"
+				label={label}
+				value={value || new Date()}
+				inputVariant="outlined"
+				disableFuture
+				onChange={handleDateChange}
+			/>
 			<span className={classes.error}>{error}</span>
-		</>
+		</MuiPickersUtilsProvider>
 	);
 	function handleDateChange(date) {
 		setValue(date);

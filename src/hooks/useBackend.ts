@@ -7,7 +7,7 @@ dotenv.config();
 export enum RequestMethod {
 	POST = 'post',
 	GET = 'get',
-	DELETE = "delete"
+	DELETE = 'delete',
 }
 
 export enum EndPoint {
@@ -34,6 +34,7 @@ export enum EndPoint {
 	ALL_USERS = '/api/users',
 	GET_MOCK_ACTIVITIES = '/template-activities',
 	SELF_DELETE = '/user',
+	ACTIVITIES = '/activity',
 }
 
 interface Props {
