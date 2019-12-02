@@ -77,13 +77,15 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 				{user.role === UserRole.MENTOR && (
 					<div>
 						<h3 className={classes.instr}>{t(Translation.ACTIVITIES_INSTRUCTION)}</h3>
-						<Button
-						variant="contained"
-						className={classes.makeButton}
-						href='/member/add-activity/new'
-						>
-							{t(Translation.MAKE_NEW_ONE)}
-						</Button>
+						<Link
+						to='/member/add-activity/new'>
+							<Button
+							variant="contained"
+							className={classes.makeButton}
+							>
+								{t(Translation.MAKE_NEW_ONE)}
+							</Button>
+						</Link>
 					</div>
 				)}
 				{data.map(({name, points, requiredParticipants, ID}) => (
