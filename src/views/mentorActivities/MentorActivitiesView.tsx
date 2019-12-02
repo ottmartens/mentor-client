@@ -78,7 +78,8 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 					<div>
 						<h3 className={classes.instr}>{t(Translation.ACTIVITIES_INSTRUCTION)}</h3>
 						<Link
-						to='/member/add-activity/new'>
+						to='/member/add-activity/new'
+						className={classes.link}>
 							<Button
 							variant="contained"
 							className={classes.makeButton}
