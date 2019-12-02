@@ -70,6 +70,7 @@ export enum Translation {
 	REDIRECT_ALMOST_DONE_INFO = 'REDIRECT_ALMOST_DONE_INFO',
 	REDIRECT_ADD_IMAGE = 'REDIRECT_ADD_IMAGE',
 	REDIRECT_FILL_PROFILE = 'REDIRECT_FILL_PROFILE',
+	ALREADY_JOINED = 'ALREADY_JOINED',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -143,6 +144,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REDIRECT_ALMOST_DONE_INFO: 'Palume sul veel ära teha need asjad, et saaksid meie rakendust kasutama hakata:',
 		REDIRECT_ADD_IMAGE: '',
 		REDIRECT_FILL_PROFILE: '',
+		ALREADY_JOINED: 'Juba liitunud',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -214,5 +216,6 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REDIRECT_ALMOST_DONE_INFO: '',
 		REDIRECT_ADD_IMAGE: '',
 		REDIRECT_FILL_PROFILE: '',
+		ALREADY_JOINED: 'Already joined',
 	},
 };
