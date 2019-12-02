@@ -17,6 +17,7 @@ import Image from '../../components/image/Image';
 import classNames from 'classnames';
 import SelectField from '../../components/selectField/SelectField';
 import { validateSize, uploadImage } from '../../services/uploadImage';
+import ConfirmationModal from '../../components/confirmationModal/ConfirmationModal';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -97,19 +98,33 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function ProfileView({ user }: HasUserProps) {
+interface Props extends HasUserProps {
+	match: {
+		params: {
+			id: string;
+		};
+	};
+}
+
+export default function ProfileView({ match, user }: HasUserProps) {
 	const classes = useStyles();
+	
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
+
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
+	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
+	const [isOpen, setOpen] = React.useState(false);
+	const { params } = match;
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.USER,
 		authToken: user.token,
 	});
+
 	const t = useTranslator();
 
 	React.useEffect(() => {
@@ -140,6 +155,13 @@ export default function ProfileView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	const [selfDeleteFn, { error: selfDeleteError }] = useBackend({
+		requestMethod: RequestMethod.DELETE,
+		endPoint: EndPoint.SELF_DELETE,
+		endPointUrlParam: params.id,
+		authToken: user.token,
+	});
+
 	React.useEffect(() => {
 		if (!updateCalled || !setUser) {
 			return;
@@ -151,6 +173,10 @@ export default function ProfileView({ user }: HasUserProps) {
 	if (loading || !userData) {
 		return <Loader />;
 	}
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	  };
 
 	return (
 		<>
@@ -269,11 +295,12 @@ export default function ProfileView({ user }: HasUserProps) {
 					</form>
 				</div>
 
-				{isEditable && (
-					<Button variant="contained" type="submit" className={classNames(classes.button, classes.declineButton)}>
-						KUSTUTA KASUTAJA
-					</Button>
-				)}
+				
+				<Button variant="contained" onClick={handleClickOpen} className={classNames(classes.button, classes.declineButton)}>
+					KUSTUTA KASUTAJA
+				</Button>
+				<ConfirmationModal title="" description="Kas oled kindel et soovid oma kasutaja kustutada?" isOpen={isOpen} onSubmit={selfDeleteFn()} onClose={setOpen(false)} ></ConfirmationModal>
+			
 			</Card>
 		</>
 	);
