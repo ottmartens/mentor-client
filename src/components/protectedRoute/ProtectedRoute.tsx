@@ -47,7 +47,7 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 			render={(routeProps) => {
 				// if not logged in, redirect to login
 				if (!user && !token) {
-					return <Redirect to="/login" />;
+					return <Redirect to="/" />;
 				}
 				if (token && !user && (loading || !data)) {
 					return <Loader />;

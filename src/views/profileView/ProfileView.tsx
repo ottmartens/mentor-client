@@ -1,13 +1,12 @@
 import React from 'react';
-import { Container, Button, Card } from '@material-ui/core';
+import { Button, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-import axios from 'axios';
-import { BASE_URL, queryPrefix } from '../../services/variables';
+import { BASE_URL} from '../../services/variables';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
@@ -18,6 +17,7 @@ import classNames from 'classnames';
 import SelectField from '../../components/selectField/SelectField';
 import { validateSize, uploadImage } from '../../services/uploadImage';
 import ConfirmationModal from '../../components/confirmationModal/ConfirmationModal';
+import { removeUserToken } from '../../services/auth';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -98,15 +98,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-interface Props extends HasUserProps {
-	match: {
-		params: {
-			id: string;
-		};
-	};
-}
 
-export default function ProfileView({ match, user }: HasUserProps) {
+
+export default function ProfileView({ user }: HasUserProps) {
 	const classes = useStyles();
 	
 	const userContext = React.useContext(UserContext);
@@ -115,9 +109,7 @@ export default function ProfileView({ match, user }: HasUserProps) {
 	const [isloadingImage, setIsLoadingImage] = React.useState(false);
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
-	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
 	const [isOpen, setOpen] = React.useState(false);
-	const { params } = match;
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -155,10 +147,10 @@ export default function ProfileView({ match, user }: HasUserProps) {
 		authToken: user.token,
 	});
 
-	const [selfDeleteFn, { error: selfDeleteError }] = useBackend({
+	const [selfDeleteFn] = useBackend({
 		requestMethod: RequestMethod.DELETE,
 		endPoint: EndPoint.SELF_DELETE,
-		endPointUrlParam: params.id,
+		endPointUrlParam: user.id,
 		authToken: user.token,
 	});
 
@@ -177,6 +169,18 @@ export default function ProfileView({ match, user }: HasUserProps) {
 	const handleClickOpen = () => {
 		setOpen(true);
 	  };
+
+	const handleClickClose = () => {
+		setOpen(false);
+	};
+
+	const handleSubmit = async () => {
+		await selfDeleteFn()
+		setOpen(false)
+		removeUserToken();
+		setUser && setUser(null);
+
+	}
 
 	return (
 		<>
@@ -299,7 +303,7 @@ export default function ProfileView({ match, user }: HasUserProps) {
 				<Button variant="contained" onClick={handleClickOpen} className={classNames(classes.button, classes.declineButton)}>
 					KUSTUTA KASUTAJA
 				</Button>
-				<ConfirmationModal title="" description="Kas oled kindel et soovid oma kasutaja kustutada?" isOpen={isOpen} onSubmit={selfDeleteFn()} onClose={setOpen(false)} ></ConfirmationModal>
+				<ConfirmationModal title="" description="Kas oled kindel et soovid oma kasutaja kustutada?" isOpen={isOpen} onSubmit={handleSubmit} onClose={handleClickClose} ></ConfirmationModal>
 			
 			</Card>
 		</>

@@ -7,6 +7,7 @@ dotenv.config();
 export enum RequestMethod {
 	POST = 'post',
 	GET = 'get',
+	DELETE = "delete"
 }
 
 export enum EndPoint {
@@ -32,12 +33,13 @@ export enum EndPoint {
 	DEADLINE = '/admin/deadlines',
 	ALL_USERS = '/api/users',
 	GET_MOCK_ACTIVITIES = '/template-activities',
+	SELF_DELETE = '/user',
 }
 
 interface Props {
 	requestMethod: RequestMethod;
 	endPoint: EndPoint;
-	endPointUrlParam?: string;
+	endPointUrlParam?: string | number;
 	variables?: any;
 	authToken?: string;
 	skip?: boolean;
