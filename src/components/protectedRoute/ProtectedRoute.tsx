@@ -8,12 +8,16 @@ import Loader from '../loader/Loader';
 import { UserRole } from '../../types';
 import { StaticContext, RouteComponentProps } from 'react-router';
 import assertNever from '../../services/assertNever';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	const userContext = React.useContext(UserContext);
 	const user = userContext && userContext.user;
 	const setUser = userContext && userContext.setUser;
 	const token = getUserToken();
+
+	const t = useTranslator();
 
 	const [getUserInfo, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -34,7 +38,7 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 		if (!data || !setUser || !token) {
 			return;
 		}
-		setUser({ ...data, token: token });
+		setUser({ ...data, token: token, id: data.ID });
 	}, [data, setUser]);
 
 	return (
@@ -54,7 +58,7 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 				}
 
 				// redirect if something is missing
-				redirectToSteps(routeProps, user);
+				redirectToSteps(routeProps, user, t);
 
 				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}
@@ -62,7 +66,11 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 	);
 }
 
-function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any>, user: UserContextUser) {
+function redirectToSteps(
+	routeProps: RouteComponentProps<any, StaticContext, any>,
+	user: UserContextUser,
+	t: (t: Translation) => string,
+) {
 	switch (user.role) {
 		case UserRole.MENTEE:
 			if (
@@ -74,7 +82,7 @@ function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any
 				routeProps.history.push({
 					pathname: '/member/redirect-info-view',
 					state: {
-						title: 'Thank you for joining the program',
+						title: t(Translation.REDIRECT_ALMOST_DONE),
 						description:
 							'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
 						urlToRedirect: '/member/profile',
@@ -92,7 +100,7 @@ function redirectToSteps(routeProps: RouteComponentProps<any, StaticContext, any
 				routeProps.history.push({
 					pathname: '/member/redirect-info-view',
 					state: {
-						title: 'Thank you for joining the program',
+						title: t(Translation.REDIRECT_ALMOST_DONE),
 						description:
 							'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
 						urlToRedirect: '/member/profile',

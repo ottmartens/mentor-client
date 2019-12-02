@@ -16,6 +16,7 @@ import Notice from '../../components/notice/Notice';
 import Image from '../../components/image/Image';
 import classNames from 'classnames';
 import SelectField from '../../components/selectField/SelectField';
+import { validateSize, uploadImage } from '../../services/uploadImage';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -104,8 +105,6 @@ export default function ProfileView({ user }: HasUserProps) {
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
 
-	const [imagePreview, setImagePreview] = React.useState<string | undefined>();
-
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.USER,
@@ -164,17 +163,11 @@ export default function ProfileView({ user }: HasUserProps) {
 						<div className={classes.imageContainer}>
 							<Image
 								className={classes.image}
-								src={
-									imagePreview
-										? imagePreview
-										: user.imageUrl
-										? `${BASE_URL}${user.imageUrl}`
-										: '/images/avatar_placeholder.webp'
-								}
+								src={user.imageUrl ? `${BASE_URL}${user.imageUrl}` : '/images/avatar_placeholder.webp'}
 							/>
 						</div>
 						<label className={classes.imageButtonContainer}>
-							<input accept="image/*" type="file" onChange={onChangeHandler} style={{ display: 'none' }} />
+							<input accept="image/*;capture=camera" type="file" onChange={onChange} style={{ display: 'none' }} />
 							<span className={classes.imageButton}>
 								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
 							</span>
@@ -285,33 +278,16 @@ export default function ProfileView({ user }: HasUserProps) {
 		</>
 	);
 
-	function onChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
+	async function onChange(event: React.ChangeEvent<HTMLInputElement>) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
 		const file = event.target.files[0];
-		var formData = new FormData();
-		formData.append('file', file);
-		setIsLoadingImage(true);
-		axios({
-			method: 'post',
-			url: `${BASE_URL}${queryPrefix}/user/image`,
-			data: formData,
-			headers: { 'Content-Type': 'multipart/form-data', Authorization: user.token },
-		})
-			.catch((err) => {
-				throw new Error(err);
-			})
-			.finally(() => {
-				setIsLoadingImage(false);
-				setImagePreview(URL.createObjectURL(file));
-			});
-	}
-	function ValidateSize(file) {
-		var FileSize = file.files[0].size / 1024 / 1024; // in MB
-		if (FileSize > 5) {
-			alert('File size exceeds 5 MB');
-			// $(file).val(''); //for clearing with Jquery
+		if (validateSize(file, 10)) {
+			setIsLoadingImage(true);
+			await uploadImage(file, user.token);
+			setIsLoadingImage(false);
+			await getUserInfo();
 		}
 	}
 }

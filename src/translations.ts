@@ -66,6 +66,10 @@ export enum Translation {
 	OTHER = 'OTHER',
 	PROFILE_BACHELOR = 'PROFILE_BACHELOR',
 	PROFILE_MASTERS = 'PROFILE_MASTERS',
+	REDIRECT_ALMOST_DONE = 'REDIRECT_ALMOST_DONE',
+	REDIRECT_ALMOST_DONE_INFO = 'REDIRECT_ALMOST_DONE_INFO',
+	REDIRECT_ADD_IMAGE = 'REDIRECT_ADD_IMAGE',
+	REDIRECT_FILL_PROFILE = 'REDIRECT_FILL_PROFILE',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -135,6 +139,10 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		OTHER: 'Muu',
 		PROFILE_BACHELOR: 'Bak',
 		PROFILE_MASTERS: 'Mag',
+		REDIRECT_ALMOST_DONE: 'Peaaegu valmis!',
+		REDIRECT_ALMOST_DONE_INFO: 'Palume sul veel ära teha need asjad, et saaksid meie rakendust kasutama hakata:',
+		REDIRECT_ADD_IMAGE: '',
+		REDIRECT_FILL_PROFILE: '',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -202,5 +210,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		OTHER: 'Other',
 		PROFILE_BACHELOR: 'BSc',
 		PROFILE_MASTERS: 'MSc',
+		REDIRECT_ALMOST_DONE: 'Almost done!',
+		REDIRECT_ALMOST_DONE_INFO: '',
+		REDIRECT_ADD_IMAGE: '',
+		REDIRECT_FILL_PROFILE: '',
 	},
 };
