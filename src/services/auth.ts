@@ -17,7 +17,3 @@ export function getUserToken() {
 	}
 	return token;
 }
-
-export function parseUser() {
-	return undefined;
-}

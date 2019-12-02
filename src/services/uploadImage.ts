@@ -13,12 +13,20 @@ export async function uploadImage(file: File, userAuth: string): Promise<any> {
 		throw new Error(err);
 	});
 }
-export function validateSize(file, size: number): boolean {
+export function validateImage(file, size?: number): string | undefined {
 	var FileSize = file.size / 1024 / 1024; // in MB
-	if (FileSize > size) {
-		return false;
+
+	if (!isFileImage(file)) {
+		return 'Selected file is not an image';
 	}
-	return true;
+
+	if (size && FileSize > size) {
+		return `Selected image exceeds ${size} mb of size`;
+	}
+
+	return undefined;
 }
 
-// setImagePreview(URL.createObjectURL(file));
+function isFileImage(file) {
+	return file && file['type'].split('/')[0] === 'image';
+}

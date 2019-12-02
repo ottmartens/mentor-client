@@ -10,13 +10,14 @@ interface Option {
 
 interface Props {
 	label: string;
-	setValue: (value: string) => void;
-	value: string | undefined;
+	setValue: (value: string | string[]) => void;
+	value: string | string[] | undefined;
 	error: FieldError | undefined;
 	className?: string;
 	disabled?: boolean;
 	labelWidth?: number;
 	options: Option[];
+	multiple?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +36,7 @@ export default function SelectField({
 	disabled,
 	options,
 	labelWidth,
+	multiple = false,
 }: Props) {
 	const classes = useStyles();
 	return (
@@ -46,6 +48,7 @@ export default function SelectField({
 				disabled={disabled}
 				labelWidth={labelWidth}
 				style={{ textAlign: 'left' }}
+				multiple={multiple}
 			>
 				{options.map(({ value, label }) => (
 					<MenuItem value={value}>{label}</MenuItem>

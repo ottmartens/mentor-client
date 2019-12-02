@@ -75,7 +75,7 @@ function NoticeWrapper(props) {
 
 interface NoticeProps {
 	title?: string;
-	message: string;
+	message?: string;
 	variant?: 'error' | 'info' | 'success' | 'warning';
 	verticalPlacement?: 'bottom' | 'top';
 	horizontalPlacement?: 'left' | 'right' | 'center';
