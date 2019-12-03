@@ -78,7 +78,7 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 					<div>
 						<h3 className={classes.instr}>{t(Translation.ACTIVITIES_INSTRUCTION)}</h3>
 						<Link
-						to='/member/add-activity/new'
+						to='/member/complete-activity/new'
 						className={classes.link}>
 							<Button
 							variant="contained"
@@ -92,7 +92,7 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 				{data.map(({name, points, requiredParticipants, ID}) => (
 					<div>
 						<Divider />
-						<Link to={`/member/add-activity/${ID}`} className={classes.link}>
+						<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
 							<div className={classes.listElement}>
 								<h2 className={classes.title}>{name}</h2>
 								<span
