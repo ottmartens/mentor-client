@@ -33,7 +33,7 @@ export default function AddActivityView({ user}: HasUserProps) {
 		minMembers: useInput({ validators: [isSet] }),
 	};
 
-	const [updateActivities, { data: updateActivitiesData, called: updateCalled, error }] = useBackend({
+	const [updateActivities, { error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_ACTIVITIES,
 		variables: {
@@ -44,24 +44,21 @@ export default function AddActivityView({ user}: HasUserProps) {
 		authToken: user.token,
 	});
 
-	React.useEffect(() => {
-		if (!updateCalled) {
-			return;
-		}
-		setIsAdded(true);
-	}, [updateActivitiesData]);
-
 	return (
 		<Card className={classes.card}>
-			{error && <Notice variant="error" title="Adding activity failed" message={error} />}
-			{isAdded && <Notice variant="success" title="Activity added successfully" message={error} />}
+			{error && <Notice variant="error" title="Tegevuse lisamine ebaõnnestus" message={error} />}
+			{isAdded && <Notice variant="success" title="Tegevus lisatud" message='' />}
 			<h1>{t(Translation.ADD_ACTIVITY)}</h1>
 			<div>
 				<form
-					onSubmit={(e) => {
+					onSubmit={async (e) => {
 						e.preventDefault();
 						if (validateInputs(input)) {
-							updateActivities();
+							await updateActivities();
+							{!error &&
+								setIsAdded(true);
+								console.log(isAdded);
+							}
 						}
 					}}
 				>
