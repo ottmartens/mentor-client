@@ -88,7 +88,7 @@ export default function MentorGroupView({ match, user }: Props) {
 	}
 
 	const alreadyRequested = data.requests.some(request => 	request.userId===user.id);
-	console.log(alreadyRequested);
+	const alreadyMember = data.mentees.some(mentee => 	mentee.userId===user.id);
 
 	return (
 		<>
@@ -111,7 +111,7 @@ export default function MentorGroupView({ match, user }: Props) {
 
 				
 				
-				{user.role === UserRole.MENTEE && (
+				{user.role === UserRole.MENTEE && !alreadyMember && (
 					<div className={classes.buttonContainer}>
 						<Button
 							disabled={alreadyRequested}
