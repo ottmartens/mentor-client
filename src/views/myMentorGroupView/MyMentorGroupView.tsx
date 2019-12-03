@@ -13,8 +13,7 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import classNames from 'classnames';
 import Image from '../../components/image/Image';
-import { Link } from 'react-router-dom';
-import { CheckCircleOutline, ErrorOutline, HelpOutline} from '@material-ui/icons';
+import ActivityFeed from '../../components/activityFeed/ActivityFeed';
 
 
 
@@ -275,39 +274,13 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					</List>
 				</Card>
 			)}
-			<Card className={classNames(classes.card, classes.alignCenter)}>
-				<h4>
-					Grupi tegevusi kokku: <span className={classes.suuredArvud}>{activityTotal} </span> Grupi teenitud punktid: <span className={classes.suuredArvud}>{pointSum}</span>
-				</h4>
-				<Divider />
-				<List>
-					{data.activities.map(({ID, name, points, isVerified, time}) => {
-						return (
-						<div key={ID}>
-							<ListItem>
-								{isVerified === null && (
-									<HelpOutline className={classes.questionmark}>
-									</HelpOutline>
-								)}
-								{isVerified === true && (
-									<CheckCircleOutline className={classes.checkmark}>
-									</CheckCircleOutline>
-								)}
-								{isVerified === false && (
-									<ErrorOutline className={classes.exclamationmark}>
-									</ErrorOutline>
-								)}
-								<Link to={`/member/activity/${ID}`} className={classes.listLink}>
-									<ListItemText primary={name} secondary={time} />
-									<p className={classes.punktid}>
-										<span className={classes.suuredArvud}>{points} p</span>
-									</p>
-								</Link>
-							</ListItem>
-						</div>
-					)})}
-				</List>
-			</Card>
+			{/* Activity Feed*/}
+			<ActivityFeed
+			activities = {data.activities}
+			onlyVerified = {false}
+			pointsum = {pointSum}
+			acttotal = {activityTotal}
+			/>
 		</>
 	);
 }
