@@ -5,7 +5,7 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import { Button, CardMedia, Typography, Card, List, Divider } from '@material-ui/core';
+import { Button, Typography, Card, List, Divider, ListItem, ListItemText} from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import Person from '../../components/person/Person';
@@ -13,6 +13,9 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import classNames from 'classnames';
 import Image from '../../components/image/Image';
+import ActivityFeed from '../../components/activityFeed/ActivityFeed';
+
+
 
 const useStyles = makeStyles((theme) => ({
 	smallMargin: {
@@ -38,9 +41,6 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 		marginTop: '8px',
 	},
-	listImage: {
-		borderRadius: '50%',
-	},
 	acceptButton: {
 		margin: '4px',
 		backgroundColor: '#26c72b',
@@ -64,6 +64,29 @@ const useStyles = makeStyles((theme) => ({
 	alignCenter: {
 		textAlign: 'center',
 	},
+	suuredArvud: {
+		color: 'purple',
+		fontSize: '20px',
+		marginRight: '15px',
+	},
+	punktid: {
+		textAlign: 'right',
+	},
+	questionmark: {
+		marginRight: '20px',
+		fontSize: '32px',
+		color: '#f0c605'
+	},
+	exclamationmark: {
+		color: 'red',
+		marginRight: '20px',
+		fontSize: '32px'
+	},
+	checkmark: {
+		color: 'green',
+		marginRight: '20px',
+		fontSize: '32px'
+	}
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
@@ -103,9 +126,15 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	const pointSum = data && data.activities.reduce((total, current) => {
+		return total + current.points
+	}, 0)
+
+	const activityTotal = data && data.activities.length
+
 	if (!data || loading) {
 		return <Loader />;
-	}
+	};
 
 	return (
 		<>
@@ -245,6 +274,13 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					</List>
 				</Card>
 			)}
+			{/* Activity Feed*/}
+			<ActivityFeed
+			activities = {data.activities}
+			onlyVerified = {false}
+			pointsum = {pointSum}
+			acttotal = {activityTotal}
+			/>
 		</>
 	);
 }

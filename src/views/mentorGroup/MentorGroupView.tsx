@@ -5,12 +5,12 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
-import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { error } from 'console';
 import Notice from '../../components/notice/Notice';
+import ActivityFeed from '../../components/activityFeed/ActivityFeed';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -87,6 +87,12 @@ export default function MentorGroupView({ match, user }: Props) {
 		return <Loader />;
 	}
 
+	const pointSum = data && data.activities.reduce((total, current) => {
+		return total + current.points
+	}, 0)
+
+	const activityTotal = data && data.activities.length
+
 	const alreadyRequested = data.requests.some(request => 	request.userId===user.id);
 	const alreadyMember = data.mentees.some(mentee => 	mentee.userId===user.id);
 
@@ -144,6 +150,13 @@ export default function MentorGroupView({ match, user }: Props) {
 						</List>
 					</Card>
 				)}
+				{/* Activity feed */}
+				<ActivityFeed
+				activities = {data.activities}
+				onlyVerified = {true}
+				pointsum = {pointSum}
+				acttotal = {activityTotal}
+				/>
 			</div>
 		</>
 	);
