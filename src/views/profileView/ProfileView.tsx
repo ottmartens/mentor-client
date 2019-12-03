@@ -64,9 +64,18 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '12px',
 	},
 	declineButton: {
-		backgroundColor: '#B40404',
+		backgroundColor: 'transparent',
 		margin: '1em auto',
-		color: '#fff',
+		color: '#f00',
+		boxShadow: 'none',
+		'&:hover': {
+			backgroundColor: 'transparent',
+			boxShadow: 'none',
+		},
+		'&:focus': {
+			backgroundColor: 'transparent',
+			boxShadow: 'none',
+		},
 	},
 	declineButtonContainer: {
 		display: 'flex',
