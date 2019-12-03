@@ -181,7 +181,6 @@ export default function Navbar({ user }: HasUserProps) {
 					{ label: t(Translation.ADMIN_OVERVIEW), url: '/admin/main'},
 					{ label: t(Translation.GROUPS), url: '/member/mentor-group-list' },
 					{ label: t(Translation.ACTIVITIES), url: '/member/activities' },
-					{ label: t(Translation.DEADLINES), url: '/admin/deadlines' },
 					{ label: t(Translation.LOGOUT), url: '/logout' },
 				];
 

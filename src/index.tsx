@@ -20,7 +20,6 @@ import AddActivityView from './views/addActivityView/AddActivityView';
 import AdminView from './views/adminView/AdminView';
 import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 import MentorActivitiesView from './views/mentorActivities/MentorActivitiesView';
-import DeadlinesView from './views/deadlinesView/DeadlinesView';
 import RedirectInfoView from './views/redirectInfoView/RedirectInfoView';
 import CompleteActivityView from './views/completeActivity/CompleteActivityView';
 import { PublicRoute } from './components/publicRoute/PublicRoute';
@@ -62,7 +61,6 @@ function Root() {
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
 						<ProtectedRoute exact path="/member/add-activity" component={AddActivityView} />
 						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
-						<ProtectedRoute exact path="/admin/deadlines" component={DeadlinesView} />
 						<ProtectedRoute exact path="/admin/main" component={AdminView} />
 					</Switch>
 				</Router>
