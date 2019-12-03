@@ -7,6 +7,10 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import Loader from '../../components/loader/Loader';
+import { validateInputs, isSet } from '../../services/validators';
+import { error } from 'console';
+import Field from '../../components/field/Field';
+import useInput, { UseInput } from '../../hooks/useInput';
 
 const useStyles = makeStyles((theme) => ({
 	link: {
@@ -44,11 +48,19 @@ const useStyles = makeStyles((theme) => ({
 	instr: {
 		display: 'inline-block',
 	},
+	button: { margin: '1em 0' },
+	largeWidth: {
+		width: '224px',
+	},
+	card: {
+		margin: ' 1em 0',
+	},
 }));
 
 export default function MentorActivitiesView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const t = useTranslator();
+	const [isAdded, setIsAdded] = React.useState(false);
 
 	// get activities from database
 	const [getActivities, { data, loading, called }] = useBackend({
@@ -64,13 +76,58 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 		getActivities();
 	}, [called, getActivities]);
 
+	const input: { [s: string]: UseInput } = {
+		name: useInput({ validators: [isSet] }),
+		points: useInput({ validators: [isSet] }),
+		minMembers: useInput({ validators: [isSet] }),
+	};
+
+	const [updateActivities, { error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.UPDATE_ACTIVITIES,
+		variables: {
+			name: input.name.value,
+			points: input.points.value,
+			minMembers: input.minMembers.value,
+		},
+		authToken: user.token,
+	});
+
 	if (loading || !data) {
 		return <Loader />;
 	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
+			{/*{error && <Notice variant="error" title="Tegevuse lisamine ebaõnnestus" message={error} />}
+			{isAdded && <Notice variant="success" title="Tegevus lisatud" message='' />}*/}
 			<h1 className={classes.title2}>{t(Translation.ACTIVITIES)}</h1>
+			{user.role === UserRole.ADMIN && (
+					<div>
+						<Card className={classes.card}>
+							<h2>{t(Translation.ADD_ACTIVITY)}</h2>
+							<form
+								onSubmit={async (e) => {
+									e.preventDefault();
+									if (validateInputs(input)) {
+										await updateActivities();
+										{!error &&
+											setIsAdded(true);
+											console.log(isAdded);
+										}
+									}
+								}}
+							>
+								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+								<Field className={classes.largeWidth} {...input.points} label={t(Translation.POINTS)} />
+								<Field className={classes.largeWidth} {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
+								<Button variant="contained" color="primary" type="submit" className={classes.button}>
+									{t(Translation.ADD)}
+								</Button>
+							</form>
+						</Card>
+					</div>
+				)}
 			<Card>
 				{user.role === UserRole.MENTOR && (
 					<div>
