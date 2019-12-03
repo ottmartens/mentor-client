@@ -58,7 +58,12 @@ const useStyles = makeStyles((theme) => ({
 		color: '#fff',
     },
     cardTitle: {
-    }
+    },
+    suuredArvud: {
+		color: 'purple',
+		fontSize: '20px',
+		marginRight: '15px',
+	},
 }));
 
 export default function AdminView({ user }: HasUserProps) {
@@ -146,7 +151,9 @@ export default function AdminView({ user }: HasUserProps) {
             tagline: "Hea kasutaja",
             userId: "72",
         }
-    ]
+    ];
+    const activitytotal = dummydata.length;
+    const usertotal = dummydata2.length;
 
 
     return (
@@ -154,6 +161,9 @@ export default function AdminView({ user }: HasUserProps) {
             <h1 className={classes.title}>{t(Translation.ADMIN_OVERVIEW)}</h1>
             <Card className={classes.menteeCard}>
                 <h2 className={classes.cardTitle}>{t(Translation.GRADE_ACTIVITIES)}</h2>
+                <h3>
+                    Hindamata tegevusi: <span className={classes.suuredArvud}>{activitytotal}</span>
+                </h3>
             <List>
                 {dummydata.map(({name, group, id}) => {
                     return <div>
@@ -175,6 +185,9 @@ export default function AdminView({ user }: HasUserProps) {
             <div>
             <Card className={classes.menteeCard}>
                 <h2 className={classes.cardTitle}>{t(Translation.VERIFY_USERS)}</h2>
+                <h3>
+                    Kinnitamata kasutajaid: <span className={classes.suuredArvud}>{usertotal}</span>
+                </h3>
                 <List>
                 {dummydata2.map(({name, tagline, userId, imageurl}) => {
                     return <div>
