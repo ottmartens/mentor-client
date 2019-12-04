@@ -102,7 +102,7 @@ export default function GradeActivityView({ match, user }: Props) {
 			{graded && <Notice variant="success" title="Activity graded successfully" message=''/>}
 			<div className={classes.container}>
                 <Card>
-					{data.name && data.group && data.date && (
+					{data && data.name && data.group && data.date && (
 						<div>
                             <Typography variant="body2">
 						        {data.name}
