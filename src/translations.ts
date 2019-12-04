@@ -80,6 +80,11 @@ export enum Translation {
 	ADMIN_UNVERIFIED_ACTIVITIES = 'ADMIN_UNVERIFIED_ACTIVITIES',
 	NAMELESS_GROUP = 'NAMELESS_GROUP',
 	DELETE_USER = 'DELETE_USER',
+	VERIFY_USER = 'VERIFY_USER',
+	REJECT_USER_REASON = 'REJECT_USER_REASON',
+	REJECTION_MODAL_MESSAGE = 'REJECTION_MODAL_MESSAGE',
+	USER_IS_REJECTED = 'USER_IS_REJECTED',
+	REJECT_USER = 'REJECT_USER',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -163,6 +168,11 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ADMIN_UNVERIFIED_ACTIVITIES: 'Kinnitamata tegevusi',
 		NAMELESS_GROUP: 'Nimeta grupp',
 		DELETE_USER: 'Kustuta kasutaja',
+		VERIFY_USER: 'Kinnita kasutaja',
+		REJECT_USER_REASON: 'Sisesta tagasilükkamise põhjus',
+		REJECTION_MODAL_MESSAGE: 'Sõnum kasutajale',
+		USER_IS_REJECTED: 'Kasutaja on tagasilükatud',
+		REJECT_USER: 'Lükka tagasi',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -244,5 +254,10 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ADMIN_UNVERIFIED_ACTIVITIES: 'Unverified activities',
 		NAMELESS_GROUP: 'Nameless group',
 		DELETE_USER: 'Delete account',
+		VERIFY_USER: 'Verify user',
+		REJECT_USER_REASON: 'Enter the reason for rejecting',
+		REJECTION_MODAL_MESSAGE: 'Message to the user',
+		USER_IS_REJECTED: 'User is rejected',
+		REJECT_USER: 'Reject user',
 	},
 };

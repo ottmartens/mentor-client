@@ -35,6 +35,7 @@ export enum EndPoint {
 	GET_ACTIVITIES = '/template-activities',
 	SELF_DELETE = '/user',
 	ACTIVITIES = '/activity',
+	VERIFY_USER = '/user/verify',
 }
 
 interface Props {
