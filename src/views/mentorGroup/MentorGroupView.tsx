@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	buttonContainer: {
 		marginTop: '1em',
+		marginBottom: '1em',
 		textAlign: 'center',
 	},
 	mentorGroupContainer: {
@@ -59,7 +60,7 @@ export default function MentorGroupView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
 	const t = useTranslator();
-	const [applied, isApplying] = React.useState(false);
+	const [hasApplied, setHasApplied] = React.useState(false);
 
 
 	const [queryMentorGroupData, { data, loading, called }] = useBackend({
@@ -94,12 +95,12 @@ export default function MentorGroupView({ match, user }: Props) {
 	const activityTotal = data && data.activities.length
 
 	const alreadyRequested = data.requests.some(request => 	request.userId===user.id);
-	console.log(alreadyRequested);
+	const alreadyMember = data.mentees.some(mentee => 	mentee.userId===user.id);
 
 	return (
 		<>
-			{error && <Notice variant="error" title="Application sending failed" message={error} />}
-			{applied && <Notice variant="success" title="Application sent" message={error} />}
+			{error && <Notice variant="error" title="Avalduse saatmine ebaõnnestus" message={error} />}
+			{hasApplied && <Notice variant="success" title="Avaldus saadetud" message={error} />}
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
@@ -117,7 +118,7 @@ export default function MentorGroupView({ match, user }: Props) {
 
 				
 				
-				{user.role === UserRole.MENTEE && (
+				{user.role === UserRole.MENTEE && !alreadyMember && (
 					<div className={classes.buttonContainer}>
 						<Button
 							disabled={alreadyRequested}
@@ -126,9 +127,12 @@ export default function MentorGroupView({ match, user }: Props) {
 							onClick={async () => {
 								await requestGroupJoinFn();
 								await queryMentorGroupData();
+								{ !error && 
+									setHasApplied(true);
+								}
 							}}
 						>
-							{alreadyRequested ? t(Translation.ALREADY_JOINED) : t(Translation.JOIN_GROUP)}
+							{alreadyRequested ? t(Translation.WAITING_RESPONSE) : t(Translation.JOIN_GROUP)}
 						</Button>
 					</div>
 				)}

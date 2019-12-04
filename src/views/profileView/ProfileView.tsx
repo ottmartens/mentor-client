@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
 		color: '#2c4d7f',
 		textAlign: 'center',
 	},
-	button: { margin: '4px' },
+	button: { 
+		margin: '4px',
+	},
 	imageContainer: {
 		display: 'block',
 		marginLeft: 'auto',
@@ -62,9 +64,22 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '12px',
 	},
 	declineButton: {
-		backgroundColor: '#B40404',
-		marginBottom: '8px',
-		color: '#fff',
+		backgroundColor: 'transparent',
+		margin: '1em auto',
+		color: '#f00',
+		boxShadow: 'none',
+		'&:hover': {
+			backgroundColor: 'transparent',
+			boxShadow: 'none',
+		},
+		'&:focus': {
+			backgroundColor: 'transparent',
+			boxShadow: 'none',
+		},
+	},
+	declineButtonContainer: {
+		display: 'flex',
+		alignItems: 'center',
 	},
 	table: {
 		width: '336px',
@@ -295,28 +310,32 @@ export default function ProfileView({ user }: HasUserProps) {
 								{isEditable ? t(Translation.CANCEL) : t(Translation.PROFILE_CHANGE)}
 							</Button>
 							{isEditable && (
-								<Button variant="contained" color="primary" type="submit" className={classes.button}>
+								<div>
+									<Button variant="contained" color="primary" type="submit" className={classes.button}>
 									{t(Translation.SAVE)}
-								</Button>
+									</Button>
+									<div className={classes.declineButtonContainer}>
+										<Button
+											variant="contained"
+											size= "small"
+											onClick={handleClickOpen}
+											className={classNames(classes.button, classes.declineButton)}
+										>
+										KUSTUTA KASUTAJA
+										</Button>
+									</div>
+									<ConfirmationModal
+										title=""
+										description="Kas oled kindel et soovid oma kasutaja kustutada?"
+										isOpen={isOpen}
+										onSubmit={handleSubmit}
+										onClose={handleClickClose}
+									></ConfirmationModal>
+								</div>
 							)}
 						</div>
 					</form>
 				</div>
-
-				<Button
-					variant="contained"
-					onClick={handleClickOpen}
-					className={classNames(classes.button, classes.declineButton)}
-				>
-					KUSTUTA KASUTAJA
-				</Button>
-				<ConfirmationModal
-					title=""
-					description="Kas oled kindel et soovid oma kasutaja kustutada?"
-					isOpen={isOpen}
-					onSubmit={handleSubmit}
-					onClose={handleClickClose}
-				></ConfirmationModal>
 			</Card>
 		</>
 	);

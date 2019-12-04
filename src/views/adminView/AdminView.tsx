@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, List, ListItem, Divider, Link, Card, ListItemText} from '@material-ui/core';
+import { Container, List, ListItem, Divider, Link, Card, ListItemText, CardContent, FormControl, FormGroup} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 //import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
@@ -8,6 +8,10 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
 import Person from '../../components/person/Person';
+import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
+import useInput, { UseInput } from '../../hooks/useInput';
+import CheckboxField from '../../components/checkboxField/CheckboxField';
+
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -63,16 +67,52 @@ const useStyles = makeStyles((theme) => ({
 		color: 'purple',
 		fontSize: '20px',
 		marginRight: '15px',
+    },
+    card: {
+		padding: '20px',
+		marginBottom: '12px',
+		marginTop: '20px',
+	},
+	buttons: {
+		margin: '2em 0',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
 	},
 }));
+
+interface Props extends HasUserProps {
+	match: {
+		params: {
+			id: string;
+		};
+	};
+	setValue: (newValue: string) => void;
+}
 
 export default function AdminView({ user }: HasUserProps) {
 
     const classes = useStyles();
-    const userContext = React.useContext(UserContext);
-    const [added, isAdded] = React.useState(false);
+    //const userContext = React.useContext(UserContext);
+    //const [added, isAdded] = React.useState(false);
     const t = useTranslator();
+     //const [hasChanged, setHasChanged] = React.useState(false);
 
+     const [state, setState] = React.useState({
+		mentor: false,
+		mentee: false,
+      });
+    
+    const [queryDeadlineData, { data:currentDeadlineData , /*loading:currentDeadlineLoading,*/ called:currentDeadlineCalled }] = useBackend({
+		requestMethod: RequestMethod.GET,
+		endPoint: EndPoint.DEADLINE,
+		authToken: user.token,
+    });
+
+    const input: { [s: string]: UseInput } = {
+		mentor: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentor) || '' }),
+		mentee: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentee) || '' }),
+    };
     /*const [queryUnverifiedActivities, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.UNVERIFIED_ACTIVITIES,
@@ -84,7 +124,17 @@ export default function AdminView({ user }: HasUserProps) {
 		endPoint: EndPoint.ALL_USERS,
 		authToken: user.token,
     });
-
+    
+	const [changeDeadlinesFn, { error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+        endPoint: EndPoint.CHANGE_DEADLINES_REQUEST,
+        variables: {
+			mentor: input.mentor.value,
+			mentee: input.mentee.value
+		},
+		authToken: user.token,
+	});
+		   
     React.useEffect(() => {
 		if (called) {
 			return;
@@ -98,12 +148,21 @@ export default function AdminView({ user }: HasUserProps) {
 		}
 		queryAllUsers();
     }, [usersCalled, queryAllUsers]);
+    */
+
+   React.useEffect(() => {
+    if (currentDeadlineCalled) {
+        return;
+    }
+    queryDeadlineData();
+    }, [currentDeadlineCalled, queryDeadlineData]);
     
-    if (loading || !usersData || usersLoading || !data) {
+    /*
+    if (loading || !usersData || usersLoading || currentDeadlineLoading|| !data || !currentDeadlineData) {
 		return <Loader />;
     }
     */
-    
+
     const dummydata = [
         {
             name: "Tegevus 1",
@@ -154,10 +213,11 @@ export default function AdminView({ user }: HasUserProps) {
     ];
     const activitytotal = dummydata.length;
     const usertotal = dummydata2.length;
-
-
+	    
     return (
         <Container className={classes.container} maxWidth="sm">
+             {/*{error && <Notice variant="error" title="Tähtaegade muutmine ebaõnnestus" message={error} />}
+			{hasChanged && <Notice variant="success" title="Tähtajad muudetud" message=''/>}*/}
             <h1 className={classes.title}>{t(Translation.ADMIN_OVERVIEW)}</h1>
             <Card className={classes.menteeCard}>
                 <h2 className={classes.cardTitle}>{t(Translation.GRADE_ACTIVITIES)}</h2>
@@ -196,6 +256,21 @@ export default function AdminView({ user }: HasUserProps) {
                 })}
                 </List>
             </Card>
+            </div>
+			<div className={classes.container}>
+                <Card className={classes.card}>
+                    <CardContent>
+						<FormControl component="fieldset">
+							<h1>{t(Translation.DEADLINES)}</h1>
+							<FormGroup>
+								<CheckboxField label='Registreerimine avatud mentoritele' {...input.mentor} value={true}></CheckboxField>
+									{/*value={data.mentor}>*/}
+								<CheckboxField label='Registreerimine avatud menteedele' {...input.mentor} value={false}></CheckboxField>
+									{/*value={data.mentee}>*/}
+							</FormGroup>
+						</FormControl>
+                    </CardContent>
+                </Card>
             </div>
         </Container>
 	);

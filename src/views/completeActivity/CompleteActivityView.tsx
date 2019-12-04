@@ -79,12 +79,7 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 	const [participantsError, setParticipantsError] = React.useState<FieldError | undefined>();
 	const t = useTranslator();
 
-	const input = {
-		name: useInput({ validators: [isSet] }),
-		description: useInput({ validators: [isSet] }),
-		time: useInput({ validators: [isSet] }),
-	};
-
+	// get info about mentors and mentees
 	const [getGroupInfo, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.MY_GROUP,
@@ -97,6 +92,29 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 		}
 		getGroupInfo();
 	}, [called, getGroupInfo]);
+
+	// getting details about selected activity
+	const [getActivities, { data: activityData, called: activityCalled }] = useBackend({
+		requestMethod: RequestMethod.GET,
+		endPoint: EndPoint.GET_ACTIVITIES,
+		authToken: user.token,
+	});
+
+	React.useEffect(() => {
+		if (activityCalled) {
+			return;
+		}
+		getActivities();
+	}, [activityCalled, getActivities]);
+
+	const selectedActivity = activityData && activityData.find((activity) => activity.id === params.id);
+
+	// completing the activity
+	const input = {
+		name: useInput({ validators: [isSet], initialValue: selectedActivity && selectedActivity.name }),
+		description: useInput({ validators: [isSet] }),
+		time: useInput({ validators: [isSet] }),
+	};
 
 	const [completeActivity, { data: completeData, loading: completeLoading, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
@@ -131,7 +149,7 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 						if (!validateInputs(input)) {
 							return;
 						}
-						if (participants.length < 1) {
+						if (participants.length < selectedActivity.requiredParticipants || 3) {
 							setParticipantsError(FieldError.NOT_SET);
 							return;
 						}

@@ -7,6 +7,10 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import Loader from '../../components/loader/Loader';
+import { validateInputs, isSet } from '../../services/validators';
+import { error } from 'console';
+import Field from '../../components/field/Field';
+import useInput, { UseInput } from '../../hooks/useInput';
 
 const useStyles = makeStyles((theme) => ({
 	link: {
@@ -30,10 +34,10 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		flexGrow: 1,
 		textAlign: 'center',
-        marginBottom: '16px',
+		marginBottom: '16px',
 	},
 	title2: {
-		color: '#2c4d7f'
+		color: '#2c4d7f',
 	},
 	makeButton: {
 		marginBottom: '20px',
@@ -43,17 +47,25 @@ const useStyles = makeStyles((theme) => ({
 	},
 	instr: {
 		display: 'inline-block',
-	}
+	},
+	button: { margin: '1em 0' },
+	largeWidth: {
+		width: '224px',
+	},
+	card: {
+		margin: ' 1em 0',
+	},
 }));
 
 export default function MentorActivitiesView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const t = useTranslator();
-	// get activities from database
+	const [isAdded, setIsAdded] = React.useState(false);
 
-	const [queryMockActivitiesData, { data, loading, called }] = useBackend({
+	// get activities from database
+	const [getActivities, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
-		endPoint: EndPoint.GET_MOCK_ACTIVITIES,
+		endPoint: EndPoint.GET_ACTIVITIES,
 		authToken: user.token,
 	});
 
@@ -61,43 +73,79 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 		if (called) {
 			return;
 		}
-		queryMockActivitiesData();
-	}, [called, queryMockActivitiesData]);
+		getActivities();
+	}, [called, getActivities]);
+
+	const input: { [s: string]: UseInput } = {
+		name: useInput({ validators: [isSet] }),
+		points: useInput({ validators: [isSet] }),
+		minMembers: useInput({ validators: [isSet] }),
+	};
+
+	const [updateActivities, { error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+		endPoint: EndPoint.UPDATE_ACTIVITIES,
+		variables: {
+			name: input.name.value,
+			points: input.points.value,
+			minMembers: input.minMembers.value,
+		},
+		authToken: user.token,
+	});
 
 	if (loading || !data) {
 		return <Loader />;
-    }
+	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			<h1 className={classes.title2}>
-				{t(Translation.ACTIVITIES)}
-			</h1>
+			{/*{error && <Notice variant="error" title="Tegevuse lisamine ebaõnnestus" message={error} />}
+			{isAdded && <Notice variant="success" title="Tegevus lisatud" message='' />}*/}
+			<h1 className={classes.title2}>{t(Translation.ACTIVITIES)}</h1>
+			{user.role === UserRole.ADMIN && (
+					<div>
+						<Card className={classes.card}>
+							<h2>{t(Translation.ADD_ACTIVITY)}</h2>
+							<form
+								onSubmit={async (e) => {
+									e.preventDefault();
+									if (validateInputs(input)) {
+										await updateActivities();
+										{!error &&
+											setIsAdded(true);
+											console.log(isAdded);
+										}
+									}
+								}}
+							>
+								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+								<Field className={classes.largeWidth} {...input.points} label={t(Translation.POINTS)} />
+								<Field className={classes.largeWidth} {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
+								<Button variant="contained" color="primary" type="submit" className={classes.button}>
+									{t(Translation.ADD)}
+								</Button>
+							</form>
+						</Card>
+					</div>
+				)}
 			<Card>
 				{user.role === UserRole.MENTOR && (
 					<div>
 						<h3 className={classes.instr}>{t(Translation.ACTIVITIES_INSTRUCTION)}</h3>
-						<Link
-						to='/member/add-activity/new'
-						className={classes.link}>
-							<Button
-							variant="contained"
-							className={classes.makeButton}
-							>
+						<Link to="/member/complete-activity/new" className={classes.link}>
+							<Button variant="contained" className={classes.makeButton}>
 								{t(Translation.MAKE_NEW_ONE)}
 							</Button>
 						</Link>
 					</div>
 				)}
-				{data.map(({name, points, requiredParticipants, ID}) => (
+				{data.map(({ name, points, requiredParticipants, ID }) => (
 					<div>
 						<Divider />
-						<Link to={`/member/add-activity/${ID}`} className={classes.link}>
+						<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
 							<div className={classes.listElement}>
 								<h2 className={classes.title}>{name}</h2>
-								<span
-									className={classes.description}
-								>{`${points} points | ${requiredParticipants}+ members`}</span>
+								<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
 							</div>
 						</Link>
 					</div>
