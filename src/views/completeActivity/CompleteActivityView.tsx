@@ -192,7 +192,7 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 							onChange={uploadImageOnChange}
 							style={{ display: 'none' }}
 						/>
-						<span className={classes.imageButton}>{t(Translation.UPLOAD)}</span>
+						<span className={classes.imageButton}>{t(Translation.ADD_PICTURE)}</span>
 					</label>
 					<div className={classes.imageContainer}>
 						{uploadedImages.length > 0 &&

@@ -218,7 +218,7 @@ export default function ProfileView({ user }: HasUserProps) {
 								style={{ display: 'none' }}
 							/>
 							<span className={classes.imageButton}>
-								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
+								{user.imageUrl? t(Translation.CHANGE_PICTURE) : t(Translation.ADD_PICTURE)} {isloadingImage && <Loader size="0.975rem" />}
 							</span>
 						</label>
 					</div>

@@ -17,7 +17,8 @@ export enum Translation {
 	APPLIED_MENTEES = 'APPLIED_MENTEES',
 	APPROVE = 'APPROVE',
 	PROFILE = 'PROFILE',
-	UPLOAD = 'UPLOAD',
+	ADD_PICTURE = 'ADD_PICTURE',
+	CHANGE_PICTURE = 'CHANGE_PICTURE',
 	FIRST_NAME = 'FIRST_NAME',
 	LAST_NAME = 'LAST_NAME',
 	USER_DESCRIPTION = 'USER_DESCRIPTION',
@@ -74,7 +75,9 @@ export enum Translation {
 	OTHER = 'OTHER',
 	COMPLETE_ACTIVITY_TIME = 'COMPLETE_ACTIVITY_TIME',
 	ACTIVITY_REJECTED = 'ACTIVITY_REJECTED',
-	ACTIVITY_PENDING = 'ACTIVITY_PENDING'
+	ACTIVITY_PENDING = 'ACTIVITY_PENDING',
+	ADMIN_UNVERIFIED_USERS = 'ADMIN_UNVERIFIED_USERS',
+	ADMIN_UNVERIFIED_ACTIVITIES = 'ADMIN_UNVERIFIED_ACTIVITIES',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -95,7 +98,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPLIED_MENTEES: 'Ootavad vastuvõttu',
 		APPROVE: 'Võta vastu',
 		PROFILE: 'Minu profiil',
-		UPLOAD: 'Lae pilt',
+		ADD_PICTURE: 'Lisa pilt',
+		CHANGE_PICTURE: 'Muuda pilti',
 		FIRST_NAME: 'Eesnimi',
 		LAST_NAME: 'Perenimi',
 		USER_DESCRIPTION: 'Kirjelda ennast',
@@ -135,7 +139,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ADMIN_OVERVIEW: 'Admini ülevaade',
 		ACTIVITIES_INSTRUCTION: 'Vali nimekirjast tegevus mida lisada või kui ei leia siis',
 		MAKE_NEW_ONE: 'LISA ENDA TEGEVUS',
-		BIO: 'Elulugu',
+		BIO: 'Kirjelda ennast',
 		PROFILE_CHARACTERIZATION: 'Iseloomustus',
 		PROFILE_CHANGE: 'Muuda profiili',
 		PROFILE_COMPUTER_SCIENCE: 'Informaatika',
@@ -152,7 +156,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		DESCRIPTION: 'Kirjeldus',
 		COMPLETE_ACTIVITY_TIME: 'Toimumise aeg',
 		ACTIVITY_REJECTED: 'Tegevus tagasilükatud',
-		ACTIVITY_PENDING: 'Ootab kinnitust'
+		ACTIVITY_PENDING: 'Ootab kinnitust',
+		ADMIN_UNVERIFIED_USERS: 'Kinnitamata kasutajaid',
+		ADMIN_UNVERIFIED_ACTIVITIES: 'Kinnitamata tegevusi',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -171,7 +177,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPLIED_MENTEES: 'Applied mentees',
 		APPROVE: 'Approve',
 		PROFILE: 'My Profile',
-		UPLOAD: 'Upload',
+		ADD_PICTURE: 'Add picture',
+		CHANGE_PICTURE: 'Change picture',
 		FIRST_NAME: 'First Name',
 		LAST_NAME: 'Last Name',
 		USER_DESCRIPTION: 'Desribe yourself',
@@ -211,7 +218,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ADMIN_OVERVIEW: 'Admin Overview',
 		ACTIVITIES_INSTRUCTION: 'Choose from the list or',
 		MAKE_NEW_ONE: 'MAKE A NEW ONE',
-		BIO: 'Biography',
+		BIO: 'Describe yourself',
 		PROFILE_CHARACTERIZATION: 'Characterization',
 		PROFILE_CHANGE: 'Change profile',
 		PROFILE_COMPUTER_SCIENCE: 'Computer science',
@@ -228,6 +235,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		DESCRIPTION: 'Description',
 		COMPLETE_ACTIVITY_TIME: 'Completion time',
 		ACTIVITY_REJECTED: 'Activity rejected',
-		ACTIVITY_PENDING: 'Activity pending'
+		ACTIVITY_PENDING: 'Activity pending',
+		ADMIN_UNVERIFIED_USERS: 'Unverified users',
+		ADMIN_UNVERIFIED_ACTIVITIES: 'Unverified activities',
 	},
 };
