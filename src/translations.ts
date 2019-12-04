@@ -78,6 +78,7 @@ export enum Translation {
 	ACTIVITY_PENDING = 'ACTIVITY_PENDING',
 	ADMIN_UNVERIFIED_USERS = 'ADMIN_UNVERIFIED_USERS',
 	ADMIN_UNVERIFIED_ACTIVITIES = 'ADMIN_UNVERIFIED_ACTIVITIES',
+	NAMELESS_GROUP = 'NAMELESS_GROUP'
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -159,6 +160,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ACTIVITY_PENDING: 'Ootab kinnitust',
 		ADMIN_UNVERIFIED_USERS: 'Kinnitamata kasutajaid',
 		ADMIN_UNVERIFIED_ACTIVITIES: 'Kinnitamata tegevusi',
+		NAMELESS_GROUP: 'Nimeta grupp',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -238,5 +240,6 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ACTIVITY_PENDING: 'Activity pending',
 		ADMIN_UNVERIFIED_USERS: 'Unverified users',
 		ADMIN_UNVERIFIED_ACTIVITIES: 'Unverified activities',
+		NAMELESS_GROUP: 'Nameless group'
 	},
 };

@@ -26,7 +26,7 @@ export enum EndPoint {
 	ACCEPT_GROUP_CREATE_REQUEST = '/groups/accept-creation',
 	MY_GROUP = '/groups/my-group',
 	UPDATE_ACTIVITIES = '/activities/add-activity',
-	UNVERIFIED_ACTIVITIES = '/unverified-activites',
+	UNVERIFIED_ACTIVITIES = '/unverified-activities',
 	ACTIVITY = '/activities/get-activity',
 	ACCEPT_ACTIVITY_REQUEST = '/activities/accept-activity',
 	CHANGE_DEADLINES_REQUEST = '/admin/change-deadlines',

@@ -1,9 +1,8 @@
-import React from 'react';
-import { Container, List, ListItem, Divider, Link, Card, ListItemText, CardContent, FormControl, FormGroup} from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Container, List, ListItem, Divider, Card, ListItemText, CardContent, FormControl, FormGroup} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-//import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-//import Loader from '../../components/loader/Loader';
+import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
@@ -11,6 +10,7 @@ import Person from '../../components/person/Person';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import useInput, { UseInput } from '../../hooks/useInput';
 import CheckboxField from '../../components/checkboxField/CheckboxField';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -113,12 +113,12 @@ export default function AdminView({ user }: HasUserProps) {
 		mentor: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentor) || '' }),
 		mentee: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentee) || '' }),
     };
-    /*const [queryUnverifiedActivities, { data, loading, called }] = useBackend({
+    const [queryUnverifiedActivities, { data:activityData, loading:activityLoading, called:activityCalled }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.UNVERIFIED_ACTIVITIES,
 		authToken: user.token,
     });
-
+    
     const [queryAllUsers, { data:usersData, loading:usersLoading, called:usersCalled }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.ALL_USERS,
@@ -133,14 +133,17 @@ export default function AdminView({ user }: HasUserProps) {
 			mentee: input.mentee.value
 		},
 		authToken: user.token,
-	});
-		   
+    });
+    
+	   
     React.useEffect(() => {
-		if (called) {
+		if (activityCalled) {
+            console.log(activityData)
 			return;
 		}
 		queryUnverifiedActivities();
-    }, [called, queryUnverifiedActivities]);
+    }, [activityCalled, queryUnverifiedActivities]);
+    
 
     React.useEffect(() => {
 		if (usersCalled) {
@@ -148,71 +151,23 @@ export default function AdminView({ user }: HasUserProps) {
 		}
 		queryAllUsers();
     }, [usersCalled, queryAllUsers]);
-    */
+    
 
-   React.useEffect(() => {
+   /*React.useEffect(() => {
     if (currentDeadlineCalled) {
         return;
     }
     queryDeadlineData();
-    }, [currentDeadlineCalled, queryDeadlineData]);
+    }, [currentDeadlineCalled, queryDeadlineData]);*/
     
-    /*
-    if (loading || !usersData || usersLoading || currentDeadlineLoading|| !data || !currentDeadlineData) {
+    
+    if (activityLoading || !usersData || usersLoading /*|| currentDeadlineLoading*/ || !activityData /*|| !currentDeadlineData*/) {
 		return <Loader />;
     }
-    */
+    
 
-    const dummydata = [
-        {
-            name: "Tegevus 1",
-            group: "Grupp2",
-            id: "1"
-        },
-        {
-            name: "Tegevus 2",
-            group: "Grupp 9",
-            id: "2"
-        },
-        {
-            name: "Rebaste ristimine",
-            group: "Parim grupp",
-            id: "89"
-        },
-        {
-            name: "Bowling",
-            group: "Kaaa",
-            id: "78"
-        }
-    ]
-    const dummydata2 = [
-        {
-            name: "Poiss ree",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "79",
-        },
-        {
-            name: "Master Yoda",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "76",
-        },
-        {
-            name: "Tere hommikust",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "73",
-        },
-        {
-            name: "Tere õhtust",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "72",
-        }
-    ];
-    const activitytotal = dummydata.length;
-    const usertotal = dummydata2.length;
+    const activitytotal = activityData && activityData.length;
+    const usertotal = usersData && usersData.length;
 	    
     return (
         <Container className={classes.container} maxWidth="sm">
@@ -225,15 +180,15 @@ export default function AdminView({ user }: HasUserProps) {
                     {t(Translation.ADMIN_UNVERIFIED_ACTIVITIES)}: <span className={classes.suuredArvud}>{activitytotal}</span>
                 </h3>
             <List>
-                {dummydata.map(({name, group, id}) => {
-                    return <div>
+                {activityData && activityData.map(({name, groupName, ID}) => {
+                    return <div key={ID}>
                         <ListItem className={classes.listitem}>
                             <div>
                                 <Link
-                                href={id ? `/activities/activity/${id}` : '#'}
+                                to={ID ? `/activities/activity/${ID}` : '#'}
                                 className={classes.link}
                                 >
-                                    <ListItemText className={classes.personName} primary={name} secondary={group}/>
+                                    <ListItemText className={classes.personName} primary={name} secondary={groupName || t(Translation.NAMELESS_GROUP)}/>
                                 </Link>
                             </div>
                         </ListItem>
@@ -249,9 +204,9 @@ export default function AdminView({ user }: HasUserProps) {
                     {t(Translation.ADMIN_UNVERIFIED_USERS)}: <span className={classes.suuredArvud}>{usertotal}</span>
                 </h3>
                 <List>
-                {dummydata2.map(({name, tagline, userId, imageurl}) => {
-                    return <div>
-                        <Person name={name} tagline={tagline} imageUrl={imageurl} userId={userId}></Person>
+                    {usersData && usersData.map(({ID, name, tagline, imageurl}) => {
+                    return <div key={ID}>
+                        <Person name={name} tagline={tagline} imageUrl={imageurl} userId={ID}></Person>
                     </div>
                 })}
                 </List>
