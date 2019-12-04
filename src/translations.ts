@@ -73,6 +73,8 @@ export enum Translation {
 	DESCRIPTION = 'DESCRIPTION',
 	OTHER = 'OTHER',
 	COMPLETE_ACTIVITY_TIME = 'COMPLETE_ACTIVITY_TIME',
+	ACTIVITY_REJECTED = 'ACTIVITY_REJECTED',
+	ACTIVITY_PENDING = 'ACTIVITY_PENDING'
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -149,6 +151,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ALREADY_JOINED: 'Juba liitunud',
 		DESCRIPTION: 'Kirjeldus',
 		COMPLETE_ACTIVITY_TIME: 'Toimumise aeg',
+		ACTIVITY_REJECTED: 'Tegevus tagasilükatud',
+		ACTIVITY_PENDING: 'Ootab kinnitust'
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -223,5 +227,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ALREADY_JOINED: 'Already joined',
 		DESCRIPTION: 'Description',
 		COMPLETE_ACTIVITY_TIME: 'Completion time',
+		ACTIVITY_REJECTED: 'Activity rejected',
+		ACTIVITY_PENDING: 'Activity pending'
 	},
 };

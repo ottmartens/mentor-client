@@ -3,6 +3,8 @@ import { makeStyles, ListItem, ListItemText, Card, Divider, List} from '@materia
 import { Link } from 'react-router-dom';
 import { CheckCircleOutline, ErrorOutline, HelpOutline} from '@material-ui/icons';
 import classNames from 'classnames';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 export interface Activity {
     ID: number;
@@ -62,12 +64,18 @@ const useStyles = makeStyles((theme) => ({
 	},
 	alignCenter: {
         textAlign: 'center',
-    }
+	},
+	mittepunktid: {
+		textAlign: 'right',
+		fontSize: '12px',
+		color: '#707070',
+	}
 }
-    ));
+	));
 
 export default function ActivityFeed({activities, onlyVerified, pointsum, acttotal}: Props){
-    const classes = useStyles();
+	const classes = useStyles();
+	const t = useTranslator();
 
     return(
     <Card className={classNames(classes.card, classes.alignCenter)}>
@@ -95,9 +103,21 @@ export default function ActivityFeed({activities, onlyVerified, pointsum, acttot
 								)}
 								<Link to={`/member/activity/${ID}`} className={classes.listLink}>
 									<ListItemText primary={name} secondary={time} />
+									{isVerified === true && (
 									<p className={classes.punktid}>
 										<span className={classes.suuredArvud}>{points} p</span>
 									</p>
+									)}
+									{isVerified === false && (
+									<p className={classes.mittepunktid}>
+										{t(Translation.ACTIVITY_REJECTED)}
+									</p>
+									)}
+									{isVerified === null && (
+									<p className={classes.mittepunktid}>
+										{t(Translation.ACTIVITY_PENDING)}
+									</p>
+									)}
 								</Link>
                             </ListItem>
                             )}
