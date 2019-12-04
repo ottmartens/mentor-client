@@ -5,6 +5,7 @@ import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 import Image from '../../components/image/Image';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,8 +39,9 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '0.975rem',
 	},
 	infoLabel: {
-		fontWeight: 700,
-		fontSize: '1.175rem',
+		fontSize: '14px',
+		textAlign: 'left',
+		marginRight: '16px',
 	},
 	image: {
 		margin: '8px',
@@ -88,23 +90,23 @@ export default function UserView({ match, user }: Props) {
 				<table className={classes.table}>
 					<tbody>
 						<tr>
-							<td className={classes.infoLabel}>name:</td>
+							<td className={classes.infoLabel}>{t(Translation.NAME)}:</td>
 							<td className={classes.info}>{data.name}</td>
 						</tr>
 						<tr>
-							<td className={classes.infoLabel}>degree:</td>
+							<td className={classes.infoLabel}>{t(Translation.DEGREE)}:</td>
 							<td className={classes.info}>{data.degree}</td>
 						</tr>
 						<tr>
-							<td className={classes.infoLabel}>year:</td>
+							<td className={classes.infoLabel}>{t(Translation.YEAR)}:</td>
 							<td className={classes.info}>{data.year}</td>
 						</tr>
 						<tr>
-							<td className={classes.infoLabel}>tagline:</td>
+							<td className={classes.infoLabel}>{t(Translation.TAGLINE)}:</td>
 							<td className={classes.info}>{data.tagline}</td>
 						</tr>
 						<tr>
-							<td className={classes.infoLabel}>bio:</td>
+							<td className={classes.infoLabel}>{t(Translation.USER_DESCRIPTION)}:</td>
 							<td className={classes.info}>{data.bio}</td>
 						</tr>
 					</tbody>

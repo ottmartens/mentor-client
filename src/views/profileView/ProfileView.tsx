@@ -321,7 +321,7 @@ export default function ProfileView({ user }: HasUserProps) {
 											onClick={handleClickOpen}
 											className={classNames(classes.button, classes.declineButton)}
 										>
-										KUSTUTA KASUTAJA
+										{t(Translation.DELETE_USER)}
 										</Button>
 									</div>
 									<ConfirmationModal
