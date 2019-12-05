@@ -78,14 +78,14 @@ export default function MentorPairingView({ user }: HasUserProps) {
 
 	return (
 		<>
-			<h1 className={classes.title}>Find co-mentor</h1>
+			<h1 className={classes.title}>{t(Translation.FIND_MENTOR)}</h1>
 			<Card className={classes.card}>
-				{hasRequested && <Notice variant="success" title="Request sent" message={'request sent'} />}
+				{hasRequested && <Notice variant="success" title="Avaldus saadetud" message='' />}
 				{hasAccepted !== undefined && (
 					<Notice
 						variant="success"
-						title="Request sent"
-						message={hasAccepted ? 'request accepted' : 'request denied'}
+						title="Avaldusele vastatud"
+						message={hasAccepted ? 'Avaldus vastu võetud' : 'Avaldus tagasi lükatud'}
 					/>
 				)}
 

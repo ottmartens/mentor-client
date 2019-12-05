@@ -5,7 +5,7 @@ import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { HasUserProps } from '../../types';
+import { HasUserProps} from '../../types';
 import { BASE_URL } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
 		color: '#2c4d7f',
 		textAlign: 'center',
 	},
-	button: { margin: '4px' },
+	button: { 
+		margin: '4px',
+	},
 	imageContainer: {
 		display: 'block',
 		marginLeft: 'auto',
@@ -41,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 		width: '320px',
 	},
 	imageButton: {
+		cursor:"pointer",
 		position: 'relative',
 		zIndex: 2,
 		color: '#fff',
@@ -62,9 +65,22 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '12px',
 	},
 	declineButton: {
-		backgroundColor: '#B40404',
-		marginBottom: '8px',
-		color: '#fff',
+		backgroundColor: 'transparent',
+		margin: '1em auto',
+		color: '#f00',
+		boxShadow: 'none',
+		'&:hover': {
+			backgroundColor: 'transparent',
+			boxShadow: 'none',
+		},
+		'&:focus': {
+			backgroundColor: 'transparent',
+			boxShadow: 'none',
+		},
+	},
+	declineButtonContainer: {
+		display: 'flex',
+		alignItems: 'center',
 	},
 	table: {
 		width: '336px',
@@ -161,6 +177,14 @@ export default function ProfileView({ user }: HasUserProps) {
 		setIsEdited(true);
 	}, [updateProfileData, setUser]);
 
+
+	React.useEffect(() => {
+		if (userData && !userData.name){
+			setIsEditable(true)
+		}
+	}, [userData]);
+
+
 	if (loading || !userData) {
 		return <Loader />;
 	}
@@ -203,7 +227,7 @@ export default function ProfileView({ user }: HasUserProps) {
 								style={{ display: 'none' }}
 							/>
 							<span className={classes.imageButton}>
-								{t(Translation.UPLOAD)} {isloadingImage && <Loader size="0.975rem" />}
+								{user.imageUrl? t(Translation.CHANGE_PICTURE) : t(Translation.ADD_PICTURE)} {isloadingImage && <Loader size="0.975rem" />}
 							</span>
 						</label>
 					</div>
@@ -295,28 +319,32 @@ export default function ProfileView({ user }: HasUserProps) {
 								{isEditable ? t(Translation.CANCEL) : t(Translation.PROFILE_CHANGE)}
 							</Button>
 							{isEditable && (
-								<Button variant="contained" color="primary" type="submit" className={classes.button}>
+								<div>
+									<Button variant="contained" color="primary" type="submit" className={classes.button}>
 									{t(Translation.SAVE)}
-								</Button>
+									</Button>
+									<div className={classes.declineButtonContainer}>
+										<Button
+											variant="contained"
+											size= "small"
+											onClick={handleClickOpen}
+											className={classNames(classes.button, classes.declineButton)}
+										>
+										{t(Translation.DELETE_USER)}
+										</Button>
+									</div>
+									<ConfirmationModal
+										title=""
+										description="Kas oled kindel et soovid oma kasutaja kustutada?"
+										isOpen={isOpen}
+										onSubmit={handleSubmit}
+										onClose={handleClickClose}
+									></ConfirmationModal>
+								</div>
 							)}
 						</div>
 					</form>
 				</div>
-
-				<Button
-					variant="contained"
-					onClick={handleClickOpen}
-					className={classNames(classes.button, classes.declineButton)}
-				>
-					KUSTUTA KASUTAJA
-				</Button>
-				<ConfirmationModal
-					title=""
-					description="Kas oled kindel et soovid oma kasutaja kustutada?"
-					isOpen={isOpen}
-					onSubmit={handleSubmit}
-					onClose={handleClickClose}
-				></ConfirmationModal>
 			</Card>
 		</>
 	);

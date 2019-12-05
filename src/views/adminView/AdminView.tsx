@@ -1,13 +1,17 @@
-import React from 'react';
-import { Container, List, ListItem, Divider, Link, Card, ListItemText} from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Container, List, ListItem, Divider, Card, ListItemText, CardContent, FormControl, FormGroup} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-//import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { HasUserProps } from '../../types';
-//import Loader from '../../components/loader/Loader';
+import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { UserContext } from '../../contexts/UserContext';
 import Person from '../../components/person/Person';
+import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
+import useInput, { UseInput } from '../../hooks/useInput';
+import CheckboxField from '../../components/checkboxField/CheckboxField';
+import { Link } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -63,34 +67,83 @@ const useStyles = makeStyles((theme) => ({
 		color: 'purple',
 		fontSize: '20px',
 		marginRight: '15px',
+    },
+    card: {
+		padding: '20px',
+		marginBottom: '12px',
+		marginTop: '20px',
+	},
+	buttons: {
+		margin: '2em 0',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
 	},
 }));
+
+interface Props extends HasUserProps {
+	match: {
+		params: {
+			id: string;
+		};
+	};
+	setValue: (newValue: string) => void;
+}
 
 export default function AdminView({ user }: HasUserProps) {
 
     const classes = useStyles();
-    const userContext = React.useContext(UserContext);
-    const [added, isAdded] = React.useState(false);
+    //const userContext = React.useContext(UserContext);
+    //const [added, isAdded] = React.useState(false);
     const t = useTranslator();
+     //const [hasChanged, setHasChanged] = React.useState(false);
 
-    /*const [queryUnverifiedActivities, { data, loading, called }] = useBackend({
+     const [state, setState] = React.useState({
+		mentor: false,
+		mentee: false,
+      });
+    
+    const [queryDeadlineData, { data:currentDeadlineData , /*loading:currentDeadlineLoading,*/ called:currentDeadlineCalled }] = useBackend({
+		requestMethod: RequestMethod.GET,
+		endPoint: EndPoint.DEADLINE,
+		authToken: user.token,
+    });
+
+    const input: { [s: string]: UseInput } = {
+		mentor: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentor) || '' }),
+		mentee: useInput({ initialValue: (currentDeadlineData && currentDeadlineData.mentee) || '' }),
+    };
+    const [queryUnverifiedActivities, { data:activityData, loading:activityLoading, called:activityCalled }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.UNVERIFIED_ACTIVITIES,
 		authToken: user.token,
     });
-
+    
     const [queryAllUsers, { data:usersData, loading:usersLoading, called:usersCalled }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.ALL_USERS,
 		authToken: user.token,
     });
-
+    
+	const [changeDeadlinesFn, { error }] = useBackend({
+		requestMethod: RequestMethod.POST,
+        endPoint: EndPoint.CHANGE_DEADLINES_REQUEST,
+        variables: {
+			mentor: input.mentor.value,
+			mentee: input.mentee.value
+		},
+		authToken: user.token,
+    });
+    
+	   
     React.useEffect(() => {
-		if (called) {
+		if (activityCalled) {
+            console.log(activityData)
 			return;
 		}
 		queryUnverifiedActivities();
-    }, [called, queryUnverifiedActivities]);
+    }, [activityCalled, queryUnverifiedActivities]);
+    
 
     React.useEffect(() => {
 		if (usersCalled) {
@@ -99,81 +152,43 @@ export default function AdminView({ user }: HasUserProps) {
 		queryAllUsers();
     }, [usersCalled, queryAllUsers]);
     
-    if (loading || !usersData || usersLoading || !data) {
+
+   /*React.useEffect(() => {
+    if (currentDeadlineCalled) {
+        return;
+    }
+    queryDeadlineData();
+    }, [currentDeadlineCalled, queryDeadlineData]);*/
+    
+    
+    if (activityLoading || !usersData || usersLoading /*|| currentDeadlineLoading*/ || !activityData /*|| !currentDeadlineData*/) {
 		return <Loader />;
     }
-    */
     
-    const dummydata = [
-        {
-            name: "Tegevus 1",
-            group: "Grupp2",
-            id: "1"
-        },
-        {
-            name: "Tegevus 2",
-            group: "Grupp 9",
-            id: "2"
-        },
-        {
-            name: "Rebaste ristimine",
-            group: "Parim grupp",
-            id: "89"
-        },
-        {
-            name: "Bowling",
-            group: "Kaaa",
-            id: "78"
-        }
-    ]
-    const dummydata2 = [
-        {
-            name: "Poiss ree",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "79",
-        },
-        {
-            name: "Master Yoda",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "76",
-        },
-        {
-            name: "Tere hommikust",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "73",
-        },
-        {
-            name: "Tere õhtust",
-            imageurl: "https://www.petmd.com/sites/default/files/what-does-it-mean-when-cat-wags-tail.jpg",
-            tagline: "Hea kasutaja",
-            userId: "72",
-        }
-    ];
-    const activitytotal = dummydata.length;
-    const usertotal = dummydata2.length;
 
-
+    const activitytotal = activityData && activityData.length;
+    const usertotal = usersData && usersData.length;
+	    
     return (
         <Container className={classes.container} maxWidth="sm">
+             {/*{error && <Notice variant="error" title="Tähtaegade muutmine ebaõnnestus" message={error} />}
+			{hasChanged && <Notice variant="success" title="Tähtajad muudetud" message=''/>}*/}
             <h1 className={classes.title}>{t(Translation.ADMIN_OVERVIEW)}</h1>
             <Card className={classes.menteeCard}>
                 <h2 className={classes.cardTitle}>{t(Translation.GRADE_ACTIVITIES)}</h2>
                 <h3>
-                    Hindamata tegevusi: <span className={classes.suuredArvud}>{activitytotal}</span>
+                    {t(Translation.ADMIN_UNVERIFIED_ACTIVITIES)}: <span className={classes.suuredArvud}>{activitytotal}</span>
                 </h3>
             <List>
-                {dummydata.map(({name, group, id}) => {
-                    return <div>
+                {activityData && activityData.map(({name, groupName, ID}) => {
+                    return <div key={ID}>
                         <ListItem className={classes.listitem}>
                             <div>
                                 <Link
-                                href={id ? `/activities/activity/${id}` : '#'}
+                                to={ID ? `/activities/activity/${ID}` : '#'}
                                 className={classes.link}
                                 >
-                                    <ListItemText className={classes.personName} primary={name} secondary={group}/>
+                                    <ListItemText className={classes.personName} primary={name} secondary={groupName || t(Translation.NAMELESS_GROUP)}/>
                                 </Link>
                             </div>
                         </ListItem>
@@ -186,16 +201,31 @@ export default function AdminView({ user }: HasUserProps) {
             <Card className={classes.menteeCard}>
                 <h2 className={classes.cardTitle}>{t(Translation.VERIFY_USERS)}</h2>
                 <h3>
-                    Kinnitamata kasutajaid: <span className={classes.suuredArvud}>{usertotal}</span>
+                    {t(Translation.ADMIN_UNVERIFIED_USERS)}: <span className={classes.suuredArvud}>{usertotal}</span>
                 </h3>
                 <List>
-                {dummydata2.map(({name, tagline, userId, imageurl}) => {
-                    return <div>
-                        <Person name={name} tagline={tagline} imageUrl={imageurl} userId={userId}></Person>
+                    {usersData && usersData.map(({ID, name, tagline, imageurl}) => {
+                    return <div key={ID}>
+                        <Person name={name} tagline={tagline} imageUrl={imageurl} userId={ID}></Person>
                     </div>
                 })}
                 </List>
             </Card>
+            </div>
+			<div className={classes.container}>
+                <Card className={classes.card}>
+                    <CardContent>
+						<FormControl component="fieldset">
+							<h1>{t(Translation.DEADLINES)}</h1>
+							<FormGroup>
+								<CheckboxField label='Registreerimine avatud mentoritele' {...input.mentor} value={true}></CheckboxField>
+									{/*value={data.mentor}>*/}
+								<CheckboxField label='Registreerimine avatud menteedele' {...input.mentor} value={false}></CheckboxField>
+									{/*value={data.mentee}>*/}
+							</FormGroup>
+						</FormControl>
+                    </CardContent>
+                </Card>
             </div>
         </Container>
 	);

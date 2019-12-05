@@ -61,7 +61,7 @@ export default function GradeActivityView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
 	const t = useTranslator();
-	const [graded, isGrading] = React.useState(false);
+	const [isGraded, setIsGraded] = React.useState(false);
 
 
 	const [queryActivityData, { data, loading, called }] = useBackend({
@@ -85,29 +85,21 @@ export default function GradeActivityView({ match, user }: Props) {
 		queryActivityData();
 	}, [called, queryActivityData]);
 
-	React.useEffect(() => {
-		if (!gradeActivityFn || !gradeActivityCalled) {
-			return;
-		}
-		gradeActivityFn();
-		isGrading(true);
-	}, [gradeActivityCalled, gradeActivityFn]);
-
 	/*if (loading || !data) {
 		return <Loader />;
 	}*/
 	return (
 		<>
-			{error && <Notice variant="error" title="Grading the activity failed" message={error} />}
-			{graded && <Notice variant="success" title="Activity graded successfully" message=''/>}
+			{error && <Notice variant="error" title="Tegevuse hindamine ebaõnnestus" message={error} />}
+			{isGraded && <Notice variant="success" title="Tegevus hinnatud" message=''/>}
 			<div className={classes.container}>
                 <Card>
-					{data.name && data.group && data.date && (
+					{data && data.name && data.group && data.date && (
 						<div>
-                            <Typography variant="body2">
+                            <Typography variant="h3">
 						        {data.name}
                             </Typography>
-                            <Typography variant="body2">
+                            <Typography variant="h6">
                                 {data.group}
                             </Typography>
                             <Typography variant="body2">
@@ -152,7 +144,10 @@ export default function GradeActivityView({ match, user }: Props) {
                                     accept: true,
                                 },
                             });
-                            await queryActivityData();
+							await queryActivityData();
+							{ !error &&
+								setIsGraded(true);
+							}
                         }}
                     >
                         {t(Translation.APPROVE_ACTIVITY)}
@@ -169,7 +164,10 @@ export default function GradeActivityView({ match, user }: Props) {
                                     accept: false,
                                 },
                             });
-                            await queryActivityData();
+							await queryActivityData();
+							{ !error &&
+								setIsGraded(true);
+							}
                         }}
                     >
                         {t(Translation.DECLINE_ACTIVITY)}

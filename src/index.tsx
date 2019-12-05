@@ -16,11 +16,9 @@ import LogoutView from './views/logout/LogoutView';
 import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
 import { UserContext, UserContextUser } from './contexts/UserContext';
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
-import AddActivityView from './views/addActivityView/AddActivityView';
 import AdminView from './views/adminView/AdminView';
 import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 import MentorActivitiesView from './views/mentorActivities/MentorActivitiesView';
-import DeadlinesView from './views/deadlinesView/DeadlinesView';
 import RedirectInfoView from './views/redirectInfoView/RedirectInfoView';
 import CompleteActivityView from './views/completeActivity/CompleteActivityView';
 import { PublicRoute } from './components/publicRoute/PublicRoute';
@@ -60,9 +58,7 @@ function Root() {
 						<ProtectedRoute exact path="/member/redirect-info-view" component={RedirectInfoView} />
 						<ProtectedRoute exact path="/member/complete-activity/:id" component={CompleteActivityView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
-						<ProtectedRoute exact path="/member/add-activity" component={AddActivityView} />
 						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
-						<ProtectedRoute exact path="/admin/deadlines" component={DeadlinesView} />
 						<ProtectedRoute exact path="/admin/main" component={AdminView} />
 					</Switch>
 				</Router>

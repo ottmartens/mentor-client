@@ -1,8 +1,12 @@
 import { UseInput } from '../hooks/useInput';
+import { Translation } from '../translations';
+import assertNever from './assertNever';
+import useTranslator from '../hooks/useTranslator';
 
 export enum FieldError {
-	NOT_SET = 'This field is required',
-	NOT_EMAIL = 'Email address is invalid',
+	NOT_SET = 'NOT_SET',
+	NOT_EMAIL = 'NOT_EMAIL',
+	PASSWORD_NOT_EQUAL = 'PASSWORD_NOT_EQUAL',
 }
 export type ValidatorFn = (value: any) => FieldError | boolean;
 
@@ -26,6 +30,13 @@ export function isEmail(value: any): FieldError | boolean {
 	return true;
 }
 
+export const isPasswordEqual = (otherValue: string | undefined) => (value: string | undefined) => {
+	if (value !== otherValue) {
+		return FieldError.PASSWORD_NOT_EQUAL;
+	}
+	return true;
+};
+
 export function validateInputs(input: { [s: string]: UseInput }) {
 	const inputsArray: UseInput[] = [...Object.values<UseInput>(input)];
 	const validationResult = inputsArray.map((input) => input.validate());
@@ -33,4 +44,17 @@ export function validateInputs(input: { [s: string]: UseInput }) {
 		return false;
 	}
 	return true;
+}
+
+export function translateError(error: FieldError, t: (t: Translation) => string) {
+	switch (error) {
+		case FieldError.NOT_EMAIL:
+			return `${t(Translation.VALIDATOR_NOT_EMAIL)}`;
+		case FieldError.NOT_SET:
+			return `${t(Translation.VALIDATOR_NOT_SET)}`;
+		case FieldError.PASSWORD_NOT_EQUAL:
+			return `${t(Translation.VALIDATOR_PASSWORD_NOT_EQUAL)}`;
+		default:
+			assertNever(error);
+	}
 }

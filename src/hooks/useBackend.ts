@@ -31,10 +31,11 @@ export enum EndPoint {
 	ACCEPT_ACTIVITY_REQUEST = '/activities/accept-activity',
 	CHANGE_DEADLINES_REQUEST = '/admin/change-deadlines',
 	DEADLINE = '/admin/deadlines',
-	ALL_USERS = '/api/users',
-	GET_MOCK_ACTIVITIES = '/template-activities',
+	ALL_USERS = '/all-users',
+	GET_ACTIVITIES = '/template-activities',
 	SELF_DELETE = '/user',
 	ACTIVITIES = '/activity',
+	VERIFY_USER = '/user/verify',
 }
 
 interface Props {

@@ -275,12 +275,14 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				</Card>
 			)}
 			{/* Activity Feed*/}
+			{activityTotal > 0 && (
 			<ActivityFeed
 			activities = {data.activities}
 			onlyVerified = {false}
 			pointsum = {pointSum}
 			acttotal = {activityTotal}
 			/>
+			)}
 		</>
 	);
 }
