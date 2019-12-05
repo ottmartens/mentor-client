@@ -1,6 +1,6 @@
 import React from 'react';
 import { HasUserProps, UserRole } from '../../types';
-import { Button, Divider, Card, Container } from '@material-ui/core';
+import { Button, Divider, Card, Container, TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import useTranslator from '../../hooks/useTranslator';
@@ -55,6 +55,12 @@ const useStyles = makeStyles((theme) => ({
 	card: {
 		margin: ' 1em 0',
 	},
+	numericInput: {
+		width: '224px',
+		WebkitAppearance: 'none',
+		MozAppearance: 'textfield',
+		appearance: 'none',
+	}
 }));
 
 export default function MentorActivitiesView({ user }: HasUserProps) {
@@ -119,8 +125,8 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 								}}
 							>
 								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-								<Field className={classes.largeWidth} {...input.points} label={t(Translation.POINTS)} />
-								<Field className={classes.largeWidth} {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
+								<Field className={classes.numericInput} type='Number' {...input.points} label={t(Translation.POINTS)} />
+								<Field className={classes.numericInput} type='Number' {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
 								<Button variant="contained" color="primary" type="submit" className={classes.button}>
 									{t(Translation.ADD)}
 								</Button>

@@ -4,7 +4,7 @@ import { FieldError } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
 
 interface Props {
-	type?: 'text' | 'password';
+	type?: 'text' | 'password' | 'Number';
 	label: string;
 	setValue: (value: string) => void;
 	value: string | undefined;
