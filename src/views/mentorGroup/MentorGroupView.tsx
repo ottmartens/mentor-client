@@ -155,12 +155,14 @@ export default function MentorGroupView({ match, user }: Props) {
 					</Card>
 				)}
 				{/* Activity feed */}
+				{activityTotal > 0 && (
 				<ActivityFeed
 				activities = {data.activities}
 				onlyVerified = {true}
 				pointsum = {pointSum}
 				acttotal = {activityTotal}
 				/>
+				)}
 			</div>
 		</>
 	);
