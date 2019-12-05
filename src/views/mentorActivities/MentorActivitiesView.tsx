@@ -140,7 +140,7 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 					</div>
 				)}
 				{data.map(({ name, points, requiredParticipants, ID }) => (
-					<div>
+					<div key={ID}>
 						<Divider />
 						<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
 							<div className={classes.listElement}>

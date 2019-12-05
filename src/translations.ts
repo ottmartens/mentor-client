@@ -3,6 +3,7 @@ import { Language } from './hooks/useTranslator';
 export enum Translation {
 	LOGIN = 'LOGIN',
 	PASSWORD = 'PASSWORD',
+	REPEAT_PASSWORD = 'REPEAT_PASSWORD',
 	REGISTER = 'REGISTER',
 	ACCEPT = 'ACCEPT',
 	DECLINE = 'DECLINE',
@@ -85,12 +86,16 @@ export enum Translation {
 	REJECTION_MODAL_MESSAGE = 'REJECTION_MODAL_MESSAGE',
 	USER_IS_REJECTED = 'USER_IS_REJECTED',
 	REJECT_USER = 'REJECT_USER',
+	VALIDATOR_NOT_SET = 'VALIDATOR_NOT_SET',
+	VALIDATOR_NOT_EMAIL = 'VALIDATOR_NOT_EMAIL',
+	VALIDATOR_PASSWORD_NOT_EQUAL = 'VALIDATOR_PASSWORD_NOT_EQUAL',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
 	EE: {
 		LOGIN: 'Logi sisse',
 		PASSWORD: 'Parool',
+		REPEAT_PASSWORD: 'Korda parooli',
 		REGISTER: 'Registreeri',
 		ACCEPT: 'Nõustun',
 		DECLINE: 'Keeldun',
@@ -173,10 +178,14 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REJECTION_MODAL_MESSAGE: 'Sõnum kasutajale',
 		USER_IS_REJECTED: 'Kasutaja on tagasilükatud',
 		REJECT_USER: 'Lükka tagasi',
+		VALIDATOR_NOT_SET: 'See väli on kohustuslik',
+		VALIDATOR_NOT_EMAIL: 'Sisestus pole email',
+		VALIDATOR_PASSWORD_NOT_EQUAL: 'Paroolid on erinevad',
 	},
 	EN: {
 		LOGIN: 'Login',
 		PASSWORD: 'Password',
+		REPEAT_PASSWORD: 'Repeat password',
 		REGISTER: 'Register',
 		ACCEPT: 'Accept',
 		DECLINE: 'Decline',
@@ -259,5 +268,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REJECTION_MODAL_MESSAGE: 'Message to the user',
 		USER_IS_REJECTED: 'User is rejected',
 		REJECT_USER: 'Reject user',
+		VALIDATOR_NOT_SET: 'This field is required',
+		VALIDATOR_NOT_EMAIL: 'Invalid email address',
+		VALIDATOR_PASSWORD_NOT_EQUAL: "Passwords don't match",
 	},
 };

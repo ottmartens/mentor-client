@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: '20px',
 		display: 'flex',
 		flexDirection: 'column',
+		textAlign: 'center',
 	},
 	marginMiddle: {
 		margin: '16px auto 8px auto',
@@ -45,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: 'center',
 	},
 	imageButton: {
+		cursor: 'pointer',
+		marginTop: '12px',
 		display: 'inline-block',
 		color: '#fff',
 		background: '#3185FC',
@@ -61,12 +64,18 @@ const useStyles = makeStyles((theme) => ({
 	},
 	imageContainer: {
 		display: 'flex',
+		justifyContent: 'center',
 		flexDirection: 'column',
+		textAlign: 'center',
+		alignItems: 'center',
 	},
 	image: {
-		width: '100%',
+		margin: '12px',
+		width: '320px',
+		maxWidth: '100%',
 	},
 	buttonContainer: {
+		marginTop: '12px',
 		textAlign: 'right',
 	},
 }));
@@ -98,6 +107,7 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.GET_ACTIVITIES,
 		authToken: user.token,
+		skip: params.id === 'new',
 	});
 
 	React.useEffect(() => {
@@ -107,16 +117,17 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 		getActivities();
 	}, [activityCalled, getActivities]);
 
-	const selectedActivity = activityData && activityData.find((activity) => activity.id === params.id);
+	const selectedActivity = activityData && activityData.find((activity) => activity.ID === Number(params.id));
 
+	const currentDate = new Date().toString();
 	// completing the activity
 	const input = {
 		name: useInput({ validators: [isSet], initialValue: selectedActivity && selectedActivity.name }),
 		description: useInput({ validators: [isSet] }),
-		time: useInput({ validators: [isSet] }),
+		time: useInput({ validators: [isSet], initialValue: currentDate }),
 	};
 
-	const [completeActivity, { data: completeData, loading: completeLoading, error }] = useBackend({
+	const [completeActivity, { data: completeData }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.ACTIVITIES,
 		variables: {
@@ -146,15 +157,22 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 					className={classes.inputContainer}
 					onSubmit={(e) => {
 						e.preventDefault();
+						setParticipantsError(undefined);
+						setImageUploadError(undefined);
+						let error = false;
 						if (!validateInputs(input)) {
-							return;
+							error = true;
 						}
-						if (participants.length < selectedActivity.requiredParticipants || 3) {
+						if (participants.length < (selectedActivity.requiredParticipants || 3)) {
+							console.log(participants.length, '<', selectedActivity.requiredParticipants);
 							setParticipantsError(FieldError.NOT_SET);
-							return;
+							error = true;
 						}
 						if (uploadedImages.length < 1) {
 							setImageUploadError('At least one image is required');
+							error = true;
+						}
+						if (error) {
 							return;
 						}
 						completeActivity();
@@ -164,27 +182,39 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 						className={classNames(classes.inputField, classes.marginMiddle)}
 						{...input.name}
 						label={t(Translation.NAME)}
+						disabled={!!selectedActivity}
 					/>
-					<Field
-						className={classNames(classes.inputField, classes.marginMiddle)}
-						{...input.description}
-						label={t(Translation.DESCRIPTION)}
-					/>
-					<DatepickerField
-						className={classNames(classes.inputField, classes.marginMiddle)}
-						{...input.time}
-						label={t(Translation.COMPLETE_ACTIVITY_TIME)}
-					/>
-					<SelectField
-						value={participants}
-						setValue={setParticipants}
-						className={classNames(classes.inputField, classes.marginMiddle)}
-						labelWidth={64}
-						error={participantsError}
-						multiple
-						label={t(Translation.PARTICIPANTS)}
-						options={[...mentors, ...mentees]}
-					/>
+					<div>
+						<DatepickerField
+							className={classNames(classes.inputField, classes.marginMiddle)}
+							{...input.time}
+							label={t(Translation.COMPLETE_ACTIVITY_TIME)}
+						/>
+					</div>
+					<div>
+						<SelectField
+							value={participants}
+							setValue={setParticipants}
+							className={classNames(classes.inputField, classes.marginMiddle)}
+							labelWidth={64}
+							error={participantsError}
+							multiple
+							label={t(Translation.PARTICIPANTS)}
+							options={[...mentors, ...mentees]}
+						/>
+					</div>
+					<div>
+						<Field
+							className={classNames(classes.inputField, classes.marginMiddle)}
+							multiline
+							{...input.description}
+							label={t(Translation.DESCRIPTION)}
+						/>
+					</div>
+					<div className={classes.imageContainer}>
+						{uploadedImages.length > 0 &&
+							uploadedImages.map((url, idx) => <img key={idx} src={`${BASE_URL}${url}`} className={classes.image} />)}
+					</div>
 					<label className={classes.imageButtonContainer}>
 						<input
 							type="file"
@@ -194,10 +224,6 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 						/>
 						<span className={classes.imageButton}>{t(Translation.ADD_PICTURE)}</span>
 					</label>
-					<div className={classes.imageContainer}>
-						{uploadedImages.length > 0 &&
-							uploadedImages.map((url, idx) => <img key={idx} src={`${BASE_URL}${url}`} className={classes.image} />)}
-					</div>
 					<div className={classes.buttonContainer}>
 						<Button variant="contained" color="primary" type="submit">
 							{t(Translation.SAVE)}

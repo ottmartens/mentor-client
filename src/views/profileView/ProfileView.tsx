@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 		width: '320px',
 	},
 	imageButton: {
+		cursor:"pointer",
 		position: 'relative',
 		zIndex: 2,
 		color: '#fff',
