@@ -176,6 +176,14 @@ export default function ProfileView({ user }: HasUserProps) {
 		setIsEdited(true);
 	}, [updateProfileData, setUser]);
 
+
+	React.useEffect(() => {
+		if (userData && !userData.name){
+			setIsEditable(true)
+		}
+	}, [userData]);
+
+
 	if (loading || !userData) {
 		return <Loader />;
 	}
