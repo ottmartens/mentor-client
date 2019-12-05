@@ -108,20 +108,19 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 			{isAdded && <Notice variant="success" title="Tegevus lisatud" message='' />}*/}
 			<h1 className={classes.title2}>{t(Translation.ACTIVITIES)}</h1>
 			{user.role === UserRole.ADMIN && (
-					<div>
-						<Card className={classes.card}>
-							<h2>{t(Translation.ADD_ACTIVITY)}</h2>
-							<form
-								onSubmit={async (e) => {
-									e.preventDefault();
-									if (validateInputs(input)) {
-										await updateActivities();
-										{!error &&
-											setIsAdded(true);
-											console.log(isAdded);
-										}
+				<div>
+					<Card className={classes.card}>
+						<h2>{t(Translation.ADD_ACTIVITY)}</h2>
+						<form
+							onSubmit={async (e) => {
+								e.preventDefault();
+								if (validateInputs(input)) {
+									await updateActivities();
+									{
+										!error && setIsAdded(true);
+										console.log(isAdded);
 									}
-								}}
+								}}}
 							>
 								<div>
 								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
@@ -151,15 +150,15 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 					</div>
 				)}
 				{data.map(({ name, points, requiredParticipants, ID }) => (
-					<div id={ID}>
+					<div key={ID}>
 						<Divider />
 						{user.role === UserRole.MENTOR && (
-						<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
-							<div className={classes.listElement}>
-								<h2 className={classes.title}>{name}</h2>
-								<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
-							</div>
-						</Link>
+							<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
+								<div className={classes.listElement}>
+									<h2 className={classes.title}>{name}</h2>
+									<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
+								</div>
+							</Link>
 						)}
 						{(user.role === UserRole.ADMIN || user.role === UserRole.MENTEE) && (
 							<div className={classes.listElement}>
