@@ -89,6 +89,8 @@ export enum Translation {
 	VALIDATOR_NOT_SET = 'VALIDATOR_NOT_SET',
 	VALIDATOR_NOT_EMAIL = 'VALIDATOR_NOT_EMAIL',
 	VALIDATOR_PASSWORD_NOT_EQUAL = 'VALIDATOR_PASSWORD_NOT_EQUAL',
+	GOT_IT = 'GOT_IT',
+	REDIRECT_VIEW_PROFILE_FILL = 'REDIRECT_VIEW_PROFILE_FILL',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -181,6 +183,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		VALIDATOR_NOT_SET: 'See väli on kohustuslik',
 		VALIDATOR_NOT_EMAIL: 'Sisestus pole email',
 		VALIDATOR_PASSWORD_NOT_EQUAL: 'Paroolid on erinevad',
+		GOT_IT: 'Sain aru',
+		REDIRECT_VIEW_PROFILE_FILL:
+			'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täidke oma profiil ära.',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -271,5 +276,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		VALIDATOR_NOT_SET: 'This field is required',
 		VALIDATOR_NOT_EMAIL: 'Invalid email address',
 		VALIDATOR_PASSWORD_NOT_EQUAL: "Passwords don't match",
+		GOT_IT: 'Got it',
+		REDIRECT_VIEW_PROFILE_FILL:
+			'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
 	},
 };

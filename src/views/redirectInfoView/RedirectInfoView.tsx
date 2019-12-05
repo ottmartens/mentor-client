@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, Typography } from '@material-ui/core';
 import { RouteProps } from 'react-router';
 import { Link } from 'react-router-dom';
+import useTranslator from '../../hooks/useTranslator';
+import { Translation } from '../../translations';
 
 interface PropsState {
 	title: string;
@@ -45,6 +47,7 @@ export default function RedirectInfoView({ location }: RouteProps) {
 	const { title, description, urlToRedirect }: PropsState = location && location.state;
 
 	const classes = useStyles();
+	const t = useTranslator();
 
 	return (
 		<Card className={classes.container}>
@@ -56,7 +59,7 @@ export default function RedirectInfoView({ location }: RouteProps) {
 				</Typography>
 			</div>
 			<Link className={classes.linkButton} to={urlToRedirect}>
-				Got it
+				{t(Translation.GOT_IT)}
 			</Link>
 		</Card>
 	);

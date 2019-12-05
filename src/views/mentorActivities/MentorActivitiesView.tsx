@@ -103,31 +103,31 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 			{isAdded && <Notice variant="success" title="Tegevus lisatud" message='' />}*/}
 			<h1 className={classes.title2}>{t(Translation.ACTIVITIES)}</h1>
 			{user.role === UserRole.ADMIN && (
-					<div>
-						<Card className={classes.card}>
-							<h2>{t(Translation.ADD_ACTIVITY)}</h2>
-							<form
-								onSubmit={async (e) => {
-									e.preventDefault();
-									if (validateInputs(input)) {
-										await updateActivities();
-										{!error &&
-											setIsAdded(true);
-											console.log(isAdded);
-										}
+				<div>
+					<Card className={classes.card}>
+						<h2>{t(Translation.ADD_ACTIVITY)}</h2>
+						<form
+							onSubmit={async (e) => {
+								e.preventDefault();
+								if (validateInputs(input)) {
+									await updateActivities();
+									{
+										!error && setIsAdded(true);
+										console.log(isAdded);
 									}
-								}}
-							>
-								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-								<Field className={classes.largeWidth} {...input.points} label={t(Translation.POINTS)} />
-								<Field className={classes.largeWidth} {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
-								<Button variant="contained" color="primary" type="submit" className={classes.button}>
-									{t(Translation.ADD)}
-								</Button>
-							</form>
-						</Card>
-					</div>
-				)}
+								}
+							}}
+						>
+							<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+							<Field className={classes.largeWidth} {...input.points} label={t(Translation.POINTS)} />
+							<Field className={classes.largeWidth} {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
+							<Button variant="contained" color="primary" type="submit" className={classes.button}>
+								{t(Translation.ADD)}
+							</Button>
+						</form>
+					</Card>
+				</div>
+			)}
 			<Card>
 				{user.role === UserRole.MENTOR && (
 					<div>
@@ -142,12 +142,20 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 				{data.map(({ name, points, requiredParticipants, ID }) => (
 					<div key={ID}>
 						<Divider />
-						<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
+						{user.role === UserRole.MENTOR && (
+							<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
+								<div className={classes.listElement}>
+									<h2 className={classes.title}>{name}</h2>
+									<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
+								</div>
+							</Link>
+						)}
+						{(user.role === UserRole.ADMIN || user.role === UserRole.MENTEE) && (
 							<div className={classes.listElement}>
 								<h2 className={classes.title}>{name}</h2>
 								<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
 							</div>
-						</Link>
+						)}
 					</div>
 				))}
 			</Card>
