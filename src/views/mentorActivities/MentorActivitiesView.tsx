@@ -140,14 +140,22 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 					</div>
 				)}
 				{data.map(({ name, points, requiredParticipants, ID }) => (
-					<div>
+					<div id={ID}>
 						<Divider />
+						{user.role === UserRole.MENTOR && (
 						<Link to={`/member/complete-activity/${ID}`} className={classes.link}>
 							<div className={classes.listElement}>
 								<h2 className={classes.title}>{name}</h2>
 								<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
 							</div>
 						</Link>
+						)}
+						{(user.role === UserRole.ADMIN || user.role === UserRole.MENTEE) && (
+							<div className={classes.listElement}>
+								<h2 className={classes.title}>{name}</h2>
+								<span className={classes.description}>{`${points} points | ${requiredParticipants}+ members`}</span>
+							</div>
+						)}
 					</div>
 				))}
 			</Card>
