@@ -84,7 +84,7 @@ function redirectToSteps(
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
 						description:
-							'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
+							t(Translation.REDIRECT_VIEW_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
 				});
@@ -102,7 +102,7 @@ function redirectToSteps(
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
 						description:
-							'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
+							t(Translation.REDIRECT_VIEW_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
 				});

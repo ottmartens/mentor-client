@@ -85,6 +85,8 @@ export enum Translation {
 	REJECTION_MODAL_MESSAGE = 'REJECTION_MODAL_MESSAGE',
 	USER_IS_REJECTED = 'USER_IS_REJECTED',
 	REJECT_USER = 'REJECT_USER',
+	GOT_IT = 'GOT_IT',
+	REDIRECT_VIEW_PROFILE_FILL = 'REDIRECT_VIEW_PROFILE_FILL',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -173,6 +175,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REJECTION_MODAL_MESSAGE: 'Sõnum kasutajale',
 		USER_IS_REJECTED: 'Kasutaja on tagasilükatud',
 		REJECT_USER: 'Lükka tagasi',
+		GOT_IT: 'Sain aru',
+		REDIRECT_VIEW_PROFILE_FILL: 'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täidke oma profiil ära.',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -259,5 +263,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REJECTION_MODAL_MESSAGE: 'Message to the user',
 		USER_IS_REJECTED: 'User is rejected',
 		REJECT_USER: 'Reject user',
+		GOT_IT: 'Got it',
+		REDIRECT_VIEW_PROFILE_FILL: 'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
 	},
 };
