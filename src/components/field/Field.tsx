@@ -1,10 +1,11 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import { FieldError } from '../../services/validators';
+import { FieldError, translateError } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
+import useTranslator from '../../hooks/useTranslator';
 
 interface Props {
-	type?: 'text' | 'password' | 'Number';
+	type?: 'text' | 'password' | 'number';
 	label: string;
 	setValue: (value: string) => void;
 	value: string | undefined;
@@ -18,13 +19,19 @@ const useStyles = makeStyles((theme) => ({
 	error: {
 		display: 'block',
 		color: '#f00',
+		textAlign: 'left',
+	},
+	inputWrapper: {
+		display: 'inline-block',
 	},
 }));
 
 export default function Field({ label, type, setValue, value, error, className, multiline, disabled }: Props) {
 	const classes = useStyles();
+	const t = useTranslator();
+	const errorMessage = error ? translateError(error, t) : undefined;
 	return (
-		<>
+		<div className={classes.inputWrapper}>
 			<TextField
 				disabled={disabled}
 				label={label}
@@ -38,8 +45,8 @@ export default function Field({ label, type, setValue, value, error, className, 
 				multiline={multiline}
 				rows={multiline ? 8 : undefined}
 			/>
-			<span className={classes.error}>{error}</span>
-		</>
+			<span className={classes.error}>{errorMessage}</span>
+		</div>
 	);
 
 	function handleChange(event) {

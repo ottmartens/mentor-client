@@ -5,9 +5,8 @@ import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import RadioButtonField from '../../components/radioButtonField/RadioButtonField';
-import { Redirect } from 'react-router';
 import Notice from '../../components/notice/Notice';
-import { validateInputs, isSet, isEmail } from '../../services/validators';
+import { validateInputs, isSet, isEmail, isPasswordEqual } from '../../services/validators';
 import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
@@ -60,6 +59,7 @@ export default function RegisterView() {
 		password: useInput({ validators: [isSet] }),
 		role: useInput({ initialValue: radioButtonOptions[0].value }),
 	};
+	const repeatPassword = useInput({ validators: [isSet, isPasswordEqual(input.password.value)] });
 
 	//register request
 	const [requestFn, { data, error }] = useBackend({
@@ -90,7 +90,7 @@ export default function RegisterView() {
 					<form
 						onSubmit={(e) => {
 							e.preventDefault();
-							if (validateInputs(input)) {
+							if (validateInputs({ ...input, repeatPassword })) {
 								requestFn();
 							}
 						}}
@@ -105,6 +105,9 @@ export default function RegisterView() {
 						</div>
 						<div>
 							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
+						</div>
+						<div>
+							<Field {...repeatPassword} label={t(Translation.REPEAT_PASSWORD)} type="password" />
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
 							{t(Translation.YES_ACCOUNT)}{' '}

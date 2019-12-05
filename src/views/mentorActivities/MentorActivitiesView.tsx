@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
 		width: '224px',
 		WebkitAppearance: 'none',
 		MozAppearance: 'textfield',
-		appearance: 'none',
 	}
 }));
 
@@ -124,9 +123,15 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 									}
 								}}
 							>
+								<div>
 								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-								<Field className={classes.numericInput} type='Number' {...input.points} label={t(Translation.POINTS)} />
-								<Field className={classes.numericInput} type='Number' {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
+								</div>
+								<div>
+								<Field className={classes.numericInput} type='number' {...input.points} label={t(Translation.POINTS)} />
+								</div>
+								<div>
+								<Field className={classes.numericInput} type='number' {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
+								</div>
 								<Button variant="contained" color="primary" type="submit" className={classes.button}>
 									{t(Translation.ADD)}
 								</Button>
