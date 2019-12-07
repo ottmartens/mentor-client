@@ -122,7 +122,7 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		GROUP_NAME: 'Grupi nimi:',
 		GROUP_DESCRIPTION: 'Kirjeldage oma gruppi:',
 		CANCEL: 'Tühista',
-		EDIT_GROUP: 'Muuda gruppi',
+		EDIT_GROUP: 'Muuda infot',
 		REGISTRATION_ERROR: 'Tekkis viga registreerimisel',
 		REGISTRATION: 'Registreerimine',
 		ALL_GROUPS: 'Kõik grupid',

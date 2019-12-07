@@ -111,12 +111,9 @@ export default function UserView({ match, user }: Props) {
 						src={data.imageUrl ? `${BASE_URL}${data.imageUrl}` : '/images/avatar_placeholder.webp'}
 					/>
 				</div>
+				<h2>{data.name}</h2>
 				<table className={classes.table}>
 					<tbody>
-						<tr>
-							<td className={classes.infoLabel}>{t(Translation.NAME)}:</td>
-							<td className={classes.info}>{data.name}</td>
-						</tr>
 						<tr>
 							<td className={classes.infoLabel}>{t(Translation.DEGREE)}:</td>
 							<td className={classes.info}>{data.degree}</td>

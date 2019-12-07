@@ -38,7 +38,7 @@ export default function Person({ userId, imageUrl, name, tagline, children }: Pr
 						src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
 					/>
 				</ListItemAvatar>
-				<ListItemText primary={name} secondary={`${tagline ? tagline : ''}`} />
+				<ListItemText primary={name} />
 			</Link>
 			{children}
 		</ListItem>
