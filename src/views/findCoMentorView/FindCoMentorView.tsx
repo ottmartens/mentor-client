@@ -1,12 +1,14 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Container, makeStyles, Divider, List, Button, Card } from '@material-ui/core';
+import { makeStyles, Divider, List, Button, Card } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import Person from '../../components/person/Person';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import Notice from '../../components/notice/Notice';
+import { UserContext } from '../../contexts/UserContext';
 
 type Mentor = {
 	userId: string;
@@ -39,6 +41,7 @@ const useStyles = makeStyles(() => ({
 export default function MentorPairingView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const t = useTranslator();
+	const h = useHistory();
 	const [hasRequested, setHasRequested] = React.useState(false);
 	const [hasAccepted, setHasAccepted] = React.useState<undefined | boolean>(undefined);
 
@@ -63,6 +66,8 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
+	const { updateUserInfo } = useUpdateUserInfo();
+
 	React.useEffect(() => {
 		if (called) {
 			return;
@@ -80,7 +85,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		<>
 			<h1 className={classes.title}>{t(Translation.FIND_MENTOR)}</h1>
 			<Card className={classes.card}>
-				{hasRequested && <Notice variant="success" title="Avaldus saadetud" message='' />}
+				{hasRequested && <Notice variant="success" title="Avaldus saadetud" message="" />}
 				{hasAccepted !== undefined && (
 					<Notice
 						variant="success"
@@ -90,7 +95,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 				)}
 
 				<List>
-					{data.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }, idx) => {
+					{data.map(({ userId, name, hasRequestedYou, youHaveRequested, imageUrl, tagline }: Mentor, idx) => {
 						return (
 							<div key={idx}>
 								{idx === 0 && <Divider variant="inset" component="li" />}
@@ -109,6 +114,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 														},
 													});
 													await queryFreeMentorsData();
+													await updateUserInfo();
 													setHasAccepted(true);
 												}}
 											>
@@ -164,4 +170,25 @@ export default function MentorPairingView({ user }: HasUserProps) {
 			</Card>
 		</>
 	);
+
+	function useUpdateUserInfo() {
+		const ctx = React.useContext(UserContext);
+		const ctxSetUser = ctx && ctx.setUser;
+		const [getUserInfo, { data: userData, loading }] = useBackend({
+			requestMethod: RequestMethod.GET,
+			endPoint: EndPoint.USER,
+			authToken: user.token,
+		});
+
+		const t = useTranslator();
+
+		React.useEffect(() => {
+			if (!userData || loading || !ctxSetUser) {
+				return;
+			}
+			ctxSetUser(userData);
+		}, [userData, loading, ctxSetUser]);
+
+		return { updateUserInfo: getUserInfo };
+	}
 }

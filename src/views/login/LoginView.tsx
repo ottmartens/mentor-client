@@ -6,7 +6,6 @@ import { Redirect } from 'react-router';
 import Field from '../../components/field/Field';
 import { isSet, isEmail, validateInputs } from '../../services/validators';
 import Notice from '../../components/notice/Notice';
-import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
@@ -37,16 +36,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LoginView() {
 	const [willRedirect, setRedirect] = React.useState(false);
+	const [userRole, setUserRole] = React.useState<undefined | UserRole>();
 	// translations
 	const t = useTranslator();
 
 	// css classes
 	const classes = useStyles();
-
-	// context
-	const userContext = React.useContext(UserContext);
-	const setUser = userContext && userContext.setUser;
-	const user = userContext && userContext.user;
 
 	// inputs
 	const input: { [s: string]: UseInput } = {
@@ -66,16 +61,16 @@ export default function LoginView() {
 
 	// set user to context and redirect if request is successful
 	React.useEffect(() => {
-		if (!data || !setUser) {
+		if (!data) {
 			return;
 		}
 		setUserToken(data.token);
-		setUser(data);
+		setUserRole(data.role);
 		setRedirect(true);
-	}, [data, setUser]);
+	}, [data, setUserRole]);
 
-	if (willRedirect && user) {
-		return <Redirect to={returnRedirectPath(user.role)} />;
+	if (willRedirect && userRole) {
+		return <Redirect to={returnRedirectPath(userRole)} />;
 	}
 
 	return (
@@ -124,7 +119,7 @@ export default function LoginView() {
 	);
 }
 
-function returnRedirectPath(userRole: UserRole): string {
+export function returnRedirectPath(userRole: UserRole): string {
 	switch (userRole) {
 		case UserRole.ADMIN:
 			return '/admin/main';

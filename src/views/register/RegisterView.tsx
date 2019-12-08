@@ -12,6 +12,7 @@ import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import useRouter from '../../hooks/useRouter';
+import { returnRedirectPath } from '../login/LoginView';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -39,12 +40,11 @@ export default function RegisterView() {
 	// css classes
 	const classes = useStyles();
 
-	// router
-	const router = useRouter();
+	// state
+	const [willRedirect, setWillRedirect] = React.useState();
+	const [userRole, setUserRole] = React.useState();
 
-	// context
-	const userContext = React.useContext(UserContext);
-	const setUser = userContext && userContext.setUser;
+	// translator
 	const t = useTranslator();
 
 	// input options
@@ -74,13 +74,17 @@ export default function RegisterView() {
 
 	// set user to context after successful request
 	React.useEffect(() => {
-		if (!data || !setUser) {
+		if (!data) {
 			return;
 		}
 		setUserToken(data.token);
-		setUser(data);
-		router.push('/member/mentor-group-list');
-	}, [data, setUser]);
+		setUserRole(data.role);
+		setWillRedirect(true);
+	}, [data, setWillRedirect]);
+
+	if (willRedirect && userRole) {
+		return <Redirect to={returnRedirectPath(userRole)} />;
+	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">

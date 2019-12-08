@@ -56,7 +56,6 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 				if (!user) {
 					return null;
 				}
-
 				// redirect if something is missing
 				redirectToSteps(routeProps, user, t);
 
@@ -83,8 +82,7 @@ function redirectToSteps(
 					pathname: '/member/redirect-info-view',
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
-						description:
-							t(Translation.REDIRECT_VIEW_PROFILE_FILL),
+						description: t(Translation.REDIRECT_VIEW_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
 				});
@@ -101,8 +99,7 @@ function redirectToSteps(
 					pathname: '/member/redirect-info-view',
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
-						description:
-							t(Translation.REDIRECT_VIEW_PROFILE_FILL),
+						description: t(Translation.REDIRECT_VIEW_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
 				});
