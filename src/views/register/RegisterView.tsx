@@ -7,12 +7,11 @@ import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import RadioButtonField from '../../components/radioButtonField/RadioButtonField';
 import Notice from '../../components/notice/Notice';
 import { validateInputs, isSet, isEmail, isPasswordEqual } from '../../services/validators';
-import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
-import useRouter from '../../hooks/useRouter';
 import { returnRedirectPath } from '../login/LoginView';
+import { Redirect } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
 	container: {

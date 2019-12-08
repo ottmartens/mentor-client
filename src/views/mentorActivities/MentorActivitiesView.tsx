@@ -1,6 +1,6 @@
 import React from 'react';
 import { HasUserProps, UserRole } from '../../types';
-import { Button, Divider, Card, Container, TextField} from '@material-ui/core';
+import { Button, Divider, Card, Container, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import useTranslator from '../../hooks/useTranslator';
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 		width: '224px',
 		WebkitAppearance: 'none',
 		MozAppearance: 'textfield',
-	}
+	},
 }));
 
 export default function MentorActivitiesView({ user }: HasUserProps) {
@@ -118,26 +118,31 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 									await updateActivities();
 									{
 										!error && setIsAdded(true);
-										console.log(isAdded);
 									}
-								}}}
-							>
-								<div>
+								}
+							}}
+						>
+							<div>
 								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
-								</div>
-								<div>
-								<Field className={classes.numericInput} type='number' {...input.points} label={t(Translation.POINTS)} />
-								</div>
-								<div>
-								<Field className={classes.numericInput} type='number' {...input.minMembers} label={t(Translation.MIN_MEMBERS)} />
-								</div>
-								<Button variant="contained" color="primary" type="submit" className={classes.button}>
-									{t(Translation.ADD)}
-								</Button>
-							</form>
-						</Card>
-					</div>
-				)}
+							</div>
+							<div>
+								<Field className={classes.numericInput} type="number" {...input.points} label={t(Translation.POINTS)} />
+							</div>
+							<div>
+								<Field
+									className={classes.numericInput}
+									type="number"
+									{...input.minMembers}
+									label={t(Translation.MIN_MEMBERS)}
+								/>
+							</div>
+							<Button variant="contained" color="primary" type="submit" className={classes.button}>
+								{t(Translation.ADD)}
+							</Button>
+						</form>
+					</Card>
+				</div>
+			)}
 			<Card>
 				{user.role === UserRole.MENTOR && (
 					<div>

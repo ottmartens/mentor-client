@@ -2,7 +2,7 @@ import React from 'react';
 import { ValidatorFn, FieldError } from '../services/validators';
 
 interface Props {
-	initialValue?: string | string[] | number;
+	initialValue?: string | string[] | number | boolean;
 	validators?: ValidatorFn[];
 }
 

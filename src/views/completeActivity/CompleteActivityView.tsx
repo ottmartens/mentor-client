@@ -164,7 +164,6 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 							error = true;
 						}
 						if (participants.length < (selectedActivity.requiredParticipants || 3)) {
-							console.log(participants.length, '<', selectedActivity.requiredParticipants);
 							setParticipantsError(FieldError.NOT_SET);
 							error = true;
 						}

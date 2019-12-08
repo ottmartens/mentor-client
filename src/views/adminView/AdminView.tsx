@@ -1,16 +1,5 @@
-import React/*, { useEffect }*/ from 'react';
-import {
-	Container,
-	List,
-	ListItem,
-	Divider,
-	Card,
-	ListItemText,
-	CardContent,
-	FormGroup,
-  FormControlLabel,
-  Checkbox,
-} from '@material-ui/core';
+import React /*, { useEffect }*/ from 'react';
+import { Container, List, ListItem, Divider, Card, ListItemText, CardContent, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
@@ -21,6 +10,8 @@ import Person from '../../components/person/Person';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Link } from 'react-router-dom';
 import Notice from '../../components/notice/Notice';
+import CheckboxField from '../../components/checkboxField/CheckboxField';
+import useInput from '../../hooks/useInput';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -102,22 +93,34 @@ interface Props extends HasUserProps {
 }
 
 export default function AdminView({ user }: HasUserProps) {
+	// css
 	const classes = useStyles();
-	//const userContext = React.useContext(UserContext);
-	//const [added, isAdded] = React.useState(false);
+
+	// translator
 	const t = useTranslator();
+
+	// state
 	const [hasChanged, setHasChanged] = React.useState(false);
 
-	const [ queryDeadlineData, { data: currentDeadlineData, loading: currentDeadlineLoading, called: currentDeadlineCalled },] = useBackend({
+	// requests
+	const [
+		queryDeadlineData,
+		{ data: currentDeadlineData, loading: currentDeadlineLoading, called: currentDeadlineCalled },
+	] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.SETTINGS,
 		authToken: user.token,
-  });
-  
-	const [state, setState] = React.useState({
-		mentor: (currentDeadlineData ? currentDeadlineData.MENTORS_CAN_REGISTER : false),
-		mentee: (currentDeadlineData ? currentDeadlineData.MENTEES_CAN_REGISTER : false),
 	});
+
+	//input
+	const input = {
+		MENTEES_CAN_REGISTER: useInput({
+			initialValue: currentDeadlineData && currentDeadlineData.MENTEES_CAN_REGISTER ? true : false,
+		}),
+		MENTORS_CAN_REGISTER: useInput({
+			initialValue: currentDeadlineData && currentDeadlineData.MENTORS_CAN_REGISTER ? true : false,
+		}),
+	};
 
 	const [
 		queryUnverifiedActivities,
@@ -138,20 +141,19 @@ export default function AdminView({ user }: HasUserProps) {
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.SETTINGS,
 		variables: {
-			MENTORS_CAN_REGISTER: state.mentor.value,
-			MENTEES_CAN_REGISTER: state.mentee.value,
+			MENTORS_CAN_REGISTER: input.MENTORS_CAN_REGISTER.value,
+			MENTEES_CAN_REGISTER: input.MENTEES_CAN_REGISTER.value,
 		},
 		authToken: user.token,
 	});
 
-  React.useEffect(() => {
+	React.useEffect(() => {
 		if (activityCalled) {
-//			console.log(activityData);
 			return;
 		}
 		queryUnverifiedActivities();
-  }, [activityCalled, queryUnverifiedActivities]);
-  
+	}, [activityCalled, queryUnverifiedActivities]);
+
 	React.useEffect(() => {
 		if (usersCalled) {
 			return;
@@ -163,7 +165,7 @@ export default function AdminView({ user }: HasUserProps) {
 		if (currentDeadlineCalled) {
 			return;
 		}
-    queryDeadlineData();
+		queryDeadlineData();
 	}, [currentDeadlineCalled, queryDeadlineData]);
 
 	if (
@@ -179,7 +181,7 @@ export default function AdminView({ user }: HasUserProps) {
 
 	const activitytotal = activityData && activityData.length;
 	const usertotal = usersData && usersData.length;
-  
+
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title="Tähtaegade muutmine ebaõnnestus" message={error} />}
@@ -234,21 +236,21 @@ export default function AdminView({ user }: HasUserProps) {
 				<Card className={classes.card}>
 					<CardContent>
 						<form
-            onClick={async (e) => {
-              e.preventDefault();
-              await changeDeadlinesFn();
-              await queryDeadlineData();
-              !error && setHasChanged(true);
-              console.log('mentor: ' + state.mentor.value + ', mentee: ' + state.mentee.value)
-						}}
+							onSubmit={async (e) => {
+								e.preventDefault();
+								await changeDeadlinesFn();
+								await queryDeadlineData();
+								!error && setHasChanged(true);
+							}}
 						>
 							<h1>{t(Translation.DEADLINES)}</h1>
 							<div className={classes.buttons}>
-                <FormGroup>
-                  <FormControlLabel checked={state.mentor.value} value={state.mentor.value} control={<Checkbox onChange={() => setState({ ...state, ['mentor']: !state.mentor.value})} />} label={'Regstreerimine avatud mentoritele'} />
-                  <FormControlLabel checked={state.mentee.value} value={state.mentee.value} control={<Checkbox onChange={() => setState({ ...state, ['mentee']: !state.mentee.value})} />} label={'Regstreerimine avatud menteedele'} />
-							  </FormGroup>
-              </div>
+								<CheckboxField label={t(Translation.ADMIN_MENTEES_CAN_REGISTER)} {...input.MENTEES_CAN_REGISTER} />
+								<CheckboxField label={t(Translation.ADMIN_MENTORS_CAN_REGISTER)} {...input.MENTORS_CAN_REGISTER} />
+							</div>
+							<Button type="submit" variant="contained" color="primary">
+								{t(Translation.CHANGE)}
+							</Button>
 						</form>
 					</CardContent>
 				</Card>

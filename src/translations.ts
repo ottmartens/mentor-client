@@ -70,6 +70,7 @@ export enum Translation {
 	REDIRECT_ALMOST_DONE_INFO = 'REDIRECT_ALMOST_DONE_INFO',
 	REDIRECT_ADD_IMAGE = 'REDIRECT_ADD_IMAGE',
 	REDIRECT_FILL_PROFILE = 'REDIRECT_FILL_PROFILE',
+	REDIRECT_VIEW_PROFILE_FILL = 'REDIRECT_VIEW_PROFILE_FILL',
 	ALREADY_JOINED = 'ALREADY_JOINED',
 	BIO = 'BIO',
 	DESCRIPTION = 'DESCRIPTION',
@@ -90,7 +91,8 @@ export enum Translation {
 	VALIDATOR_NOT_EMAIL = 'VALIDATOR_NOT_EMAIL',
 	VALIDATOR_PASSWORD_NOT_EQUAL = 'VALIDATOR_PASSWORD_NOT_EQUAL',
 	GOT_IT = 'GOT_IT',
-	REDIRECT_VIEW_PROFILE_FILL = 'REDIRECT_VIEW_PROFILE_FILL',
+	ADMIN_MENTORS_CAN_REGISTER = 'ADMIN_MENTORS_CAN_REGISTER',
+	ADMIN_MENTEES_CAN_REGISTER = 'ADMIN_MENTEES_CAN_REGISTER',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -173,6 +175,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ACTIVITY_PENDING: 'Ootab kinnitust',
 		ADMIN_UNVERIFIED_USERS: 'Kinnitamata kasutajaid',
 		ADMIN_UNVERIFIED_ACTIVITIES: 'Kinnitamata tegevusi',
+		ADMIN_MENTORS_CAN_REGISTER: 'Registreerimine avatud mentoritele',
+		ADMIN_MENTEES_CAN_REGISTER: 'Registreerimine avatud menteedele',
 		NAMELESS_GROUP: 'Nimeta grupp',
 		DELETE_USER: 'Kustuta kasutaja',
 		VERIFY_USER: 'Kinnita kasutaja',
@@ -266,6 +270,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		ACTIVITY_PENDING: 'Activity pending',
 		ADMIN_UNVERIFIED_USERS: 'Unverified users',
 		ADMIN_UNVERIFIED_ACTIVITIES: 'Unverified activities',
+		ADMIN_MENTORS_CAN_REGISTER: 'Registration open for mentors',
+		ADMIN_MENTEES_CAN_REGISTER: 'Registration open for menetees',
 		NAMELESS_GROUP: 'Nameless group',
 		DELETE_USER: 'Delete account',
 		VERIFY_USER: 'Verify user',
