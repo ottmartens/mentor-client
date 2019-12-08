@@ -95,7 +95,9 @@ export enum Translation {
 	ADMIN_MENTEES_CAN_REGISTER = 'ADMIN_MENTEES_CAN_REGISTER',
 	ACTIVITY_IS_REJECTED = 'ACTIVITY_IS_REJECTED',
 	INSERT_POINTS = 'INSERT_POINTS',
-
+	REGISTER_IS_DISABLED = 'REGISTER_IS_DISABLED',
+	REGISTER_MENTORS_ONLY = 'REGISTER_MENTORS_ONLY',
+	REGISTER_MENTEES_ONLY = 'REGISTER_MENTEES_ONLY',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -192,9 +194,12 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		VALIDATOR_PASSWORD_NOT_EQUAL: 'Paroolid on erinevad',
 		GOT_IT: 'Sain aru',
 		REDIRECT_VIEW_PROFILE_FILL:
-			'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täiTke oma profiil ära.',
+			'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täidke oma profiil ära.',
 		ACTIVITY_IS_REJECTED: 'Tegevus on tagasi lükatud',
 		INSERT_POINTS: 'Sisesta punktide arv',
+		REGISTER_IS_DISABLED: 'Registreerimine on suletud',
+		REGISTER_MENTORS_ONLY: 'Mentoritele',
+		REGISTER_MENTEES_ONLY: 'Menteedele',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -291,6 +296,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REDIRECT_VIEW_PROFILE_FILL:
 			'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
 		ACTIVITY_IS_REJECTED: 'Activity is rejected',
-		INSERT_POINTS: 'Insert the number of points'
-		},
+		INSERT_POINTS: 'Insert the number of points',
+		REGISTER_IS_DISABLED: 'Registration is not available',
+		REGISTER_MENTORS_ONLY: 'For mentors',
+		REGISTER_MENTEES_ONLY: 'For mentees',
+	},
 };

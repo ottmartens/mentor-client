@@ -192,6 +192,8 @@ export default function AdminView({ user }: HasUserProps) {
 				<h3>
 					{t(Translation.ADMIN_UNVERIFIED_ACTIVITIES)}: <span className={classes.suuredArvud}>{activitytotal}</span>
 				</h3>
+
+				{/* Unverified activities */}
 				<List>
 					{activityData &&
 						activityData.map(({ name, groupName, ID }) => {
@@ -214,6 +216,8 @@ export default function AdminView({ user }: HasUserProps) {
 						})}
 				</List>
 			</Card>
+
+			{/* Unverified users */}
 			<div>
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.cardTitle}>{t(Translation.VERIFY_USERS)}</h2>
@@ -232,6 +236,8 @@ export default function AdminView({ user }: HasUserProps) {
 					</List>
 				</Card>
 			</div>
+
+			{/* Deadlines */}
 			<div className={classes.container}>
 				<Card className={classes.card}>
 					<CardContent>

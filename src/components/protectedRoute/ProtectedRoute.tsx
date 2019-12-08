@@ -56,8 +56,12 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 				if (!user) {
 					return null;
 				}
+
 				// redirect if something is missing
-				redirectToSteps(routeProps, user, t);
+				const redirectInfo = redirectToSteps(routeProps, user, t);
+				if (redirectInfo) {
+					return <Redirect to={{ pathname: redirectInfo.pathname, state: redirectInfo.state }} />;
+				}
 
 				return <WithNavigation user={user}>{renderMergedProps(component, routeProps, { user })}</WithNavigation>;
 			}}
@@ -70,42 +74,51 @@ function redirectToSteps(
 	user: UserContextUser,
 	t: (t: Translation) => string,
 ) {
+	const unfinishedProfileAllowedRoutes = ['/logout', '/member/profile', '/member/redirect-info-view'];
+	const noGroupMenteeAllowedRoutes = [];
+	const noGroupMentorAllowedRoutes = [];
 	switch (user.role) {
 		case UserRole.MENTEE:
+			// if unfinished profile
 			if (
 				(!user.name || !user.imageUrl) &&
 				routeProps.location &&
-				routeProps.location.pathname !== '/member/profile' &&
-				routeProps.location.pathname !== '/member/redirect-info-view'
+				!unfinishedProfileAllowedRoutes.includes(routeProps.location.pathname)
 			) {
-				routeProps.history.push({
+				return {
 					pathname: '/member/redirect-info-view',
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
 						description: t(Translation.REDIRECT_VIEW_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
-				});
+				};
 			}
-			break;
+		// if is not verified
+
+		// if not mentorgroup found
+
 		case UserRole.MENTOR:
+			// if unfinished profile
 			if (
 				(!user.name || !user.imageUrl) &&
 				routeProps.location &&
-				routeProps.location.pathname !== '/member/profile' &&
-				routeProps.location.pathname !== '/member/redirect-info-view'
+				!unfinishedProfileAllowedRoutes.includes(routeProps.location.pathname)
 			) {
-				routeProps.history.push({
+				return {
 					pathname: '/member/redirect-info-view',
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
 						description: t(Translation.REDIRECT_VIEW_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
-				});
+				};
 			}
 
-			break;
+		// if is not verified
+
+		// if no mentorgroup is found
+
 		case UserRole.ADMIN:
 			break;
 		default:
