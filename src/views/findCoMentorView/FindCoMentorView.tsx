@@ -1,6 +1,6 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Container, makeStyles, Divider, List, Button, Card } from '@material-ui/core';
+import { makeStyles, Divider, List, Button, Card } from '@material-ui/core';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import Person from '../../components/person/Person';
