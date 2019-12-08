@@ -91,8 +91,6 @@ export default function Navbar({ user }: HasUserProps) {
 	const routes = getPossibleRoutes(user);
 	const [isDrawerOpen, setIsDrawerOpen] = React.useState<boolean>(false);
 
-	console.log(user.groupId);
-
 	const showDrawer = (open) => (e) => {
 		setIsDrawerOpen(open);
 	};

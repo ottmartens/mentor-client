@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
 	title: {
 		marginTop: '0',
 	},
+	desc: {
+		paddingLeft: '8px',
+		paddingRight: '8px',
+	},
 }));
 
 export default function RedirectInfoView({ location }: RouteProps) {
@@ -54,7 +58,7 @@ export default function RedirectInfoView({ location }: RouteProps) {
 			<img className={classes.image} src="/images/checkmark.svg" />
 			<div className={classes.textArea}>
 				<h1 className={classes.title}>{title}</h1>
-				<Typography variant="body2" color="textSecondary" component="p">
+				<Typography variant="body2" color="textSecondary" component="p" className={classes.desc}>
 					{description}
 				</Typography>
 			</div>

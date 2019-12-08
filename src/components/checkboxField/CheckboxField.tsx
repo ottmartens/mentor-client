@@ -7,7 +7,7 @@ import useTranslator from '../../hooks/useTranslator';
 interface Props {
 	value: boolean;
 	label: string;
-	setValue: (value: string) => void;
+	setValue: (value: boolean) => void;
 	error?: FieldError;
 }
 
@@ -18,18 +18,18 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Field({ value, label, setValue, error }: Props) {
+export default function CheckboxField({ value, label, setValue, error }: Props) {
 	const classes = useStyles();
 	const t = useTranslator();
 	const errorMessage = error ? translateError(error, t) : undefined;
 	return (
 		<div>
-			<FormControlLabel value={value || ''} control={<Checkbox onChange={handleChange} />} label={label} />
+			<FormControlLabel control={<Checkbox checked={value} onChange={handleChange} />} label={label} />
 			<span className={classes.error}>{errorMessage}</span>
 		</div>
 	);
 
 	function handleChange(event) {
-		setValue(event.target.value);
+		setValue(event.target.checked);
 	}
 }

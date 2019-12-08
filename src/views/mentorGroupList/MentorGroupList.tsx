@@ -6,6 +6,7 @@ import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	alignCenter: {
@@ -13,6 +14,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		color: '#2c4d7f',
+	},
+	link: {
+		textDecoration: 'none',
+		color: 'inherit',
 	},
 }));
 
@@ -42,16 +47,27 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 				{data &&
 					data.map(({ mentors, title, id, description }, idx) => {
 						return (
-							<MentorGroupPreview
-								id={id}
-								key={idx}
-								mentors={mentors}
-								groupName={title}
-								bio={description}
-								showGroupName={true}
-								showNames={true}
-								showLongBio={false}
-							/>
+							<Link
+								to={
+									user.groupId && id && user.groupId.toString() == id
+										? '/member/my-mentor-group/'
+										: id
+										? `/member/mentor-group/${id}`
+										: '#'
+								}
+								className={classes.link}
+							>
+								<MentorGroupPreview
+									id={id}
+									key={idx}
+									mentors={mentors}
+									groupName={title}
+									bio={description}
+									showGroupName={true}
+									showNames={true}
+									showLongBio={false}
+								/>
+							</Link>
 						);
 					})}
 			</div>

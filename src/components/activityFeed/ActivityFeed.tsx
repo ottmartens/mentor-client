@@ -1,26 +1,25 @@
 import React from 'react';
-import { makeStyles, ListItem, ListItemText, Card, Divider, List} from '@material-ui/core';
+import { makeStyles, ListItem, ListItemText, Card, Divider, List } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { CheckCircleOutline, ErrorOutline, HelpOutline} from '@material-ui/icons';
+import { CheckCircleOutline, ErrorOutline, HelpOutline } from '@material-ui/icons';
 import classNames from 'classnames';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 
 export interface Activity {
-    ID: number;
-    name: string;
-    points: number;
-    isVerified?: boolean;
-    time: string;
+	ID: number;
+	name: string;
+	points: number;
+	isVerified?: boolean;
+	time: string;
 }
 
 interface Props {
 	activities: Activity[];
-	onlyVerified: boolean;
-    pointsum: number;
+	showOnlyVerifiedActivities?: boolean;
+	pointsum: number;
 	acttotal: number;
 }
-
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -34,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 	listImage: {
 		borderRadius: '50%',
-    },
-    suuredArvud: {
+	},
+	bigNumbers: {
 		color: 'purple',
 		fontSize: '20px',
 		marginRight: '15px',
 	},
-	punktid: {
+	points: {
 		textAlign: 'right',
 	},
 	questionmark: {
@@ -57,73 +56,61 @@ const useStyles = makeStyles((theme) => ({
 		color: 'green',
 		marginRight: '20px',
 		fontSize: '32px',
-    },
-    card: {
+	},
+	card: {
 		padding: '20px',
 		marginBottom: '12px',
 	},
 	alignCenter: {
-        textAlign: 'center',
+		textAlign: 'center',
 	},
-	mittepunktid: {
+	pendingOrRejected: {
 		textAlign: 'right',
 		fontSize: '12px',
 		color: '#707070',
-	}
-}
-	));
+	},
+}));
 
-export default function ActivityFeed({activities, onlyVerified, pointsum, acttotal}: Props){
+export default function ActivityFeed({ activities, showOnlyVerifiedActivities, pointsum, acttotal }: Props) {
 	const classes = useStyles();
 	const t = useTranslator();
 
-    return(
-    <Card className={classNames(classes.card, classes.alignCenter)}>
-				<h4>
-					Grupi tegevusi kokku: <span className={classes.suuredArvud}>{acttotal} </span> Grupi teenitud punktid: <span className={classes.suuredArvud}>{pointsum}</span>
-				</h4>
-				<Divider />
-				<List>
-					{activities.map(({ID, name, points, isVerified, time}) => {
-						return (
+	return (
+		<Card className={classNames(classes.card, classes.alignCenter)}>
+			<h4>
+				{t(Translation.ACTIVITY_ACTIVITIES)}: <span className={classes.bigNumbers}>{acttotal} </span>{' '}
+				{t(Translation.ACTIVITY_POINTS)}: <span className={classes.bigNumbers}>{pointsum}</span>
+			</h4>
+			<Divider />
+			<List>
+				{activities.map(({ ID, name, points, isVerified, time }) => {
+					return (
 						<div key={ID}>
-                            {(!onlyVerified || onlyVerified && isVerified) && (
-							<ListItem>
-								{isVerified === null && (
-									<HelpOutline className={classes.questionmark}>
-									</HelpOutline>
-								)}
-								{isVerified === true && (
-									<CheckCircleOutline className={classes.checkmark}>
-									</CheckCircleOutline>
-								)}
-								{isVerified === false && (
-									<ErrorOutline className={classes.exclamationmark}>
-									</ErrorOutline>
-								)}
-								<Link to={`/member/activity/${ID}`} className={classes.listLink}>
-									<ListItemText primary={name} secondary={time} />
-									{isVerified === true && (
-									<p className={classes.punktid}>
-										<span className={classes.suuredArvud}>{points} p</span>
-									</p>
-									)}
-									{isVerified === false && (
-									<p className={classes.mittepunktid}>
-										{t(Translation.ACTIVITY_REJECTED)}
-									</p>
-									)}
-									{isVerified === null && (
-									<p className={classes.mittepunktid}>
-										{t(Translation.ACTIVITY_PENDING)}
-									</p>
-									)}
-								</Link>
-                            </ListItem>
-                            )}
+							{(!showOnlyVerifiedActivities || (showOnlyVerifiedActivities && isVerified)) && (
+								<ListItem>
+									{isVerified === null && <HelpOutline className={classes.questionmark}></HelpOutline>}
+									{isVerified === true && <CheckCircleOutline className={classes.checkmark}></CheckCircleOutline>}
+									{isVerified === false && <ErrorOutline className={classes.exclamationmark}></ErrorOutline>}
+									<Link to={`/member/completed-activity/${ID}`} className={classes.listLink}>
+										<ListItemText primary={name} secondary={time} />
+										{isVerified === true && (
+											<p className={classes.points}>
+												<span className={classes.bigNumbers}>{points} p</span>
+											</p>
+										)}
+										{isVerified === false && (
+											<p className={classes.pendingOrRejected}>{t(Translation.ACTIVITY_REJECTED)}</p>
+										)}
+										{isVerified === null && (
+											<p className={classes.pendingOrRejected}>{t(Translation.ACTIVITY_PENDING)}</p>
+										)}
+									</Link>
+								</ListItem>
+							)}
 						</div>
-					)})}
-				</List>
-			</Card>
-    )
+					);
+				})}
+			</List>
+		</Card>
+	);
 }

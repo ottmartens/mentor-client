@@ -61,7 +61,7 @@ export default function MentorGroupView({ match, user }: Props) {
 	const { params } = match;
 	const t = useTranslator();
 	const [hasApplied, setHasApplied] = React.useState(false);
-
+	const [alreadyRequested, setAlreadyRequested] = React.useState(false);
 
 	const [queryMentorGroupData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -84,23 +84,30 @@ export default function MentorGroupView({ match, user }: Props) {
 		queryMentorGroupData();
 	}, [called, queryMentorGroupData]);
 
+	React.useEffect(() => {
+		{
+			data ? setAlreadyRequested(data.requests.some((request) => request.userId === user.id)) : console.log('NO DATA');
+		}
+	}, [queryMentorGroupData]);
+
 	if (loading || !data) {
 		return <Loader />;
 	}
 
-	const pointSum = data && data.activities.reduce((total, current) => {
-		return total + current.points
-	}, 0)
+	const pointSum =
+		data &&
+		data.activities.reduce((total, current) => {
+			return total + current.points;
+		}, 0);
 
-	const activityTotal = data && data.activities.length
+	const activityTotal = data && data.activities.length;
 
-	const alreadyRequested = data.requests.some(request => 	request.userId===user.id);
-	const alreadyMember = data.mentees.some(mentee => 	mentee.userId===user.id);
+	const alreadyMember = !!user.groupId;
 
 	return (
 		<>
 			{error && <Notice variant="error" title="Avalduse saatmine ebaõnnestus" message={error} />}
-			{hasApplied && <Notice variant="success" title="Avaldus saadetud" message={error} />}
+			{hasApplied && <Notice variant="success" title="Avaldus saadetud" message="" />}
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
@@ -116,8 +123,6 @@ export default function MentorGroupView({ match, user }: Props) {
 					)}
 				</div>
 
-				
-				
 				{user.role === UserRole.MENTEE && !alreadyMember && (
 					<div className={classes.buttonContainer}>
 						<Button
@@ -127,8 +132,8 @@ export default function MentorGroupView({ match, user }: Props) {
 							onClick={async () => {
 								await requestGroupJoinFn();
 								await queryMentorGroupData();
-								{ !error && 
-									setHasApplied(true);
+								{
+									!error && setHasApplied(true);
 								}
 							}}
 						>
@@ -156,12 +161,12 @@ export default function MentorGroupView({ match, user }: Props) {
 				)}
 				{/* Activity feed */}
 				{activityTotal > 0 && (
-				<ActivityFeed
-				activities = {data.activities}
-				onlyVerified = {true}
-				pointsum = {pointSum}
-				acttotal = {activityTotal}
-				/>
+					<ActivityFeed
+						activities={data.activities}
+						showOnlyVerifiedActivities={true}
+						pointsum={pointSum}
+						acttotal={activityTotal}
+					/>
 				)}
 			</div>
 		</>
