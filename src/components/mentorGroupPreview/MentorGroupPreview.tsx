@@ -1,9 +1,8 @@
 import React from 'react';
-import { makeStyles, Card, CardMedia, CardContent, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
+import { makeStyles, Card, CardContent, Typography } from '@material-ui/core';
 import { BASE_URL } from '../../services/variables';
 import Image from '../image/Image';
+import { HasUserProps } from '../../types';
 
 export interface Mentor {
 	imageUrl: string;
@@ -44,9 +43,6 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 	},
-	noPointer: {
-		cursor: 'default',
-	},
 	image: {
 		display: 'inline-block',
 		width: '100%',
@@ -72,50 +68,45 @@ export default function MentorGroupPreview({
 
 	return (
 		<Card className={classes.container}>
-			<Link
-				to={id ? `/member/mentor-group/${id}` : '#'}
-				className={classNames(classes.link, { [classes.noPointer]: !id })}
-			>
-				<div>
-					{mentors.map(({ imageUrl, name }, idx) => {
-						return (
-							<div key={idx} className={classes.mentor}>
-								<Image
-									className={classes.image}
-									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-								/>
-								{showNames && (
-									<Typography key={idx} gutterBottom variant="body2" component="h6">
-										{name}
-									</Typography>
-								)}
-							</div>
-						);
-					})}
-				</div>
+			<div>
+				{mentors.map(({ imageUrl, name }, idx) => {
+					return (
+						<div key={idx} className={classes.mentor}>
+							<Image
+								className={classes.image}
+								src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+							/>
+							{showNames && (
+								<Typography key={idx} gutterBottom variant="body2" component="h6">
+									{name}
+								</Typography>
+							)}
+						</div>
+					);
+				})}
+			</div>
 
-				<CardContent>
-					{showGroupName && (
-						<Typography gutterBottom variant="h5" component="h2">
-							{groupName}
+			<CardContent>
+				{showGroupName && (
+					<Typography gutterBottom variant="h5" component="h2">
+						{groupName}
+					</Typography>
+				)}
+				{showLongBio && (
+					<div className={classes.longBio}>
+						<Typography variant="body2" color="textSecondary" component="p">
+							{bio}
 						</Typography>
-					)}
-					{showLongBio && (
-						<div className={classes.longBio}>
-							<Typography variant="body2" color="textSecondary" component="p">
-								{bio}
-							</Typography>
-						</div>
-					)}
-					{!showLongBio && (
-						<div className={classes.bio}>
-							<Typography variant="body2" color="textSecondary" component="p">
-								{bio}
-							</Typography>
-						</div>
-					)}
-				</CardContent>
-			</Link>
+					</div>
+				)}
+				{!showLongBio && (
+					<div className={classes.bio}>
+						<Typography variant="body2" color="textSecondary" component="p">
+							{bio}
+						</Typography>
+					</div>
+				)}
+			</CardContent>
 		</Card>
 	);
 }

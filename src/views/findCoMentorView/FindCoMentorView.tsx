@@ -1,7 +1,6 @@
 import React from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { makeStyles, Divider, List, Button, Card } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
 import Person from '../../components/person/Person';
@@ -41,7 +40,6 @@ const useStyles = makeStyles(() => ({
 export default function MentorPairingView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const t = useTranslator();
-	const h = useHistory();
 	const [hasRequested, setHasRequested] = React.useState(false);
 	const [hasAccepted, setHasAccepted] = React.useState<undefined | boolean>(undefined);
 
