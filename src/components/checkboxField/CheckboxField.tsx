@@ -5,7 +5,6 @@ import { FieldError, translateError } from '../../services/validators';
 import useTranslator from '../../hooks/useTranslator';
 
 interface Props {
-	role: string;
 	value: boolean;
 	label: string;
 	setValue: (value: boolean) => void;

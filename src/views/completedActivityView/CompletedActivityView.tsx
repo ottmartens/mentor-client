@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Card, makeStyles, Divider, List, Button, Typography, Dialog, DialogTitle, DialogContent, Input, DialogActions } from '@material-ui/core';
+import {
+	Card,
+	makeStyles,
+	Divider,
+	List,
+	Button,
+	Typography,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	Input,
+	DialogActions,
+} from '@material-ui/core';
 import Person from '../../components/person/Person';
-import { HasUserProps, UserRole } from '../../types';
-//import Loader from '../../components/loader/Loader';
-//import { Link } from 'react-router-dom';
-//import { BASE_URL } from '../../services/variables';
+import { HasUserProps } from '../../types';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
-//import { error } from 'console';
 import Notice from '../../components/notice/Notice';
 import useInput from '../../hooks/useInput';
 import { isSet } from '../../services/validators';
-import { id } from 'date-fns/esm/locale';
 import Loader from '../../components/loader/Loader';
+import Field from '../../components/field/Field';
+import { BASE_URL } from '../../services/variables';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -22,13 +31,13 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '20px',
 	},
 	title: {
-        marginTop: '1em',
+		marginTop: '1em',
 	},
 	buttonContainer: {
 		textAlign: 'center',
 	},
 	container: {
-        marginTop: '1em',
+		marginTop: '1em',
 		textAlign: 'center',
 	},
 	button: { marginBottom: '8px' },
@@ -36,15 +45,15 @@ const useStyles = makeStyles((theme) => ({
 		width: '224px',
 	},
 	image: {
-        borderRadius: '2%',
-        maxWidth: '90%',
-        marginTop: '1em',
-    },
-    imageList: {
-        justifyContent: 'center',
-        marginTop: '1em',
-        marginBottom: '2em',
-    },
+		borderRadius: '2%',
+		maxWidth: '90%',
+		marginTop: '1em',
+	},
+	imageList: {
+		justifyContent: 'center',
+		marginTop: '1em',
+		marginBottom: '2em',
+	},
 	requestButton: {
 		margin: '1em',
 	},
@@ -62,18 +71,14 @@ interface Props extends HasUserProps {
 	};
 }
 
-export default function GradeActivityView({ match, user }: Props) {
+export default function CompletedActivityView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
 	const t = useTranslator();
 
 	const [isVerified, setIsVerified] = React.useState(false);
-
 	const [rejectModalOpen, setRejectModalOpen] = useState(false);
-	const [rejectionReason, setRejectionReason] = useState('');
-
 	const [gradeModalOpen, setGradeModalOpen] = useState(false);
-	const [points, setPoints] = useState(0);
 
 	const [queryActivityData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -83,16 +88,18 @@ export default function GradeActivityView({ match, user }: Props) {
 	});
 
 	const input = {
-		points: useInput({ validators: [isSet], initialValue: 0}),
+		rejectionReason: useInput({ initialValue: '' }),
+		points: useInput({ validators: [isSet], initialValue: 0 }),
 	};
-	
+
 	//accept or reject activity
-	const [verifyActivity, { data: acceptRequestResponse, called: gradeActivityCalled, error }] = useBackend({
+	const [verifyActivity, { error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.VERIFY_ACTIVITY,
-		variables:{
-			rejectionReason: rejectionReason,
-			points: points.value,
+		variables: {
+			rejectionReason: input.rejectionReason.value,
+			points: Number(input.points.value),
+			id: Number(params.id),
 		},
 		authToken: user.token,
 	});
@@ -110,8 +117,16 @@ export default function GradeActivityView({ match, user }: Props) {
 
 	return (
 		<>
-			{error && <Notice variant="error" title="Tegevuse hindamine ebaõnnestus" message={error} />}
-			{isVerified && <Notice variant="success" title="Tegevus hinnatud" message="" />}
+			{error && (
+				<Notice
+					variant="error"
+					title="Tegevuse hindamine ebaõnnestus"
+					message={error}
+				/>
+			)}
+			{isVerified && (
+				<Notice variant="success" title="Tegevus hinnatud" message="" />
+			)}
 			<div className={classes.container}>
 				<Card>
 					{data && data.activity.name && data.groupName && data.activity.time && (
@@ -128,23 +143,39 @@ export default function GradeActivityView({ match, user }: Props) {
 						<div>
 							<h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
 							<List>
-								{data.participants.map(({ imageUrl, name, Id, tagline }, idx) => {
-									return (
-										<div key={idx}>
-											{idx === 0 && <Divider variant="inset" component="li" />}
-											<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={Id} key={idx} />
-											<Divider variant="inset" component="li" />
-										</div>
-									);
-								})}
+								{data.participants.map(
+									({ imageUrl, name, Id, tagline }, idx) => {
+										return (
+											<div key={`${Id}${idx}`}>
+												{idx === 0 && (
+													<Divider variant="inset" component="li" />
+												)}
+												<Person
+													name={name}
+													tagline={tagline}
+													imageUrl={imageUrl}
+													userId={Id}
+												/>
+												<Divider variant="inset" component="li" />
+											</div>
+										);
+									},
+								)}
 							</List>
 						</div>
 					)}
 
 					{data && data.activity.images && data.activity.images.length !== 0 && (
 						<List>
-							{data.activity.images.map(({ imageUrl }) => {
-								return <img className={classes.image} src={imageUrl} alt="Activity image"></img>;
+							{data.activity.images.map((imageUrl, idx) => {
+								return (
+									<img
+										key={`${imageUrl}${idx}`}
+										className={classes.image}
+										src={`${BASE_URL}${imageUrl}`}
+										alt="Activity image"
+									></img>
+								);
 							})}
 						</List>
 					)}
@@ -156,16 +187,21 @@ export default function GradeActivityView({ match, user }: Props) {
 								color="primary"
 								className={classes.requestButton}
 								onClick={
-									data.activity.templateId ? async () => {
-										await verifyActivity({
-										overrideVariables: {
-											accept: true,
-										},
-									});
-									{!error && setIsVerified(true);}
-									await queryActivityData();
-										}
-									: () => {setGradeModalOpen(true)}
+									data.activity.templateId
+										? async () => {
+												await verifyActivity({
+													overrideVariables: {
+														accept: true,
+													},
+												});
+												{
+													!error && setIsVerified(true);
+												}
+												await queryActivityData();
+										  }
+										: () => {
+												setGradeModalOpen(true);
+										  }
 								}
 							>
 								{t(Translation.APPROVE_ACTIVITY)}
@@ -189,16 +225,12 @@ export default function GradeActivityView({ match, user }: Props) {
 				</Card>
 				{rejectModalOpen && (
 					<Dialog open>
-						<DialogTitle id="alert-dialog-slide-title">{t(Translation.REJECT_USER_REASON)}:</DialogTitle>
+						<DialogTitle>{t(Translation.REJECT_USER_REASON)}:</DialogTitle>
 						<DialogContent className={classes.modalContent}>
-							<Input
-								autoFocus
-								multiline
-								fullWidth
-								placeholder={t(Translation.REJECTION_MODAL_MESSAGE)}
-								value={rejectionReason}
-								onChange={(e) => setRejectionReason(e.target.value)}
-							></Input>
+							<Field
+								label={t(Translation.REJECTION_MODAL_MESSAGE)}
+								{...input.rejectionReason}
+							/>
 						</DialogContent>
 						<DialogActions>
 							<Button onClick={() => setRejectModalOpen(false)} color="primary">
@@ -209,7 +241,6 @@ export default function GradeActivityView({ match, user }: Props) {
 									await verifyActivity({
 										overrideVariables: {
 											accept: false,
-											rejectionReason,
 										},
 									});
 									{
@@ -228,15 +259,15 @@ export default function GradeActivityView({ match, user }: Props) {
 				)}
 				{gradeModalOpen && (
 					<Dialog open>
-						<DialogTitle id="alert-dialog-slide-title">{t(Translation.INSERT_POINTS)}:</DialogTitle>
+						<DialogTitle id="alert-dialog-slide-title">
+							{t(Translation.INSERT_POINTS)}:
+						</DialogTitle>
 						<DialogContent className={classes.modalContent}>
-							<Input
-								autoFocus
+							<Field
+								label={t(Translation.POINTS)}
+								{...input.points}
 								type="number"
-								fullWidth
-								value={points}
-								onChange={(e) => setPoints(e.target.value)}
-							></Input>
+							/>
 						</DialogContent>
 						<DialogActions>
 							<Button onClick={() => setGradeModalOpen(false)} color="primary">
@@ -247,7 +278,6 @@ export default function GradeActivityView({ match, user }: Props) {
 									await verifyActivity({
 										overrideVariables: {
 											accept: true,
-											points,
 										},
 									});
 									setGradeModalOpen(false);
