@@ -67,7 +67,7 @@ export default function LandingPageView() {
 		<Container maxWidth="sm" className={classes.container}>
 			<Card className={classes.card}>
 				<div className={classes.logoContainer}>
-					<img className={classes.logo} src="images/logo_valge.webp" alt="MITS LOGO"></img>
+					<img className={classes.logo} src="/images/logo_valge.webp" alt="MITS LOGO"></img>
 				</div>
 				<div className={classes.intro}>
 					<Typography variant="h4">MentorApp</Typography>

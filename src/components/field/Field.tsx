@@ -13,6 +13,8 @@ interface Props {
 	multiline?: boolean;
 	className?: string;
 	disabled?: boolean;
+	name?: string;
+	validate?: () => FieldError | undefined;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -26,16 +28,29 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function Field({ label, type, setValue, value, error, className, multiline, disabled }: Props) {
+export default function Field({
+	label,
+	type,
+	setValue,
+	value,
+	error,
+	className,
+	multiline,
+	disabled,
+	name,
+	validate,
+	...rest
+}: Props) {
 	const classes = useStyles();
 	const t = useTranslator();
 	const errorMessage = error ? translateError(error, t) : undefined;
 	return (
-		<div className={classes.inputWrapper}>
+		<div className={classes.inputWrapper} data-testid="inputWrapper">
 			<TextField
 				disabled={disabled}
 				label={label}
 				type={type}
+				name={name}
 				value={value || ''}
 				onChange={handleChange}
 				margin="normal"
@@ -44,8 +59,11 @@ export default function Field({ label, type, setValue, value, error, className, 
 				className={className}
 				multiline={multiline}
 				rows={multiline ? 8 : undefined}
+				{...rest}
 			/>
-			<span className={classes.error}>{errorMessage}</span>
+			<span className={classes.error} data-testid="inputError">
+				{errorMessage}
+			</span>
 		</div>
 	);
 
