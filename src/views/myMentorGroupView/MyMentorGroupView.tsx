@@ -84,17 +84,12 @@ const useStyles = makeStyles((theme) => ({
 	checkmark: {
 		color: 'green',
 		marginRight: '20px',
-<<<<<<< HEAD
 		fontSize: '32px'
 	},
 	link: {
 		textDecoration: 'none',
 		color: 'inherit',
 	}
-=======
-		fontSize: '32px',
-	},
->>>>>>> 505f2fbf5655c791fe54c268f8ff81e5b2411ba0
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
