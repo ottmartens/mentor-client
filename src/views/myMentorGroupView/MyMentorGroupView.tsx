@@ -5,7 +5,7 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import { Button, Typography, Card, List, Divider, ListItem, ListItemText} from '@material-ui/core';
+import { Button, Typography, Card, List, Divider, ListItem, ListItemText } from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import Person from '../../components/person/Person';
@@ -15,8 +15,6 @@ import classNames from 'classnames';
 import Image from '../../components/image/Image';
 import ActivityFeed from '../../components/activityFeed/ActivityFeed';
 import { Link } from 'react-router-dom';
-
-
 
 const useStyles = makeStyles((theme) => ({
 	smallMargin: {
@@ -76,22 +74,27 @@ const useStyles = makeStyles((theme) => ({
 	questionmark: {
 		marginRight: '20px',
 		fontSize: '32px',
-		color: '#f0c605'
+		color: '#f0c605',
 	},
 	exclamationmark: {
 		color: 'red',
 		marginRight: '20px',
-		fontSize: '32px'
+		fontSize: '32px',
 	},
 	checkmark: {
 		color: 'green',
 		marginRight: '20px',
+<<<<<<< HEAD
 		fontSize: '32px'
 	},
 	link: {
 		textDecoration: 'none',
 		color: 'inherit',
 	}
+=======
+		fontSize: '32px',
+	},
+>>>>>>> 505f2fbf5655c791fe54c268f8ff81e5b2411ba0
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
@@ -131,15 +134,17 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
-	const pointSum = data && data.activities.reduce((total, current) => {
-		return total + current.points
-	}, 0)
+	const pointSum =
+		data &&
+		data.activities.reduce((total, current) => {
+			return total + current.points;
+		}, 0);
 
-	const activityTotal = data && data.activities.length
+	const activityTotal = data && data.activities.length;
 
 	if (!data || loading) {
 		return <Loader />;
-	};
+	}
 
 	return (
 		<>
@@ -284,14 +289,7 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 				</Card>
 			)}
 			{/* Activity Feed*/}
-			{activityTotal > 0 && (
-			<ActivityFeed
-			activities = {data.activities}
-			onlyVerified = {false}
-			pointsum = {pointSum}
-			acttotal = {activityTotal}
-			/>
-			)}
+			{activityTotal > 0 && <ActivityFeed activities={data.activities} pointsum={pointSum} acttotal={activityTotal} />}
 		</>
 	);
 }

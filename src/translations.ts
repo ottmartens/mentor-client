@@ -66,11 +66,15 @@ export enum Translation {
 	PROFILE_STATISTICS = 'PROFILE_STATISTICS',
 	PROFILE_BACHELOR = 'PROFILE_BACHELOR',
 	PROFILE_MASTERS = 'PROFILE_MASTERS',
+
+	/* redirect translations */
 	REDIRECT_ALMOST_DONE = 'REDIRECT_ALMOST_DONE',
-	REDIRECT_ALMOST_DONE_INFO = 'REDIRECT_ALMOST_DONE_INFO',
-	REDIRECT_ADD_IMAGE = 'REDIRECT_ADD_IMAGE',
-	REDIRECT_FILL_PROFILE = 'REDIRECT_FILL_PROFILE',
-	REDIRECT_VIEW_PROFILE_FILL = 'REDIRECT_VIEW_PROFILE_FILL',
+	REDIRECT_PROFILE_FILL = 'REDIRECT_PROFILE_FILL',
+	REDIRECT_FIND_GROUP = 'REDIRECT_FIND_GROUP',
+	REDIRECT_MAKE_GROUP = 'REDIRECT_MAKE_GROUP',
+	REDIRECT_MAKE_GROUP_INFO_MENTOR = 'REDIRECT_MAKE_GROUP_INFO_MENTOR',
+	REDIRECT_FIND_GROUP_INFO_MENTEE = 'REDIRECT_FIND_GROUP_INFO_MENTEE',
+
 	ALREADY_JOINED = 'ALREADY_JOINED',
 	BIO = 'BIO',
 	DESCRIPTION = 'DESCRIPTION',
@@ -80,6 +84,8 @@ export enum Translation {
 	ACTIVITY_PENDING = 'ACTIVITY_PENDING',
 	ADMIN_UNVERIFIED_USERS = 'ADMIN_UNVERIFIED_USERS',
 	ADMIN_UNVERIFIED_ACTIVITIES = 'ADMIN_UNVERIFIED_ACTIVITIES',
+	ADMIN_MENTORS_CAN_REGISTER = 'ADMIN_MENTORS_CAN_REGISTER',
+	ADMIN_MENTEES_CAN_REGISTER = 'ADMIN_MENTEES_CAN_REGISTER',
 	NAMELESS_GROUP = 'NAMELESS_GROUP',
 	DELETE_USER = 'DELETE_USER',
 	VERIFY_USER = 'VERIFY_USER',
@@ -91,13 +97,13 @@ export enum Translation {
 	VALIDATOR_NOT_EMAIL = 'VALIDATOR_NOT_EMAIL',
 	VALIDATOR_PASSWORD_NOT_EQUAL = 'VALIDATOR_PASSWORD_NOT_EQUAL',
 	GOT_IT = 'GOT_IT',
-	ADMIN_MENTORS_CAN_REGISTER = 'ADMIN_MENTORS_CAN_REGISTER',
-	ADMIN_MENTEES_CAN_REGISTER = 'ADMIN_MENTEES_CAN_REGISTER',
 	ACTIVITY_IS_REJECTED = 'ACTIVITY_IS_REJECTED',
 	INSERT_POINTS = 'INSERT_POINTS',
 	REGISTER_IS_DISABLED = 'REGISTER_IS_DISABLED',
 	REGISTER_MENTORS_ONLY = 'REGISTER_MENTORS_ONLY',
 	REGISTER_MENTEES_ONLY = 'REGISTER_MENTEES_ONLY',
+	ACTIVITY_ACTIVITIES = 'ACTIVITY_ACTIVITIES',
+	ACTIVITY_POINTS = 'ACTIVITY_POINTS',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -170,9 +176,12 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		PROFILE_BACHELOR: 'Bak',
 		PROFILE_MASTERS: 'Mag',
 		REDIRECT_ALMOST_DONE: 'Peaaegu valmis!',
-		REDIRECT_ALMOST_DONE_INFO: 'Palume sul veel ära teha need asjad, et saaksid meie rakendust kasutama hakata:',
-		REDIRECT_ADD_IMAGE: '',
-		REDIRECT_FILL_PROFILE: '',
+		REDIRECT_FIND_GROUP: 'Aeg omale grupp leida!',
+		REDIRECT_MAKE_GROUP: 'Aeg mentorgrupp moodustada!',
+		REDIRECT_MAKE_GROUP_INFO_MENTOR:
+			'Saada taotlus teisele mentorile, et temaga koos grupp moodustada. Taotlusi saab küll mitu saata aga esimene kes vastu võtab, saab sinu paariliseks.',
+		REDIRECT_FIND_GROUP_INFO_MENTEE:
+			'Leia omale meelepärane grupp ning kandideeri sellesse nende lehelt. Grupi liitumise taotlusi saab küll mitu saata aga sind lisatakse esimesse gruppi kes su vastu võtab.',
 		ALREADY_JOINED: 'Juba liitunud',
 		DESCRIPTION: 'Kirjeldus',
 		COMPLETE_ACTIVITY_TIME: 'Toimumise aeg',
@@ -193,13 +202,15 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		VALIDATOR_NOT_EMAIL: 'Sisestus pole email',
 		VALIDATOR_PASSWORD_NOT_EQUAL: 'Paroolid on erinevad',
 		GOT_IT: 'Sain aru',
-		REDIRECT_VIEW_PROFILE_FILL:
+		REDIRECT_PROFILE_FILL:
 			'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täidke oma profiil ära.',
 		ACTIVITY_IS_REJECTED: 'Tegevus on tagasi lükatud',
 		INSERT_POINTS: 'Sisesta punktide arv',
 		REGISTER_IS_DISABLED: 'Registreerimine on suletud',
 		REGISTER_MENTORS_ONLY: 'Mentoritele',
 		REGISTER_MENTEES_ONLY: 'Menteedele',
+		ACTIVITY_ACTIVITIES: 'Grupi tegevusi kokku',
+		ACTIVITY_POINTS: 'Grupi teenitud punktid',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -270,9 +281,12 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		PROFILE_BACHELOR: 'BSc',
 		PROFILE_MASTERS: 'MSc',
 		REDIRECT_ALMOST_DONE: 'Almost done!',
-		REDIRECT_ALMOST_DONE_INFO: '',
-		REDIRECT_ADD_IMAGE: '',
-		REDIRECT_FILL_PROFILE: '',
+		REDIRECT_FIND_GROUP: 'Time to find a group!',
+		REDIRECT_MAKE_GROUP: 'Time to create the mentorgroup!',
+		REDIRECT_MAKE_GROUP_INFO_MENTOR:
+			'Send a request to another mentor, to form a mentorgroup with him/her. You can send multiple requests but the first one to accept will be your partner.',
+		REDIRECT_FIND_GROUP_INFO_MENTEE:
+			'Find a group you like and request to join them on their page. You can send multiple join requests but the first ones to accept you, will be your group.',
 		ALREADY_JOINED: 'Already joined',
 		DESCRIPTION: 'Description',
 		COMPLETE_ACTIVITY_TIME: 'Completion time',
@@ -293,12 +307,14 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		VALIDATOR_NOT_EMAIL: 'Invalid email address',
 		VALIDATOR_PASSWORD_NOT_EQUAL: "Passwords don't match",
 		GOT_IT: 'Got it',
-		REDIRECT_VIEW_PROFILE_FILL:
+		REDIRECT_PROFILE_FILL:
 			'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
 		ACTIVITY_IS_REJECTED: 'Activity is rejected',
 		INSERT_POINTS: 'Insert the number of points',
 		REGISTER_IS_DISABLED: 'Registration is not available',
 		REGISTER_MENTORS_ONLY: 'For mentors',
 		REGISTER_MENTEES_ONLY: 'For mentees',
+		ACTIVITY_ACTIVITIES: 'Total completed activities',
+		ACTIVITY_POINTS: 'Total points',
 	},
 };

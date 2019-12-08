@@ -1,5 +1,14 @@
 import React /*, { useEffect }*/ from 'react';
-import { Container, List, ListItem, Divider, Card, ListItemText, CardContent, Button } from '@material-ui/core';
+import {
+	Container,
+	List,
+	ListItem,
+	Divider,
+	Card,
+	ListItemText,
+	CardContent,
+	Button,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
 import Loader from '../../components/loader/Loader';
@@ -105,7 +114,11 @@ export default function AdminView({ user }: HasUserProps) {
 	// requests
 	const [
 		queryDeadlineData,
-		{ data: currentDeadlineData, loading: currentDeadlineLoading, called: currentDeadlineCalled },
+		{
+			data: currentDeadlineData,
+			loading: currentDeadlineLoading,
+			called: currentDeadlineCalled,
+		},
 	] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.SETTINGS,
@@ -115,10 +128,16 @@ export default function AdminView({ user }: HasUserProps) {
 	//input
 	const input = {
 		MENTEES_CAN_REGISTER: useInput({
-			initialValue: currentDeadlineData && currentDeadlineData.MENTEES_CAN_REGISTER ? true : false,
+			initialValue:
+				currentDeadlineData && currentDeadlineData.MENTEES_CAN_REGISTER
+					? true
+					: false,
 		}),
 		MENTORS_CAN_REGISTER: useInput({
-			initialValue: currentDeadlineData && currentDeadlineData.MENTORS_CAN_REGISTER ? true : false,
+			initialValue:
+				currentDeadlineData && currentDeadlineData.MENTORS_CAN_REGISTER
+					? true
+					: false,
 		}),
 	};
 
@@ -131,7 +150,10 @@ export default function AdminView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
-	const [queryAllUsers, { data: usersData, loading: usersLoading, called: usersCalled }] = useBackend({
+	const [
+		queryAllUsers,
+		{ data: usersData, loading: usersLoading, called: usersCalled },
+	] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.ALL_USERS,
 		authToken: user.token,
@@ -139,7 +161,7 @@ export default function AdminView({ user }: HasUserProps) {
 
 	const [changeDeadlinesFn, { error }] = useBackend({
 		requestMethod: RequestMethod.POST,
-		endPoint: EndPoint.SETTINGS,
+		endPoint: EndPoint.SET_SETTINGS,
 		variables: {
 			MENTORS_CAN_REGISTER: input.MENTORS_CAN_REGISTER.value,
 			MENTEES_CAN_REGISTER: input.MENTEES_CAN_REGISTER.value,
@@ -184,13 +206,22 @@ export default function AdminView({ user }: HasUserProps) {
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
-			{error && <Notice variant="error" title="Tähtaegade muutmine ebaõnnestus" message={error} />}
-			{hasChanged && <Notice variant="success" title="Tähtajad muudetud" message="" />}
+			{error && (
+				<Notice
+					variant="error"
+					title="Tähtaegade muutmine ebaõnnestus"
+					message={error}
+				/>
+			)}
+			{hasChanged && (
+				<Notice variant="success" title="Tähtajad muudetud" message="" />
+			)}
 			<h1 className={classes.title}>{t(Translation.ADMIN_OVERVIEW)}</h1>
 			<Card className={classes.menteeCard}>
 				<h2 className={classes.cardTitle}>{t(Translation.GRADE_ACTIVITIES)}</h2>
 				<h3>
-					{t(Translation.ADMIN_UNVERIFIED_ACTIVITIES)}: <span className={classes.suuredArvud}>{activitytotal}</span>
+					{t(Translation.ADMIN_UNVERIFIED_ACTIVITIES)}:{' '}
+					<span className={classes.suuredArvud}>{activitytotal}</span>
 				</h3>
 
 				{/* Unverified activities */}
@@ -201,7 +232,10 @@ export default function AdminView({ user }: HasUserProps) {
 								<div key={ID}>
 									<ListItem className={classes.listitem}>
 										<div>
-											<Link to={ID ? `/admin/grade-activity/${ID}` : '#'} className={classes.link}>
+											<Link
+												to={ID ? `/member/completed-activity/${ID}` : '#'}
+												className={classes.link}
+											>
 												<ListItemText
 													className={classes.personName}
 													primary={name}
@@ -222,14 +256,20 @@ export default function AdminView({ user }: HasUserProps) {
 				<Card className={classes.menteeCard}>
 					<h2 className={classes.cardTitle}>{t(Translation.VERIFY_USERS)}</h2>
 					<h3>
-						{t(Translation.ADMIN_UNVERIFIED_USERS)}: <span className={classes.suuredArvud}>{usertotal}</span>
+						{t(Translation.ADMIN_UNVERIFIED_USERS)}:{' '}
+						<span className={classes.suuredArvud}>{usertotal}</span>
 					</h3>
 					<List>
 						{usersData &&
 							usersData.map(({ ID, name, tagline, imageurl }) => {
 								return (
 									<div key={ID}>
-										<Person name={name} tagline={tagline} imageUrl={imageurl} userId={ID}></Person>
+										<Person
+											name={name}
+											tagline={tagline}
+											imageUrl={imageurl}
+											userId={ID}
+										></Person>
 									</div>
 								);
 							})}
@@ -251,8 +291,14 @@ export default function AdminView({ user }: HasUserProps) {
 						>
 							<h1>{t(Translation.DEADLINES)}</h1>
 							<div className={classes.buttons}>
-								<CheckboxField label={t(Translation.ADMIN_MENTEES_CAN_REGISTER)} {...input.MENTEES_CAN_REGISTER} />
-								<CheckboxField label={t(Translation.ADMIN_MENTORS_CAN_REGISTER)} {...input.MENTORS_CAN_REGISTER} />
+								<CheckboxField
+									label={t(Translation.ADMIN_MENTEES_CAN_REGISTER)}
+									{...input.MENTEES_CAN_REGISTER}
+								/>
+								<CheckboxField
+									label={t(Translation.ADMIN_MENTORS_CAN_REGISTER)}
+									{...input.MENTORS_CAN_REGISTER}
+								/>
 							</div>
 							<Button type="submit" variant="contained" color="primary">
 								{t(Translation.CHANGE)}

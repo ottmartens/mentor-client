@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import './themes/main.scss';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import LoginView from './views/login/LoginView';
 import RegisterView from './views/register/RegisterView';
 import MentorGroupListView from './views/mentorGroupList/MentorGroupList';
@@ -17,11 +17,11 @@ import FindCoMentorView from './views/findCoMentorView/FindCoMentorView';
 import { UserContext, UserContextUser } from './contexts/UserContext';
 import MyMentorGroupView from './views/myMentorGroupView/MyMentorGroupView';
 import AdminView from './views/adminView/AdminView';
-import GradeActivityView from './views/gradeActivityView/GradeActivityView';
 import MentorActivitiesView from './views/mentorActivities/MentorActivitiesView';
 import RedirectInfoView from './views/redirectInfoView/RedirectInfoView';
 import CompleteActivityView from './views/completeActivity/CompleteActivityView';
 import { PublicRoute } from './components/publicRoute/PublicRoute';
+import CompletedActivityView from './views/completedActivityView/CompletedActivityView';
 
 // Or Create your Own theme:
 const theme = createMuiTheme({
@@ -55,10 +55,10 @@ function Root() {
 						<ProtectedRoute exact path="/member/find-co-mentor" component={FindCoMentorView} />
 						<ProtectedRoute exact path="/member/user/:id" component={UserView} />
 						<ProtectedRoute exact path="/member/activities" component={MentorActivitiesView} />
+						<ProtectedRoute exact path="/member/completed-activity/:id" component={CompletedActivityView} />
 						<ProtectedRoute exact path="/member/redirect-info-view" component={RedirectInfoView} />
 						<ProtectedRoute exact path="/member/complete-activity/:id" component={CompleteActivityView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
-						<ProtectedRoute exact path="/admin/grade-activity/:id" component={GradeActivityView} />
 						<ProtectedRoute exact path="/admin/main" component={AdminView} />
 					</Switch>
 				</Router>

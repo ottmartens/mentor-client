@@ -75,50 +75,90 @@ function redirectToSteps(
 	t: (t: Translation) => string,
 ) {
 	const unfinishedProfileAllowedRoutes = ['/logout', '/member/profile', '/member/redirect-info-view'];
-	const noGroupMenteeAllowedRoutes = [];
-	const noGroupMentorAllowedRoutes = [];
+	const noGroupMenteeAllowedRoutes = ['/member/mentor-group-list', '/member/mentor-group/:id', '/member/user/:id'];
+	const noGroupMentorAllowedRoutes = [
+		'/member/find-co-mentor',
+		'/member/mentor-group-list',
+		'/member/mentor-group/:id',
+		'/member/user/:id',
+	];
 	switch (user.role) {
+		/* MENTEE */
 		case UserRole.MENTEE:
 			// if unfinished profile
 			if (
 				(!user.name || !user.imageUrl) &&
-				routeProps.location &&
-				!unfinishedProfileAllowedRoutes.includes(routeProps.location.pathname)
+				routeProps.match &&
+				!unfinishedProfileAllowedRoutes.includes(routeProps.match.path)
 			) {
 				return {
 					pathname: '/member/redirect-info-view',
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
-						description: t(Translation.REDIRECT_VIEW_PROFILE_FILL),
+						description: t(Translation.REDIRECT_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
 				};
 			}
-		// if is not verified
+			// if is not verified
+			// TODO
 
-		// if not mentorgroup found
+			// if not mentorgroup found
+			if (
+				!user.groupId &&
+				routeProps.match &&
+				![...unfinishedProfileAllowedRoutes, ...noGroupMenteeAllowedRoutes].includes(routeProps.match.path)
+			) {
+				console.log(routeProps);
 
+				return {
+					pathname: '/member/redirect-info-view',
+					state: {
+						title: t(Translation.REDIRECT_FIND_GROUP),
+						description: t(Translation.REDIRECT_FIND_GROUP_INFO_MENTEE),
+						urlToRedirect: '/member/mentor-group-list',
+					},
+				};
+			}
+
+		/* MENTOR */
 		case UserRole.MENTOR:
 			// if unfinished profile
 			if (
 				(!user.name || !user.imageUrl) &&
-				routeProps.location &&
-				!unfinishedProfileAllowedRoutes.includes(routeProps.location.pathname)
+				routeProps.match &&
+				!unfinishedProfileAllowedRoutes.includes(routeProps.match.path)
 			) {
 				return {
 					pathname: '/member/redirect-info-view',
 					state: {
 						title: t(Translation.REDIRECT_ALMOST_DONE),
-						description: t(Translation.REDIRECT_VIEW_PROFILE_FILL),
+						description: t(Translation.REDIRECT_PROFILE_FILL),
 						urlToRedirect: '/member/profile',
 					},
 				};
 			}
 
-		// if is not verified
+			// if is not verified
+			// TODO
 
-		// if no mentorgroup is found
+			// if no mentorgroup is found
+			if (
+				!user.groupId &&
+				routeProps.match &&
+				![...unfinishedProfileAllowedRoutes, ...noGroupMentorAllowedRoutes].includes(routeProps.match.path)
+			) {
+				return {
+					pathname: '/member/redirect-info-view',
+					state: {
+						title: t(Translation.REDIRECT_MAKE_GROUP),
+						description: t(Translation.REDIRECT_MAKE_GROUP_INFO_MENTOR),
+						urlToRedirect: '/member/find-co-mentor',
+					},
+				};
+			}
 
+		/* ADMIN */
 		case UserRole.ADMIN:
 			break;
 		default:

@@ -29,6 +29,7 @@ export enum EndPoint {
 	UNVERIFIED_ACTIVITIES = '/unverified-activities',
 	VERIFY_ACTIVITY = '/activity/verify',
 	SETTINGS = '/global-settings',
+	SET_SETTINGS = '/set-global-settings',
 	ALL_USERS = '/all-users',
 	GET_ACTIVITIES = '/template-activities',
 	SELF_DELETE = '/user',
