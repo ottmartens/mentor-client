@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React/*, { useEffect }*/ from 'react';
 import {
 	Container,
 	List,
@@ -8,7 +8,6 @@ import {
 	ListItemText,
 	CardContent,
 	FormGroup,
-	Button,
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
@@ -22,7 +21,6 @@ import Person from '../../components/person/Person';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import { Link } from 'react-router-dom';
 import Notice from '../../components/notice/Notice';
-import { SentimentSatisfiedSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -136,7 +134,7 @@ export default function AdminView({ user }: HasUserProps) {
 		authToken: user.token,
 	});
 
-	const [changeDeadlinesFn, { called, error }] = useBackend({
+	const [changeDeadlinesFn, { error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.SETTINGS,
 		variables: {
@@ -145,11 +143,6 @@ export default function AdminView({ user }: HasUserProps) {
 		},
 		authToken: user.token,
 	});
-
-  const setStates = () => {
-    setState({ ...state, ['mentor']: currentDeadlineData ? currentDeadlineData.MENTORS_CAN_REGISTER : false});
-    setState({ ...state, ['mentee']: currentDeadlineData ? currentDeadlineData.MENTEES_CAN_REGISTER : false});
-  }
 
   React.useEffect(() => {
 		if (activityCalled) {
@@ -171,7 +164,6 @@ export default function AdminView({ user }: HasUserProps) {
 			return;
 		}
     queryDeadlineData();
-    setStates();
 	}, [currentDeadlineCalled, queryDeadlineData]);
 
 	if (
