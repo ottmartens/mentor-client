@@ -202,7 +202,7 @@ export default function UserView({ match, user }: Props) {
 									variant="contained"
 									color="secondary"
 								>
-									{t(Translation.REJECT_USER)}
+									{t(Translation.REJECT)}
 								</Button>
 							</DialogActions>
 						</Dialog>

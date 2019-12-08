@@ -72,6 +72,9 @@ export default function GradeActivityView({ match, user }: Props) {
 	const [rejectModalOpen, setRejectModalOpen] = useState(false);
 	const [rejectionReason, setRejectionReason] = useState('');
 
+	const [gradeModalOpen, setGradeModalOpen] = useState(false);
+	const [points, setPoints] = useState(0);
+
 	const [queryActivityData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.ACTIVITIES,
@@ -88,8 +91,8 @@ export default function GradeActivityView({ match, user }: Props) {
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.VERIFY_ACTIVITY,
 		variables:{
-			//rejectionReason: rejectionReason.value,
-			//points: input.points.value,
+			rejectionReason: rejectionReason,
+			points: points.value,
 		},
 		authToken: user.token,
 	});
@@ -104,115 +107,164 @@ export default function GradeActivityView({ match, user }: Props) {
 	if (loading || !data) {
 		return <Loader />;
 	}
+
 	return (
 		<>
 			{error && <Notice variant="error" title="Tegevuse hindamine ebaõnnestus" message={error} />}
-			{isVerified && <Notice variant="success" title="Tegevus hinnatud" message=''/>}
+			{isVerified && <Notice variant="success" title="Tegevus hinnatud" message="" />}
 			<div className={classes.container}>
-                <Card>
-					{data && data.name && data.time && (
+				<Card>
+					{data && data.activity.name && data.groupName && data.activity.time && (
 						<div>
-                            <Typography variant="h3" className={classes.title}>
-						        {data.name}
-                            </Typography>
-                            <Typography variant="h6">
-                                {data.time}
-                            </Typography>
-                        </div>
-                    )}
-                    
-				{data && data.participants && data.participants.length !== 0 && (
-					<div>
-                        <h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
-			    		<List>
-							{data.participants.map(({ imageUrl, name, Id, tagline }, idx) => {
-								return (
-									<div key={idx}>
-										{idx === 0 && <Divider variant="inset" component="li" />}
-										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={Id} key={idx} />
-										<Divider variant="inset" component="li" />
-									</div>
-								);
+							<Typography variant="h3" className={classes.title}>
+								{data.activity.name}
+							</Typography>
+							<Typography variant="h5">{data.groupName}</Typography>
+							<Typography variant="h6">{data.activity.time}</Typography>
+						</div>
+					)}
+
+					{data && data.participants && data.participants.length !== 0 && (
+						<div>
+							<h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
+							<List>
+								{data.participants.map(({ imageUrl, name, Id, tagline }, idx) => {
+									return (
+										<div key={idx}>
+											{idx === 0 && <Divider variant="inset" component="li" />}
+											<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={Id} key={idx} />
+											<Divider variant="inset" component="li" />
+										</div>
+									);
+								})}
+							</List>
+						</div>
+					)}
+
+					{data && data.activity.images && data.activity.images.length !== 0 && (
+						<List>
+							{data.activity.images.map(({ imageUrl }) => {
+								return <img className={classes.image} src={imageUrl} alt="Activity image"></img>;
 							})}
-                		</List>
-						</div>)}
-                        
-                {data && data.images && data.images.length !== 0 && (
-                    <List>
-                        {data.images.map(({imageUrl}) => {
-                            return (
-                                <img className={classes.image} src={imageUrl} alt="Activity image"></img>
-                            );}
-                        )}
-                    </List>
-							)}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.requestButton}
-                        onClick={async () => {
-                            await verifyActivity({
-                                overrideVariables: {
-                                    accept: true,
-                                },
-                            });
-							await queryActivityData();
-							{ !error &&
-								setIsVerified(true);
-							}
-                        }}
-                    >
-                        {t(Translation.APPROVE_ACTIVITY)}
-                    </Button>
-                    {'  '}
-					{data && data.isVerified === false ? (
-						<span>{t(Translation.ACTIVITY_IS_REJECTED)}</span>
-					) : (
-						<Button
-							variant="contained"
-							color="primary"
-							className={classes.requestButton}
-							onClick={() => {
-								setRejectModalOpen(true);
-							}}
-						>
-							{t(Translation.DECLINE_ACTIVITY)}
-						</Button>
+						</List>
 					)}
-                </Card>    
-				{rejectModalOpen && (
-						<Dialog open>
-							<DialogTitle id="alert-dialog-slide-title">{t(Translation.REJECT_USER_REASON)}:</DialogTitle>
-							<DialogContent className={classes.modalContent}>
-								<Input autoFocus multiline fullWidth placeholder={t(Translation.REJECTION_MODAL_MESSAGE)} value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)}></Input>
-							</DialogContent>
-							<DialogActions>
-								<Button onClick={() => setRejectModalOpen(false)} color="primary">
-									{t(Translation.CANCEL)}
-								</Button>
-								<Button
-									onClick={async () => {
+
+					{data && !data.activity.isVerified && (
+						<div>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classes.requestButton}
+								onClick={
+									data.activity.templateId ? async () => {
 										await verifyActivity({
-											overrideVariables: {
-												accept: false,
-												rejectionReason,
-											},
-										});
-										setRejectModalOpen(false);
-										await queryActivityData();
-										{ !error &&
-											setIsVerified(true);
+										overrideVariables: {
+											accept: true,
+										},
+									});
+									{!error && setIsVerified(true);}
+									await queryActivityData();
 										}
-									}}
+									: () => {setGradeModalOpen(true)}
+								}
+							>
+								{t(Translation.APPROVE_ACTIVITY)}
+							</Button>
+							{data && data.activity.isVerified === false ? (
+								<span>{t(Translation.ACTIVITY_IS_REJECTED)}</span>
+							) : (
+								<Button
 									variant="contained"
-									color="secondary"
+									color="primary"
+									className={classes.requestButton}
+									onClick={() => {
+										setRejectModalOpen(true);
+									}}
 								>
-									{t(Translation.REJECT_USER)}
+									{t(Translation.DECLINE_ACTIVITY)}
 								</Button>
-							</DialogActions>
-						</Dialog>
+							)}
+						</div>
 					)}
-            </div>
+				</Card>
+				{rejectModalOpen && (
+					<Dialog open>
+						<DialogTitle id="alert-dialog-slide-title">{t(Translation.REJECT_USER_REASON)}:</DialogTitle>
+						<DialogContent className={classes.modalContent}>
+							<Input
+								autoFocus
+								multiline
+								fullWidth
+								placeholder={t(Translation.REJECTION_MODAL_MESSAGE)}
+								value={rejectionReason}
+								onChange={(e) => setRejectionReason(e.target.value)}
+							></Input>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={() => setRejectModalOpen(false)} color="primary">
+								{t(Translation.CANCEL)}
+							</Button>
+							<Button
+								onClick={async () => {
+									await verifyActivity({
+										overrideVariables: {
+											accept: false,
+											rejectionReason,
+										},
+									});
+									{
+										!error && setIsVerified(true);
+									}
+									setRejectModalOpen(false);
+									await queryActivityData();
+								}}
+								variant="contained"
+								color="secondary"
+							>
+								{t(Translation.DECLINE_ACTIVITY)}
+							</Button>
+						</DialogActions>
+					</Dialog>
+				)}
+				{gradeModalOpen && (
+					<Dialog open>
+						<DialogTitle id="alert-dialog-slide-title">{t(Translation.INSERT_POINTS)}:</DialogTitle>
+						<DialogContent className={classes.modalContent}>
+							<Input
+								autoFocus
+								type="number"
+								fullWidth
+								value={points}
+								onChange={(e) => setPoints(e.target.value)}
+							></Input>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={() => setGradeModalOpen(false)} color="primary">
+								{t(Translation.CANCEL)}
+							</Button>
+							<Button
+								onClick={async () => {
+									await verifyActivity({
+										overrideVariables: {
+											accept: true,
+											points,
+										},
+									});
+									setGradeModalOpen(false);
+									await queryActivityData();
+									{
+										!error && setIsVerified(true);
+									}
+								}}
+								variant="contained"
+								color="secondary"
+							>
+								{t(Translation.APPROVE_USER)}
+							</Button>
+						</DialogActions>
+					</Dialog>
+				)}
+			</div>
 		</>
 	);
 }
