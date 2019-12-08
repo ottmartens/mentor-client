@@ -116,6 +116,7 @@ export default function MentorGroupView({ match, user }: Props) {
 							showNames={true}
 							showGroupName={false}
 							showLongBio={true}
+							linkMentors={true}
 						/>
 					)}
 				</div>
