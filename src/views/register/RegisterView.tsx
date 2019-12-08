@@ -12,6 +12,16 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import { returnRedirectPath } from '../login/LoginView';
 import { Redirect } from 'react-router';
+import Loader from '../../components/loader/Loader';
+
+enum TranslateOption {
+	MENTEES_CAN_REGISTER = 'MENTEE',
+	MENTORS_CAN_REGISTER = 'MENTOR',
+}
+interface Option {
+	value: string;
+	label: string;
+}
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -42,21 +52,38 @@ export default function RegisterView() {
 	// state
 	const [willRedirect, setWillRedirect] = React.useState();
 	const [userRole, setUserRole] = React.useState();
+	const [radioButtonOptions, setRadioButtonOptions] = React.useState<Option[]>([] as Option[]);
 
 	// translator
 	const t = useTranslator();
 
-	// input options
-	const radioButtonOptions = [
-		{ value: 'MENTOR', label: 'Mentor' },
-		{ value: 'MENTEE', label: 'Mentee' },
-	];
+	const [
+		queryDeadlineData,
+		{ data: registerDeadlinesData, loading: registerDeadlinesLoading, called: registerDeadlinesCalled },
+	] = useBackend({
+		requestMethod: RequestMethod.GET,
+		endPoint: EndPoint.SETTINGS,
+	});
+
+	React.useEffect(() => {
+		if (registerDeadlinesCalled) {
+			return;
+		}
+		queryDeadlineData();
+	}, [registerDeadlinesCalled, queryDeadlineData]);
+
+	React.useEffect(() => {
+		if (!registerDeadlinesData || !registerDeadlinesCalled) {
+			return;
+		}
+		setRadioButtonOptions(formatOptions(registerDeadlinesData));
+	}, [registerDeadlinesData, setRadioButtonOptions]);
 
 	// inputs
 	const input: { [s: string]: UseInput } = {
 		email: useInput({ validators: [isSet, isEmail] }),
 		password: useInput({ validators: [isSet] }),
-		role: useInput({ initialValue: radioButtonOptions[0].value }),
+		role: useInput({ initialValue: radioButtonOptions && radioButtonOptions[0] && radioButtonOptions[0].value }),
 	};
 	const repeatPassword = useInput({ validators: [isSet, isPasswordEqual(input.password.value)] });
 
@@ -85,6 +112,12 @@ export default function RegisterView() {
 		return <Redirect to={returnRedirectPath(userRole)} />;
 	}
 
+	if (registerDeadlinesLoading || !registerDeadlinesData) {
+		return <Loader />;
+	}
+
+	const isRegisterEnabled = radioButtonOptions && radioButtonOptions.length > 0;
+
 	return (
 		<Container className={classes.container} maxWidth="sm">
 			{error && <Notice variant="error" title={t(Translation.REGISTRATION_ERROR)} message={error} />}
@@ -101,17 +134,27 @@ export default function RegisterView() {
 						className={classes.form}
 					>
 						<h2>{t(Translation.REGISTRATION)}</h2>
+						{renderOptions()}
 						<div>
-							<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={false} data-testid="role"/>
+							<Field {...input.email} label="E-mail" type="text" disabled={!isRegisterEnabled} data-testid="email" />
 						</div>
 						<div>
-							<Field {...input.email} label="E-mail" type="text" data-testid="email" />
+							<Field
+								{...input.password}
+								label={t(Translation.PASSWORD)}
+								type="password"
+								disabled={!isRegisterEnabled}
+								data-testid="password"
+							/>
 						</div>
 						<div>
-							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" data-testid="password" />
-						</div>
-						<div>
-							<Field {...repeatPassword} label={t(Translation.REPEAT_PASSWORD)} type="password" data-testid="confirmation-password" />
+							<Field
+								{...repeatPassword}
+								label={t(Translation.REPEAT_PASSWORD)}
+								type="password"
+								disabled={!isRegisterEnabled}
+								data-testid="confirmation password"
+							/>
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
 							{t(Translation.YES_ACCOUNT)}{' '}
@@ -120,7 +163,7 @@ export default function RegisterView() {
 							</Link>
 						</Typography>
 						<div className={classes.button}>
-							<Button type="submit" variant="contained" color="primary">
+							<Button type="submit" variant="contained" color="primary" disabled={!isRegisterEnabled}>
 								{t(Translation.REGISTER)}
 							</Button>
 						</div>
@@ -129,4 +172,44 @@ export default function RegisterView() {
 			</Card>
 		</Container>
 	);
+
+	function formatOptions(data: { MENTEES_CAN_REGISTER: boolean; MENTORS_CAN_REGISTER: boolean }): Option[] {
+		function capitalize(string: string) {
+			return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+		}
+
+		return Object.entries(data)
+			.filter(([_, value]) => value)
+			.map(([key, _]) => {
+				return { value: TranslateOption[key], label: capitalize(TranslateOption[key]) };
+			});
+	}
+
+	function renderOptions() {
+		if (radioButtonOptions.length === 0) {
+			return <div>{t(Translation.REGISTER_IS_DISABLED)}</div>;
+		}
+
+		if (radioButtonOptions.length === 1) {
+			return (
+				<div>
+					{radioButtonOptions[0].value === 'MENTEE'
+						? t(Translation.REGISTER_MENTEES_ONLY)
+						: t(Translation.REGISTER_MENTORS_ONLY)}
+				</div>
+			);
+		}
+
+		if (radioButtonOptions.length >= 2) {
+			return (
+				<div>
+					{radioButtonOptions.length > 0 && (
+						<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={false} />
+					)}
+				</div>
+			);
+		}
+
+		return null;
+	}
 }
