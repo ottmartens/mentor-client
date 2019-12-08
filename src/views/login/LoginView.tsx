@@ -10,7 +10,8 @@ import { UserContext } from '../../contexts/UserContext';
 import { setUserToken } from '../../services/auth';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
-import useRouter from '../../hooks/useRouter';
+import { UserRole } from '../../types';
+import assertNever from '../../services/assertNever';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -35,11 +36,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginView() {
+	const [willRedirect, setRedirect] = React.useState(false);
 	// translations
 	const t = useTranslator();
-
-	// react router
-	const router = useRouter();
 
 	// css classes
 	const classes = useStyles();
@@ -47,6 +46,7 @@ export default function LoginView() {
 	// context
 	const userContext = React.useContext(UserContext);
 	const setUser = userContext && userContext.setUser;
+	const user = userContext && userContext.user;
 
 	// inputs
 	const input: { [s: string]: UseInput } = {
@@ -71,8 +71,12 @@ export default function LoginView() {
 		}
 		setUserToken(data.token);
 		setUser(data);
-		router.push('/member/mentor-group-list');
+		setRedirect(true);
 	}, [data, setUser]);
+
+	if (willRedirect && user) {
+		return <Redirect to={returnRedirectPath(user.role)} />;
+	}
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
@@ -80,6 +84,7 @@ export default function LoginView() {
 			<Card className={classes.card}>
 				<CardContent>
 					<form
+						data-testid="login-form"
 						onSubmit={(e) => {
 							e.preventDefault();
 							if (validateInputs(input)) {
@@ -90,10 +95,16 @@ export default function LoginView() {
 					>
 						<h2>{t(Translation.LOGIN)}</h2>
 						<div>
-							<Field {...input.email} label="E-mail" type="text" />
+							<Field {...input.email} label="E-mail" type="text" name="email" data-testid="email" />
 						</div>
 						<div>
-							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
+							<Field
+								{...input.password}
+								label={t(Translation.PASSWORD)}
+								type="password"
+								name="password"
+								data-testid="password"
+							/>
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
 							{t(Translation.NO_ACCOUNT)}{' '}
@@ -111,4 +122,16 @@ export default function LoginView() {
 			</Card>
 		</Container>
 	);
+}
+
+function returnRedirectPath(userRole: UserRole): string {
+	switch (userRole) {
+		case UserRole.ADMIN:
+			return '/admin/main';
+		case UserRole.MENTEE:
+		case UserRole.MENTOR:
+			return '/member/my-mentor-group';
+		default:
+			return assertNever(userRole);
+	}
 }
