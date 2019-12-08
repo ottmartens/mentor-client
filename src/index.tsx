@@ -58,7 +58,7 @@ function Root() {
 						<ProtectedRoute exact path="/member/redirect-info-view" component={RedirectInfoView} />
 						<ProtectedRoute exact path="/member/complete-activity/:id" component={CompleteActivityView} />
 						<ProtectedRoute exact path="/logout" component={LogoutView} />
-						<ProtectedRoute exact path="/admin/grade-activity" component={GradeActivityView} />
+						<ProtectedRoute exact path="/admin/grade-activity/:id" component={GradeActivityView} />
 						<ProtectedRoute exact path="/admin/main" component={AdminView} />
 					</Switch>
 				</Router>

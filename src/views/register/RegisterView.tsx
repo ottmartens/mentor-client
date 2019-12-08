@@ -91,6 +91,7 @@ export default function RegisterView() {
 			<Card className={classes.card}>
 				<CardContent>
 					<form
+						data-testid="register-form"
 						onSubmit={(e) => {
 							e.preventDefault();
 							if (validateInputs({ ...input, repeatPassword })) {
@@ -101,16 +102,16 @@ export default function RegisterView() {
 					>
 						<h2>{t(Translation.REGISTRATION)}</h2>
 						<div>
-							<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={false} />
+							<RadioButtonField {...input.role} options={radioButtonOptions} isColumn={false} data-testid="role"/>
 						</div>
 						<div>
-							<Field {...input.email} label="E-mail" type="text" />
+							<Field {...input.email} label="E-mail" type="text" data-testid="email" />
 						</div>
 						<div>
-							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" />
+							<Field {...input.password} label={t(Translation.PASSWORD)} type="password" data-testid="password" />
 						</div>
 						<div>
-							<Field {...repeatPassword} label={t(Translation.REPEAT_PASSWORD)} type="password" />
+							<Field {...repeatPassword} label={t(Translation.REPEAT_PASSWORD)} type="password" data-testid="confirmation-password" />
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">
 							{t(Translation.YES_ACCOUNT)}{' '}

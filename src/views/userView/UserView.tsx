@@ -12,7 +12,7 @@ import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import Image from '../../components/image/Image';
-import { height } from '@material-ui/system';
+import Notice from '../../components/notice/Notice';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -77,6 +77,8 @@ export default function UserView({ match, user }: Props) {
 	const { params } = match;
 	const t = useTranslator();
 
+	const [isVerified, setIsVerified] = React.useState(false);
+
 	const [rejectModalOpen, setRejectModalOpen] = useState(false);
 	const [rejectionReason, setRejectionReason] = useState('');
 
@@ -86,7 +88,7 @@ export default function UserView({ match, user }: Props) {
 		endPointUrlParam: params.id,
 		authToken: user.token,
 	});
-	const [verifyUser, { data: acceptRequestResponse, called: gradeActivityCalled, error }] = useBackend({
+	const [verifyUser, { /*data: acceptRequestResponse, called: gradeActivityCalled,*/ error }] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.VERIFY_USER,
 		authToken: user.token,
@@ -104,6 +106,8 @@ export default function UserView({ match, user }: Props) {
 	}
 	return (
 		<div className={classes.container}>
+			{error && <Notice variant="error" title="Kasutaja valideerimine ebaõnnestus" message={error} />}
+			{isVerified && <Notice variant="success" title="Kasutaja valideeritud" message='' />}
 			<Card>
 				<div className={classes.imageContainer}>
 					<Image
@@ -151,6 +155,7 @@ export default function UserView({ match, user }: Props) {
 											},
 										});
 										await queryUserData();
+										!error && setIsVerified(true);
 									}}
 								>
 									{t(Translation.APPROVE_ACTIVITY)}

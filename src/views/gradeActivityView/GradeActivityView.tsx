@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { Card, makeStyles, Divider, List, Button, Typography } from '@material-ui/core';
+import { Card, makeStyles, Divider, List, Button, Typography, Dialog, DialogTitle, DialogContent, Input, DialogActions } from '@material-ui/core';
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 //import Loader from '../../components/loader/Loader';
@@ -10,6 +10,10 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 //import { error } from 'console';
 import Notice from '../../components/notice/Notice';
+import useInput from '../../hooks/useInput';
+import { isSet } from '../../services/validators';
+import { id } from 'date-fns/esm/locale';
+import Loader from '../../components/loader/Loader';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -18,10 +22,7 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '20px',
 	},
 	title: {
-        display: 'flex',
-        alignSelf: 'left',
-        marginLeft: '1em',
-        marginTop: '2em',
+        marginTop: '1em',
 	},
 	buttonContainer: {
 		textAlign: 'center',
@@ -47,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
 	requestButton: {
 		margin: '1em',
 	},
+	modalContent: {
+		width: '300px',
+		height: '100px',
+	},
 }));
 
 interface Props extends HasUserProps {
@@ -61,20 +66,31 @@ export default function GradeActivityView({ match, user }: Props) {
 	const classes = useStyles();
 	const { params } = match;
 	const t = useTranslator();
-	const [isGraded, setIsGraded] = React.useState(false);
 
+	const [isVerified, setIsVerified] = React.useState(false);
+
+	const [rejectModalOpen, setRejectModalOpen] = useState(false);
+	const [rejectionReason, setRejectionReason] = useState('');
 
 	const [queryActivityData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
-		endPoint: EndPoint.ACTIVITY,
+		endPoint: EndPoint.ACTIVITIES,
 		endPointUrlParam: params.id,
 		authToken: user.token,
 	});
 
+	const input = {
+		points: useInput({ validators: [isSet], initialValue: 0}),
+	};
+	
 	//accept or reject activity
-	const [gradeActivityFn, { data: acceptRequestResponse, called: gradeActivityCalled, error }] = useBackend({
+	const [verifyActivity, { data: acceptRequestResponse, called: gradeActivityCalled, error }] = useBackend({
 		requestMethod: RequestMethod.POST,
-		endPoint: EndPoint.ACCEPT_ACTIVITY_REQUEST,
+		endPoint: EndPoint.VERIFY_ACTIVITY,
+		variables:{
+			//rejectionReason: rejectionReason.value,
+			//points: input.points.value,
+		},
 		authToken: user.token,
 	});
 
@@ -85,46 +101,43 @@ export default function GradeActivityView({ match, user }: Props) {
 		queryActivityData();
 	}, [called, queryActivityData]);
 
-	/*if (loading || !data) {
+	if (loading || !data) {
 		return <Loader />;
-	}*/
+	}
 	return (
 		<>
 			{error && <Notice variant="error" title="Tegevuse hindamine ebaõnnestus" message={error} />}
-			{isGraded && <Notice variant="success" title="Tegevus hinnatud" message=''/>}
+			{isVerified && <Notice variant="success" title="Tegevus hinnatud" message=''/>}
 			<div className={classes.container}>
                 <Card>
-					{data && data.name && data.group && data.date && (
+					{data && data.name && data.time && (
 						<div>
-                            <Typography variant="h3">
+                            <Typography variant="h3" className={classes.title}>
 						        {data.name}
                             </Typography>
                             <Typography variant="h6">
-                                {data.group}
-                            </Typography>
-                            <Typography variant="body2">
-                                {data.date}
+                                {data.time}
                             </Typography>
                         </div>
                     )}
                     
-				{data.mentees && data.mentees.length !== 0 && (
+				{data && data.participants && data.participants.length !== 0 && (
 					<div>
-                        <h2 className={classes.title}>{t(Translation.APPROVED_MENTEES)}</h2>
+                        <h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
 			    		<List>
-							{data.mentees.map(({ imageUrl, name, userId, tagline }, idx) => {
+							{data.participants.map(({ imageUrl, name, Id, tagline }, idx) => {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
+										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={Id} key={idx} />
 										<Divider variant="inset" component="li" />
 									</div>
 								);
 							})}
                 		</List>
-                    </div>)}
+						</div>)}
                         
-                {data.images && data.images.length !== 0 && (
+                {data && data.images && data.images.length !== 0 && (
                     <List>
                         {data.images.map(({imageUrl}) => {
                             return (
@@ -132,47 +145,73 @@ export default function GradeActivityView({ match, user }: Props) {
                             );}
                         )}
                     </List>
-                )}
+							)}
                     <Button
                         variant="contained"
                         color="primary"
                         className={classes.requestButton}
                         onClick={async () => {
-                            await gradeActivityFn({
+                            await verifyActivity({
                                 overrideVariables: {
-                                    //activityId,
                                     accept: true,
                                 },
                             });
 							await queryActivityData();
 							{ !error &&
-								setIsGraded(true);
+								setIsVerified(true);
 							}
                         }}
                     >
                         {t(Translation.APPROVE_ACTIVITY)}
                     </Button>
                     {'  '}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.requestButton}
-                        onClick={async () => {
-                            await gradeActivityFn({
-                                overrideVariables: {
-                                    //activityId,
-                                    accept: false,
-                                },
-                            });
-							await queryActivityData();
-							{ !error &&
-								setIsGraded(true);
-							}
-                        }}
-                    >
-                        {t(Translation.DECLINE_ACTIVITY)}
-                    </Button>
+					{data && data.isVerified === false ? (
+						<span>{t(Translation.ACTIVITY_IS_REJECTED)}</span>
+					) : (
+						<Button
+							variant="contained"
+							color="primary"
+							className={classes.requestButton}
+							onClick={() => {
+								setRejectModalOpen(true);
+							}}
+						>
+							{t(Translation.DECLINE_ACTIVITY)}
+						</Button>
+					)}
                 </Card>    
+				{rejectModalOpen && (
+						<Dialog open>
+							<DialogTitle id="alert-dialog-slide-title">{t(Translation.REJECT_USER_REASON)}:</DialogTitle>
+							<DialogContent className={classes.modalContent}>
+								<Input autoFocus multiline fullWidth placeholder={t(Translation.REJECTION_MODAL_MESSAGE)} value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)}></Input>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={() => setRejectModalOpen(false)} color="primary">
+									{t(Translation.CANCEL)}
+								</Button>
+								<Button
+									onClick={async () => {
+										await verifyActivity({
+											overrideVariables: {
+												accept: false,
+												rejectionReason,
+											},
+										});
+										setRejectModalOpen(false);
+										await queryActivityData();
+										{ !error &&
+											setIsVerified(true);
+										}
+									}}
+									variant="contained"
+									color="secondary"
+								>
+									{t(Translation.REJECT_USER)}
+								</Button>
+							</DialogActions>
+						</Dialog>
+					)}
             </div>
 		</>
 	);

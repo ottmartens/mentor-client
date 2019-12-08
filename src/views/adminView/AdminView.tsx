@@ -199,7 +199,7 @@ export default function AdminView({ user }: HasUserProps) {
 								<div key={ID}>
 									<ListItem className={classes.listitem}>
 										<div>
-											<Link to={ID ? `/activities/activity/${ID}` : '#'} className={classes.link}>
+											<Link to={ID ? `/admin/grade-activity/${ID}` : '#'} className={classes.link}>
 												<ListItemText
 													className={classes.personName}
 													primary={name}

@@ -93,6 +93,7 @@ export enum Translation {
 	GOT_IT = 'GOT_IT',
 	ADMIN_MENTORS_CAN_REGISTER = 'ADMIN_MENTORS_CAN_REGISTER',
 	ADMIN_MENTEES_CAN_REGISTER = 'ADMIN_MENTEES_CAN_REGISTER',
+	ACTIVITY_IS_REJECTED = 'ACTIVITY_IS_REJECTED',
 }
 // ts-ignore
 export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
@@ -189,7 +190,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		VALIDATOR_PASSWORD_NOT_EQUAL: 'Paroolid on erinevad',
 		GOT_IT: 'Sain aru',
 		REDIRECT_VIEW_PROFILE_FILL:
-			'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täidke oma profiil ära.',
+			'Tubli. Paar asja on veel vaja teha, enne kui laseme teid rakenduse juurde. Kõigepealt täiTke oma profiil ära.',
+		ACTIVITY_IS_REJECTED: 'Tegevus on tagasi lükatud',
+
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -285,5 +288,6 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		GOT_IT: 'Got it',
 		REDIRECT_VIEW_PROFILE_FILL:
 			'There are a few things we need to do to get you up and running. Please fill out your profile info first.',
-	},
+		ACTIVITY_IS_REJECTED: 'Activity is rejected',
+		},
 };
