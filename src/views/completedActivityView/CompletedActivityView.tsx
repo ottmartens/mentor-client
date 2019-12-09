@@ -144,9 +144,9 @@ export default function CompletedActivityView({ match, user }: Props) {
 							<h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
 							<List>
 								{data.participants.map(
-									({ imageUrl, name, Id, tagline }, idx) => {
+									({ imageUrl, name, userId, tagline }, idx) => {
 										return (
-											<div key={`${Id}${idx}`}>
+											<div key={`${userId}${idx}`}>
 												{idx === 0 && (
 													<Divider variant="inset" component="li" />
 												)}
@@ -154,7 +154,7 @@ export default function CompletedActivityView({ match, user }: Props) {
 													name={name}
 													tagline={tagline}
 													imageUrl={imageUrl}
-													userId={Id}
+													userId={userId}
 												/>
 												<Divider variant="inset" component="li" />
 											</div>
