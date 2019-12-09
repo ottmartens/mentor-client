@@ -1,5 +1,15 @@
 version: "3"
 services:
+  mentor-client:	
+    image: localhost:5000/mentor-client-local	
+    deploy:	
+      replicas: 1	
+      restart_policy:	
+        condition: on-failure	
+    ports:	
+      - "3000:3000"	
+    networks: 	
+      - backend
   mentor-server:
     image: localhost:5000/mentor-server-local
     deploy:
