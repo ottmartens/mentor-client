@@ -19,6 +19,7 @@ import ConfirmationModal from '../../components/confirmationModal/ConfirmationMo
 import { removeUserToken } from '../../services/auth';
 import { uploadImage, validateImage } from '../../services/uploadImage';
 import { useHistory } from 'react-router';
+import LanguageSelectButton from '../../components/langueSelectButton/LanguageSelectButton';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -113,6 +114,16 @@ const useStyles = makeStyles((theme) => ({
 	select: {
 		display: 'flex',
 		margin: '16px auto 8px auto',
+	},
+	settings: {
+		height: '200px',
+		marginBottom: '20px',
+		paddingBottom: '20px',
+		textAlign: 'center',
+	},
+	languageField: {
+		lineHeight: '55px',
+		marginRight: '20px',
 	},
 }));
 
@@ -435,6 +446,15 @@ export default function ProfileView({ user }: HasUserProps) {
 							)}
 						</div>
 					</form>
+				</div>
+			</Card>
+			<Card className={classes.settings}>
+				<h2>Settings</h2>
+				<div>
+					<span className={classes.languageField}>
+						{t(Translation.PROFILE_LANGUAGE)}
+					</span>
+					<LanguageSelectButton />
 				</div>
 			</Card>
 		</>
