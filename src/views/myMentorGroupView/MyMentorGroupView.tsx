@@ -14,6 +14,7 @@ import { Translation } from '../../translations';
 import classNames from 'classnames';
 import Image from '../../components/image/Image';
 import ActivityFeed from '../../components/activityFeed/ActivityFeed';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	smallMargin: {
@@ -83,8 +84,12 @@ const useStyles = makeStyles((theme) => ({
 	checkmark: {
 		color: 'green',
 		marginRight: '20px',
-		fontSize: '32px',
+		fontSize: '32px'
 	},
+	link: {
+		textDecoration: 'none',
+		color: 'inherit',
+	}
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
@@ -143,13 +148,17 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 			<Card className={classNames(classes.card, classes.alignCenter)}>
 				<div className={classes.mentors}>
 					{data &&
-						data.mentors.map(({ imageUrl, name }, idx) => {
+						data.mentors.map(({ imageUrl, name, userId }, idx) => {
 							return (
 								<div className={classes.mentor} key={idx}>
+									<Link
+									to={`/member/user/${userId}`}
+									className={classes.link}>
 									<Image src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'} />
 									<Typography gutterBottom variant="h6" component="h2">
 										{name}
 									</Typography>
+									</Link>
 								</div>
 							);
 						})}

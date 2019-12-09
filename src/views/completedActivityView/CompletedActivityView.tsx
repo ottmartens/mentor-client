@@ -14,7 +14,7 @@ import {
 	DialogActions,
 } from '@material-ui/core';
 import Person from '../../components/person/Person';
-import { HasUserProps } from '../../types';
+import { HasUserProps, UserRole } from '../../types';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import Notice from '../../components/notice/Notice';
@@ -180,7 +180,7 @@ export default function CompletedActivityView({ match, user }: Props) {
 						</List>
 					)}
 
-					{data && !data.activity.isVerified && (
+					{data && !data.activity.isVerified && user.role === UserRole.ADMIN && (
 						<div>
 							<Button
 								variant="contained"

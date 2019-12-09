@@ -58,7 +58,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 								className={classes.link}
 							>
 								<MentorGroupPreview
-									id={id}
+									groupId={id}
 									key={idx}
 									mentors={mentors}
 									groupName={title}
@@ -66,6 +66,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 									showGroupName={true}
 									showNames={true}
 									showLongBio={false}
+									linkMentors={false}
 								/>
 							</Link>
 						);

@@ -3,20 +3,23 @@ import { makeStyles, Card, CardContent, Typography } from '@material-ui/core';
 import { BASE_URL } from '../../services/variables';
 import Image from '../image/Image';
 import { HasUserProps } from '../../types';
+import { Link } from 'react-router-dom';
 
 export interface Mentor {
 	imageUrl: string;
 	name: string;
+	userId: number;
 }
 
 interface Props {
 	mentors: Mentor[];
 	groupName: string;
 	bio: string;
-	id?: string;
+	groupId?: string;
 	showNames?: boolean;
 	showGroupName?: boolean;
 	showLongBio?: boolean;
+	linkMentors?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -59,27 +62,46 @@ export default function MentorGroupPreview({
 	mentors,
 	groupName,
 	bio,
-	id,
+	groupId,
 	showGroupName,
 	showNames,
 	showLongBio,
+	linkMentors,
 }: Props) {
 	const classes = useStyles();
 
 	return (
 		<Card className={classes.container}>
 			<div>
-				{mentors.map(({ imageUrl, name }, idx) => {
+				{mentors.map(({ imageUrl, name, userId }, idx) => {
 					return (
 						<div key={idx} className={classes.mentor}>
-							<Image
-								className={classes.image}
-								src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-							/>
-							{showNames && (
-								<Typography key={idx} gutterBottom variant="body2" component="h6">
-									{name}
-								</Typography>
+							{linkMentors && userId && (
+								<Link
+								to={`/member/user/${userId}`}
+								className={classes.link}
+								>
+									<Image
+									className={classes.image}
+									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+								/>
+									{showNames && (
+									<Typography key={idx} gutterBottom variant="body2" component="h6">
+										{name}
+									</Typography>
+								)}
+								</Link>
+							)}
+							{linkMentors === false && (
+								<div>
+									<Image
+									className={classes.image}
+									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
+								/>
+									<Typography key={idx} gutterBottom variant="body2" component="h6">
+										{name}
+									</Typography>
+								</div>
 							)}
 						</div>
 					);
