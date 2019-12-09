@@ -5,7 +5,15 @@ import useInput from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import { makeStyles } from '@material-ui/styles';
-import { Button, Typography, Card, List, Divider, ListItem, ListItemText } from '@material-ui/core';
+import {
+	Button,
+	Typography,
+	Card,
+	List,
+	Divider,
+	ListItem,
+	ListItemText,
+} from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';
 import Person from '../../components/person/Person';
@@ -84,12 +92,12 @@ const useStyles = makeStyles((theme) => ({
 	checkmark: {
 		color: 'green',
 		marginRight: '20px',
-		fontSize: '32px'
+		fontSize: '32px',
 	},
 	link: {
 		textDecoration: 'none',
 		color: 'inherit',
-	}
+	},
 }));
 
 export default function MyMentorGroupView({ user }: HasUserProps) {
@@ -109,8 +117,14 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 		getGroupInfo();
 	}, [called, getGroupInfo]);
 	const input = {
-		title: useInput({ validators: [isSet], initialValue: (data && data.title) || '' }),
-		description: useInput({ validators: [isSet], initialValue: (data && data.description) || '' }),
+		title: useInput({
+			validators: [isSet],
+			initialValue: (data && data.title) || '',
+		}),
+		description: useInput({
+			validators: [isSet],
+			initialValue: (data && data.description) || '',
+		}),
 	};
 
 	const [updateInfo] = useBackend({
@@ -151,13 +165,17 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 						data.mentors.map(({ imageUrl, name, userId }, idx) => {
 							return (
 								<div className={classes.mentor} key={idx}>
-									<Link
-									to={`/member/user/${userId}`}
-									className={classes.link}>
-									<Image src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'} />
-									<Typography gutterBottom variant="h6" component="h2">
-										{name}
-									</Typography>
+									<Link to={`/member/user/${userId}`} className={classes.link}>
+										<Image
+											src={
+												imageUrl
+													? `${BASE_URL}${imageUrl}`
+													: '/images/avatar_placeholder.webp'
+											}
+										/>
+										<Typography gutterBottom variant="h6" component="h2">
+											{name}
+										</Typography>
 									</Link>
 								</div>
 							);
@@ -174,20 +192,28 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 					}}
 				>
 					{isEditable ? (
-						<Field {...input.title} label={t(Translation.GROUP_NAME)} disabled={!isEditable} />
+						<div>
+							<Field
+								{...input.title}
+								label={t(Translation.GROUP_NAME)}
+								disabled={!isEditable}
+							/>
+						</div>
 					) : (
 						<Typography gutterBottom variant="h5" component="h2">
 							{(data && data.title) || ''}
 						</Typography>
 					)}
 					{isEditable ? (
-						<Field
-							{...input.description}
-							label={t(Translation.GROUP_DESCRIPTION)}
-							disabled={!isEditable}
-							multiline
-							className={classes.largeWidth}
-						/>
+						<div>
+							<Field
+								{...input.description}
+								label={t(Translation.GROUP_DESCRIPTION)}
+								disabled={!isEditable}
+								multiline
+								className={classes.largeWidth}
+							/>
+						</div>
 					) : (
 						<Typography variant="body2" color="textSecondary" component="p">
 							{(data && data.description) || ''}
@@ -207,7 +233,12 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 							</Button>
 						)}
 						{isEditable && (
-							<Button variant="contained" color="primary" type="submit" className={classes.smallMargin}>
+							<Button
+								variant="contained"
+								color="primary"
+								type="submit"
+								className={classes.smallMargin}
+							>
 								{t(Translation.SAVE)}
 							</Button>
 						)}
@@ -224,7 +255,13 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 							return (
 								<div key={idx}>
 									{idx === 0 && <Divider variant="inset" component="li" />}
-									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
+									<Person
+										name={name}
+										tagline={tagline}
+										imageUrl={imageUrl}
+										userId={userId}
+										key={idx}
+									/>
 									<Divider variant="inset" component="li" />
 								</div>
 							);
@@ -234,57 +271,71 @@ export default function MyMentorGroupView({ user }: HasUserProps) {
 			)}
 
 			{/* Join requests */}
-			{user.role === UserRole.MENTOR && data.requests && data.requests.length !== 0 && (
-				<Card className={classNames(classes.card, classes.alignCenter)}>
-					<h2 className={classes.title}>{t(Translation.APPLIED_MENTEES)}</h2>
-					<List>
-						{data.requests.map(({ imageUrl, name, userId, tagline }, idx) => {
-							return (
-								<div key={idx}>
-									{idx === 0 && <Divider variant="inset" component="li" />}
-									<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx}>
-										<Button
-											variant="contained"
-											className={classes.acceptButton}
-											onClick={async (e) => {
-												e.stopPropagation();
-												await determineGroupJoinFn({
-													overrideVariables: {
-														userId,
-														accept: true,
-													},
-												});
-												await getGroupInfo();
-											}}
+			{user.role === UserRole.MENTOR &&
+				data.requests &&
+				data.requests.length !== 0 && (
+					<Card className={classNames(classes.card, classes.alignCenter)}>
+						<h2 className={classes.title}>{t(Translation.APPLIED_MENTEES)}</h2>
+						<List>
+							{data.requests.map(({ imageUrl, name, userId, tagline }, idx) => {
+								return (
+									<div key={idx}>
+										{idx === 0 && <Divider variant="inset" component="li" />}
+										<Person
+											name={name}
+											tagline={tagline}
+											imageUrl={imageUrl}
+											userId={userId}
+											key={idx}
 										>
-											{t(Translation.APPROVE)}
-										</Button>{' '}
-										<Button
-											variant="contained"
-											className={classes.declineButton}
-											onClick={async (e) => {
-												e.stopPropagation();
-												await determineGroupJoinFn({
-													overrideVariables: {
-														userId,
-														accept: false,
-													},
-												});
-												await getGroupInfo();
-											}}
-										>
-											{t(Translation.DECLINE)}
-										</Button>
-									</Person>
-									<Divider variant="inset" component="li" />
-								</div>
-							);
-						})}
-					</List>
-				</Card>
-			)}
+											<Button
+												variant="contained"
+												className={classes.acceptButton}
+												onClick={async (e) => {
+													e.stopPropagation();
+													await determineGroupJoinFn({
+														overrideVariables: {
+															userId,
+															accept: true,
+														},
+													});
+													await getGroupInfo();
+												}}
+											>
+												{t(Translation.APPROVE)}
+											</Button>{' '}
+											<Button
+												variant="contained"
+												className={classes.declineButton}
+												onClick={async (e) => {
+													e.stopPropagation();
+													await determineGroupJoinFn({
+														overrideVariables: {
+															userId,
+															accept: false,
+														},
+													});
+													await getGroupInfo();
+												}}
+											>
+												{t(Translation.DECLINE)}
+											</Button>
+										</Person>
+										<Divider variant="inset" component="li" />
+									</div>
+								);
+							})}
+						</List>
+					</Card>
+				)}
 			{/* Activity Feed*/}
-			{activityTotal > 0 && <ActivityFeed activities={data.activities} pointsum={pointSum} acttotal={activityTotal} />}
+			{activityTotal > 0 && (
+				<ActivityFeed
+					activities={data.activities}
+					pointsum={pointSum}
+					acttotal={activityTotal}
+				/>
+			)}
 		</>
 	);
 }

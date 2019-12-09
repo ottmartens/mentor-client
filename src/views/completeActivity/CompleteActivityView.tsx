@@ -200,12 +200,14 @@ export default function CompleteActivityView({
 			{imageUploadError && (
 				<Notice
 					title={t(Translation.ACVITITY_COMPLETE_IMAGE_FAILED)}
+					variant="error"
 					message={imageUploadError}
 				/>
 			)}
 			{completedError && (
 				<Notice
 					title={t(Translation.ACVITITY_COMPLETE_ACTIVITY_FAILED)}
+					variant="error"
 					message={completedError}
 				/>
 			)}

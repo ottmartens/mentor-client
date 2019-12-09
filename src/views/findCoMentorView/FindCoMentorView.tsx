@@ -8,6 +8,7 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import Notice from '../../components/notice/Notice';
 import { UserContext } from '../../contexts/UserContext';
+import { Redirect } from 'react-router';
 
 type Mentor = {
 	userId: string;
@@ -44,7 +45,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	const [hasAccepted, setHasAccepted] = React.useState<undefined | boolean>(
 		undefined,
 	);
-
+	console.log(user);
 	//get data
 	const [queryFreeMentorsData, { data, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -53,7 +54,10 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	});
 
 	//request to pair up w free mentor
-	const [requestPairUpFn] = useBackend({
+	const [
+		requestPairUpFn,
+		{ loading: requestLoading, error: requestError },
+	] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.MAKE_GROUP_CREATE_REQUEST,
 		authToken: user.token,
@@ -82,6 +86,10 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	const sortedData: Mentor[] = data.sort((_, b) =>
 		b.hasRequestedYou ? 1 : b.youHaveRequested ? 1 : -1,
 	);
+
+	if (hasAccepted && !requestLoading && user.groupId) {
+		return <Redirect to="/member/my-mentor-group" />;
+	}
 
 	return (
 		<>
@@ -197,6 +205,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	function useUpdateUserInfo() {
 		const ctx = React.useContext(UserContext);
 		const ctxSetUser = ctx && ctx.setUser;
+		const ctxUser = ctx && ctx.user;
 		const [getUserInfo, { data: userData, loading }] = useBackend({
 			requestMethod: RequestMethod.GET,
 			endPoint: EndPoint.USER,
@@ -209,7 +218,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 			if (!userData || loading || !ctxSetUser) {
 				return;
 			}
-			ctxSetUser(userData);
+			ctxSetUser({ ...userData, token: ctxUser && ctxUser.token });
 		}, [userData, loading, ctxSetUser]);
 
 		return { updateUserInfo: getUserInfo };
