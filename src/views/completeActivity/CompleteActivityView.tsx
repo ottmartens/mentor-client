@@ -191,8 +191,8 @@ export default function CompleteActivityView({
 	const minAmountOfParticipants =
 		(selectedActivity && selectedActivity.requiredParticipants) || 3;
 
-	if (isCompleted && completedData && !completedError) {
-		return <Redirect to="/member/my-mentorgroup-view" />;
+	if (isCompleted && !completedError) {
+		return <Redirect to="/member/my-mentor-group" />;
 	}
 
 	return (
