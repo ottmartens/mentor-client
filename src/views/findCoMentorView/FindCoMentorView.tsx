@@ -79,7 +79,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		queryFreeMentorsData();
 	}, [called, queryFreeMentorsData]);
 
-	if (loading || !data) {
+	if (loading || !data || requestLoading) {
 		return <Loader />;
 	}
 
