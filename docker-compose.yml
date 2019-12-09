@@ -1,14 +1,14 @@
 version: "3"
 services:
-  mentor-client:
-    image: localhost:5000/mentor-client-local
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    ports:
-      - "3000:3000"
-    networks: 
+  mentor-client:	
+    image: localhost:5000/mentor-client-local	
+    deploy:	
+      replicas: 1	
+      restart_policy:	
+        condition: on-failure	
+    ports:	
+      - "3000:3000"	
+    networks: 	
       - backend
   mentor-server:
     image: localhost:5000/mentor-server-local
@@ -18,6 +18,8 @@ services:
         condition: on-failure
     ports:
       - "8000:8080"
+    volumes:
+      - pictures:/go/src/mentor-server/images
     networks:
       - backend
   mentor-db:
@@ -40,3 +42,4 @@ networks:
   backend:
 volumes:
   pgdata:
+  pictures:
