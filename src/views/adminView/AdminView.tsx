@@ -1,4 +1,4 @@
-import React, { useState /*, { useEffect }*/ } from 'react';
+import React, {/*, { useEffect }*/ } from 'react';
 import {
 	Container,
 	List,
@@ -186,7 +186,6 @@ export default function AdminView({ user }: HasUserProps) {
 
 	React.useEffect(() => {
 		if (usersData) {
-			console.log('asd')
 			setUnverifiedUsers(usersData.filter((user) => !user.isVerified));
 		}
 	}, [usersData]);

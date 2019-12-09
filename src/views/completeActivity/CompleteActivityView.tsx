@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography, Button } from '@material-ui/core';
+import { Card,  Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { HasUserProps } from '../../types';
 import useInput from '../../hooks/useInput';
@@ -13,7 +13,6 @@ import Loader from '../../components/loader/Loader';
 import classNames from 'classnames';
 import { validateImage, uploadImage } from '../../services/uploadImage';
 import { BASE_URL } from '../../services/variables';
-import Image from '../../components/image/Image';
 import { isSet, validateInputs, FieldError } from '../../services/validators';
 import Notice from '../../components/notice/Notice';
 import { Redirect } from 'react-router';
@@ -156,7 +155,7 @@ export default function CompleteActivityView({
 
 	const [
 		completeActivity,
-		{ data: completedData, error: completedError },
+		{ error: completedError },
 	] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.ACTIVITIES,
@@ -283,6 +282,7 @@ export default function CompleteActivityView({
 									key={idx}
 									src={`${BASE_URL}${url}`}
 									className={classes.image}
+									alt="Tegevus"
 								/>
 							))}
 					</div>

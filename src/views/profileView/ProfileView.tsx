@@ -193,7 +193,7 @@ export default function ProfileView({ user }: HasUserProps) {
 		}
 		setUser({ ...user, ...updateProfileData });
 		setIsEdited(true);
-	}, [updateProfileData, setUser]);
+	}, [updateProfileData, setUser, user, updateCalled]);
 
 	React.useEffect(() => {
 		if (userData && !userData.name) {

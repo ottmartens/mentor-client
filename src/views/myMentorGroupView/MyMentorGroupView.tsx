@@ -11,8 +11,6 @@ import {
 	Card,
 	List,
 	Divider,
-	ListItem,
-	ListItemText,
 } from '@material-ui/core';
 import Loader from '../../components/loader/Loader';
 import { BASE_URL } from '../../services/variables';

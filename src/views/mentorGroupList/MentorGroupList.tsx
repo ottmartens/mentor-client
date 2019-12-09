@@ -50,7 +50,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 							<Link
 							key={id}
 								to={
-									user.groupId && id && user.groupId.toString() == id
+									user.groupId && id && user.groupId.toString() === id
 										? '/member/my-mentor-group/'
 										: id
 										? `/member/mentor-group/${id}`

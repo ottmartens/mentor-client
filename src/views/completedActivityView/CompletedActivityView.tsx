@@ -10,7 +10,6 @@ import {
 	Dialog,
 	DialogTitle,
 	DialogContent,
-	Input,
 	DialogActions,
 } from '@material-ui/core';
 import Person from '../../components/person/Person';
@@ -173,7 +172,7 @@ export default function CompletedActivityView({ match, user }: Props) {
 										key={`${imageUrl}${idx}`}
 										className={classes.image}
 										src={`${BASE_URL}${imageUrl}`}
-										alt="Activity image"
+										alt="Activity"
 									></img>
 								);
 							})}
@@ -194,9 +193,11 @@ export default function CompletedActivityView({ match, user }: Props) {
 														accept: true,
 													},
 												});
-												{
-													!error && setIsVerified(true);
+
+												if (!error) {
+													setIsVerified(true);
 												}
+
 												await queryActivityData();
 										  }
 										: () => {
@@ -243,9 +244,11 @@ export default function CompletedActivityView({ match, user }: Props) {
 											accept: false,
 										},
 									});
-									{
-										!error && setIsVerified(true);
+
+									if (!error) {
+										setIsVerified(true);
 									}
+
 									setRejectModalOpen(false);
 									await queryActivityData();
 								}}
@@ -282,8 +285,9 @@ export default function CompletedActivityView({ match, user }: Props) {
 									});
 									setGradeModalOpen(false);
 									await queryActivityData();
-									{
-										!error && setIsVerified(true);
+
+									if (!error) {
+										setIsVerified(true);
 									}
 								}}
 								variant="contained"

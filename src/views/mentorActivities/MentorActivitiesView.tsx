@@ -1,6 +1,6 @@
 import React from 'react';
 import { HasUserProps, UserRole } from '../../types';
-import { Button, Divider, Card, Container, TextField } from '@material-ui/core';
+import { Button, Divider, Card, Container} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import useTranslator from '../../hooks/useTranslator';
@@ -8,7 +8,6 @@ import { Translation } from '../../translations';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
 import Loader from '../../components/loader/Loader';
 import { validateInputs, isSet } from '../../services/validators';
-import { error } from 'console';
 import Field from '../../components/field/Field';
 import useInput, { UseInput } from '../../hooks/useInput';
 
@@ -65,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 export default function MentorActivitiesView({ user }: HasUserProps) {
 	const classes = useStyles();
 	const t = useTranslator();
-	const [isAdded, setIsAdded] = React.useState(false);
 
 	// get activities from database
 	const [getActivities, { data, loading, called }] = useBackend({
@@ -87,7 +85,7 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 		minMembers: useInput({ validators: [isSet] }),
 	};
 
-	const [updateActivities, { error }] = useBackend({
+	const [updateActivities] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_ACTIVITIES,
 		variables: {
@@ -116,9 +114,6 @@ export default function MentorActivitiesView({ user }: HasUserProps) {
 								e.preventDefault();
 								if (validateInputs(input)) {
 									await updateActivities();
-									{
-										!error && setIsAdded(true);
-									}
 								}
 							}}
 						>

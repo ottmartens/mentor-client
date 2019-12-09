@@ -55,7 +55,7 @@ export default function RedirectInfoView({ location }: RouteProps) {
 
 	return (
 		<Card className={classes.container}>
-			<img className={classes.image} src="/images/checkmark.svg" />
+			<img className={classes.image} src="/images/checkmark.svg" alt="Checkmark"/>
 			<div className={classes.textArea}>
 				<h1 className={classes.title}>{title}</h1>
 				<Typography variant="body2" color="textSecondary" component="p" className={classes.desc}>

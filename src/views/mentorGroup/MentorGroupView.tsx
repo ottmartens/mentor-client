@@ -5,10 +5,8 @@ import MentorGroupPreview from '../../components/mentorGroupPreview/MentorGroupP
 import Person from '../../components/person/Person';
 import { HasUserProps, UserRole } from '../../types';
 import Loader from '../../components/loader/Loader';
-import { BASE_URL } from '../../services/variables';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
-import { error } from 'console';
 import Notice from '../../components/notice/Notice';
 import ActivityFeed from '../../components/activityFeed/ActivityFeed';
 
@@ -85,12 +83,13 @@ export default function MentorGroupView({ match, user }: Props) {
 	}, [called, queryMentorGroupData]);
 
 	React.useEffect(() => {
-		if(!data) {
-			return
+		if (!data) {
+			return;
 		}
-			setAlreadyRequested(data.requests.some((request) => request.userId === user.id)) ;
-		
-	}, [queryMentorGroupData]);
+		setAlreadyRequested(
+			data.requests.some((request) => request.userId === user.id),
+		);
+	}, [queryMentorGroupData, data, user.id]);
 
 	if (loading || !data) {
 		return <Loader />;
@@ -108,8 +107,16 @@ export default function MentorGroupView({ match, user }: Props) {
 
 	return (
 		<>
-			{error && <Notice variant="error" title="Avalduse saatmine ebaõnnestus" message={error} />}
-			{hasApplied && <Notice variant="success" title="Avaldus saadetud" message="" />}
+			{error && (
+				<Notice
+					variant="error"
+					title="Avalduse saatmine ebaõnnestus"
+					message={error}
+				/>
+			)}
+			{hasApplied && (
+				<Notice variant="success" title="Avaldus saadetud" message="" />
+			)}
 			<div className={classes.container}>
 				<h1>{data.title}</h1>
 				<div className={classes.mentorGroupContainer}>
@@ -135,12 +142,14 @@ export default function MentorGroupView({ match, user }: Props) {
 							onClick={async () => {
 								await requestGroupJoinFn();
 								await queryMentorGroupData();
-								{
-									!error && setHasApplied(true);
+								if (!error) {
+									setHasApplied(true);
 								}
 							}}
 						>
-							{alreadyRequested ? t(Translation.WAITING_RESPONSE) : t(Translation.JOIN_GROUP)}
+							{alreadyRequested
+								? t(Translation.WAITING_RESPONSE)
+								: t(Translation.JOIN_GROUP)}
 						</Button>
 					</div>
 				)}
@@ -154,7 +163,13 @@ export default function MentorGroupView({ match, user }: Props) {
 								return (
 									<div key={idx}>
 										{idx === 0 && <Divider variant="inset" component="li" />}
-										<Person name={name} tagline={tagline} imageUrl={imageUrl} userId={userId} key={idx} />
+										<Person
+											name={name}
+											tagline={tagline}
+											imageUrl={imageUrl}
+											userId={userId}
+											key={idx}
+										/>
 										<Divider variant="inset" component="li" />
 									</div>
 								);

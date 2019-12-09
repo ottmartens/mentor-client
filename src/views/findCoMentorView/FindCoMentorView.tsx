@@ -56,7 +56,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 	//request to pair up w free mentor
 	const [
 		requestPairUpFn,
-		{ loading: requestLoading, error: requestError },
+		{ loading: requestLoading},
 	] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.MAKE_GROUP_CREATE_REQUEST,
@@ -208,14 +208,12 @@ export default function MentorPairingView({ user }: HasUserProps) {
 			authToken: user.token,
 		});
 
-		const t = useTranslator();
-
 		React.useEffect(() => {
 			if (!userData || loading || !ctxSetUser) {
 				return;
 			}
 			ctxSetUser({ ...userData, token: ctxUser && ctxUser.token });
-		}, [userData, loading, ctxSetUser]);
+		}, [userData, loading, ctxSetUser, ctxUser]);
 
 		return { updateUserInfo: getUserInfo };
 	}

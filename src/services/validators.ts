@@ -1,7 +1,6 @@
 import { UseInput } from '../hooks/useInput';
 import { Translation } from '../translations';
 import assertNever from './assertNever';
-import useTranslator from '../hooks/useTranslator';
 
 export enum FieldError {
 	NOT_SET = 'NOT_SET',

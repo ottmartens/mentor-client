@@ -24,7 +24,7 @@ export function PublicRoute({ component, ...rest }: RouteProps) {
 			return;
 		}
 		getUserInfo();
-	}, [called, getUserInfo]);
+	}, [called, getUserInfo, token, user]);
 
 	// set user
 	React.useEffect(() => {
@@ -32,7 +32,7 @@ export function PublicRoute({ component, ...rest }: RouteProps) {
 			return;
 		}
 		setUser({ ...data, token: token, id: data.ID });
-	}, [data, setUser]);
+	}, [data, setUser, token]);
 
 	return (
 		<Route

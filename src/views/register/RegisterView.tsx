@@ -77,7 +77,7 @@ export default function RegisterView() {
 			return;
 		}
 		setRadioButtonOptions(formatOptions(registerDeadlinesData));
-	}, [registerDeadlinesData, setRadioButtonOptions]);
+	}, [registerDeadlinesData, setRadioButtonOptions, registerDeadlinesCalled]);
 
 	// inputs
 	const input: { [s: string]: UseInput } = {

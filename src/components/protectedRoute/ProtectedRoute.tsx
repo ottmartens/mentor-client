@@ -39,7 +39,7 @@ export function ProtectedRoute({ component, ...rest }: RouteProps) {
 			return;
 		}
 		setUser({ ...data, token: token, id: data.ID });
-	}, [data, setUser]);
+	}, [data, setUser, token]);
 
 	return (
 		<Route
@@ -157,12 +157,14 @@ function redirectToSteps(
 					},
 				};
 			}
+			break;
 
 		/* ADMIN */
 		case UserRole.ADMIN:
 			break;
 		default:
 			assertNever(user.role);
+			break;
 	}
 }
 
