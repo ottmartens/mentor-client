@@ -5,7 +5,7 @@ import useInput, { UseInput } from '../../hooks/useInput';
 import Field from '../../components/field/Field';
 import { isSet, validateInputs } from '../../services/validators';
 import useBackend, { RequestMethod, EndPoint } from '../../hooks/useBackend';
-import { HasUserProps} from '../../types';
+import { HasUserProps } from '../../types';
 import { BASE_URL } from '../../services/variables';
 import Loader from '../../components/loader/Loader';
 import useTranslator from '../../hooks/useTranslator';
@@ -18,6 +18,7 @@ import SelectField from '../../components/selectField/SelectField';
 import ConfirmationModal from '../../components/confirmationModal/ConfirmationModal';
 import { removeUserToken } from '../../services/auth';
 import { uploadImage, validateImage } from '../../services/uploadImage';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 		color: '#2c4d7f',
 		textAlign: 'center',
 	},
-	button: { 
+	button: {
 		margin: '4px',
 	},
 	imageContainer: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 		width: '320px',
 	},
 	imageButton: {
-		cursor:"pointer",
+		cursor: 'pointer',
 		position: 'relative',
 		zIndex: 2,
 		color: '#fff',
@@ -57,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
 		borderRadius: '4px',
 		letterSpacing: '0.02857em',
 		textTransform: 'uppercase',
-		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
+		boxShadow:
+			'0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
 	},
 	imageButtonContainer: {
 		display: 'block',
@@ -124,7 +126,10 @@ export default function ProfileView({ user }: HasUserProps) {
 	const [isEdited, setIsEdited] = React.useState(false);
 	const [isEditable, setIsEditable] = React.useState(false);
 	const [isOpen, setOpen] = React.useState(false);
-	const [imageUploadError, setImageUploadError] = React.useState<string | undefined>();
+	const [imageUploadError, setImageUploadError] = React.useState<
+		string | undefined
+	>();
+	const [isFirstUpdate, setIsFirstUpdate] = React.useState<boolean>(false);
 
 	const [getUserInfo, { data: userData, loading, called }] = useBackend({
 		requestMethod: RequestMethod.GET,
@@ -133,6 +138,7 @@ export default function ProfileView({ user }: HasUserProps) {
 	});
 
 	const t = useTranslator();
+	const h = useHistory();
 
 	React.useEffect(() => {
 		if (called) {
@@ -142,14 +148,26 @@ export default function ProfileView({ user }: HasUserProps) {
 	}, [called, getUserInfo]);
 
 	const input: { [s: string]: UseInput } = {
-		name: useInput({ validators: [isSet], initialValue: (userData && userData.name) || '' }),
-		degree: useInput({ validators: [isSet], initialValue: (userData && userData.degree) || '' }),
-		year: useInput({ validators: [isSet], initialValue: (userData && userData.year) || '' }),
+		name: useInput({
+			validators: [isSet],
+			initialValue: (userData && userData.name) || '',
+		}),
+		degree: useInput({
+			validators: [isSet],
+			initialValue: (userData && userData.degree) || '',
+		}),
+		year: useInput({
+			validators: [isSet],
+			initialValue: (userData && userData.year) || '',
+		}),
 		tagline: useInput({ initialValue: (userData && userData.tagline) || '' }),
 		bio: useInput({ initialValue: (userData && userData.bio) || '' }),
 	};
 
-	const [updateProfile, { data: updateProfileData, called: updateCalled, error }] = useBackend({
+	const [
+		updateProfile,
+		{ data: updateProfileData, called: updateCalled, error },
+	] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.UPDATE_PROFILE,
 		variables: {
@@ -177,13 +195,12 @@ export default function ProfileView({ user }: HasUserProps) {
 		setIsEdited(true);
 	}, [updateProfileData, setUser]);
 
-
 	React.useEffect(() => {
-		if (userData && !userData.name){
-			setIsEditable(true)
+		if (userData && !userData.name) {
+			setIsEditable(true);
+			setIsFirstUpdate(true);
 		}
 	}, [userData]);
-
 
 	if (loading || !userData) {
 		return <Loader />;
@@ -208,15 +225,33 @@ export default function ProfileView({ user }: HasUserProps) {
 		<>
 			<h1 className={classes.title}>{t(Translation.PROFILE)}</h1>
 			<Card className={classes.card}>
-				{error && <Notice variant="error" title="Profile updating failed" message={error} />}
-				{imageUploadError && <Notice variant="error" title="Image upload failed" message={imageUploadError} />}
-				{isEdited && <Notice variant="success" title="Profile updated successfully" />}
+				{error && (
+					<Notice
+						variant="error"
+						title="Profile updating failed"
+						message={error}
+					/>
+				)}
+				{imageUploadError && (
+					<Notice
+						variant="error"
+						title="Image upload failed"
+						message={imageUploadError}
+					/>
+				)}
+				{isEdited && (
+					<Notice variant="success" title="Profile updated successfully" />
+				)}
 				<div>
 					<div>
 						<div className={classes.imageContainer}>
 							<Image
 								className={classes.image}
-								src={userData.imageUrl ? `${BASE_URL}${userData.imageUrl}` : '/images/avatar_placeholder.webp'}
+								src={
+									userData.imageUrl
+										? `${BASE_URL}${userData.imageUrl}`
+										: '/images/avatar_placeholder.webp'
+								}
 							/>
 						</div>
 						<label className={classes.imageButtonContainer}>
@@ -227,7 +262,10 @@ export default function ProfileView({ user }: HasUserProps) {
 								style={{ display: 'none' }}
 							/>
 							<span className={classes.imageButton}>
-								{user.imageUrl? t(Translation.CHANGE_PICTURE) : t(Translation.ADD_PICTURE)} {isloadingImage && <Loader size="0.975rem" />}
+								{user.imageUrl
+									? t(Translation.CHANGE_PICTURE)
+									: t(Translation.ADD_PICTURE)}{' '}
+								{isloadingImage && <Loader size="0.975rem" />}
 							</span>
 						</label>
 					</div>
@@ -240,19 +278,36 @@ export default function ProfileView({ user }: HasUserProps) {
 								await getUserInfo();
 								setIsEditable(false);
 								setIsEdited(false);
+								isFirstUpdate && h.push('/member/my-mentor-group');
 							}
 						}}
 					>
 						{isEditable ? (
 							<>
-								<Field className={classes.largeWidth} {...input.name} label={t(Translation.NAME)} />
+								<Field
+									className={classes.largeWidth}
+									{...input.name}
+									label={t(Translation.NAME)}
+								/>
 								<SelectField
 									labelWidth={42}
 									options={[
-										{ value: t(Translation.PROFILE_COMPUTER_SCIENCE), label: t(Translation.PROFILE_COMPUTER_SCIENCE) },
-										{ value: t(Translation.PROFILE_MATHEMATICS), label: t(Translation.PROFILE_MATHEMATICS) },
-										{ value: t(Translation.PROFILE_STATISTICS), label: t(Translation.PROFILE_STATISTICS) },
-										{ value: t(Translation.OTHER), label: t(Translation.OTHER) },
+										{
+											value: t(Translation.PROFILE_COMPUTER_SCIENCE),
+											label: t(Translation.PROFILE_COMPUTER_SCIENCE),
+										},
+										{
+											value: t(Translation.PROFILE_MATHEMATICS),
+											label: t(Translation.PROFILE_MATHEMATICS),
+										},
+										{
+											value: t(Translation.PROFILE_STATISTICS),
+											label: t(Translation.PROFILE_STATISTICS),
+										},
+										{
+											value: t(Translation.OTHER),
+											label: t(Translation.OTHER),
+										},
 									]}
 									className={classNames(classes.largeWidth, classes.select)}
 									{...input.degree}
@@ -261,18 +316,40 @@ export default function ProfileView({ user }: HasUserProps) {
 								<SelectField
 									labelWidth={80}
 									options={[
-										{ value: `${t(Translation.PROFILE_BACHELOR)} 1.`, label: `${t(Translation.PROFILE_BACHELOR)} 1.` },
-										{ value: `${t(Translation.PROFILE_BACHELOR)} 2.`, label: `${t(Translation.PROFILE_BACHELOR)} 2.` },
-										{ value: `${t(Translation.PROFILE_BACHELOR)} 3.`, label: `${t(Translation.PROFILE_BACHELOR)} 3.` },
-										{ value: `${t(Translation.PROFILE_MASTERS)} 4.`, label: `${t(Translation.PROFILE_MASTERS)} 1.` },
-										{ value: `${t(Translation.PROFILE_MASTERS)} 5.`, label: `${t(Translation.PROFILE_MASTERS)} 2.` },
-										{ value: t(Translation.OTHER), label: t(Translation.OTHER) },
+										{
+											value: `${t(Translation.PROFILE_BACHELOR)} 1.`,
+											label: `${t(Translation.PROFILE_BACHELOR)} 1.`,
+										},
+										{
+											value: `${t(Translation.PROFILE_BACHELOR)} 2.`,
+											label: `${t(Translation.PROFILE_BACHELOR)} 2.`,
+										},
+										{
+											value: `${t(Translation.PROFILE_BACHELOR)} 3.`,
+											label: `${t(Translation.PROFILE_BACHELOR)} 3.`,
+										},
+										{
+											value: `${t(Translation.PROFILE_MASTERS)} 4.`,
+											label: `${t(Translation.PROFILE_MASTERS)} 1.`,
+										},
+										{
+											value: `${t(Translation.PROFILE_MASTERS)} 5.`,
+											label: `${t(Translation.PROFILE_MASTERS)} 2.`,
+										},
+										{
+											value: t(Translation.OTHER),
+											label: t(Translation.OTHER),
+										},
 									]}
 									className={classNames(classes.largeWidth, classes.select)}
 									{...input.year}
 									label={t(Translation.YEAR)}
 								/>
-								<Field className={classes.largeWidth} {...input.tagline} label={t(Translation.TAGLINE)} />
+								<Field
+									className={classes.largeWidth}
+									{...input.tagline}
+									label={t(Translation.TAGLINE)}
+								/>
 								<Field
 									className={classes.largeWidth}
 									{...input.bio}
@@ -288,7 +365,9 @@ export default function ProfileView({ user }: HasUserProps) {
 										<td className={classes.info}>{userData.name}</td>
 									</tr>
 									<tr>
-										<td className={classes.infoLabel}>{t(Translation.DEGREE)}</td>
+										<td className={classes.infoLabel}>
+											{t(Translation.DEGREE)}
+										</td>
 										<td className={classes.info}>{userData.degree}</td>
 									</tr>
 									<tr>
@@ -296,7 +375,9 @@ export default function ProfileView({ user }: HasUserProps) {
 										<td className={classes.info}>{userData.year}</td>
 									</tr>
 									<tr>
-										<td className={classes.infoLabel}>{t(Translation.PROFILE_CHARACTERIZATION)}</td>
+										<td className={classes.infoLabel}>
+											{t(Translation.PROFILE_CHARACTERIZATION)}
+										</td>
 										<td className={classes.info}>{userData.tagline}</td>
 									</tr>
 									<tr>
@@ -316,21 +397,31 @@ export default function ProfileView({ user }: HasUserProps) {
 									setIsEditable(!isEditable);
 								}}
 							>
-								{isEditable ? t(Translation.CANCEL) : t(Translation.PROFILE_CHANGE)}
+								{isEditable
+									? t(Translation.CANCEL)
+									: t(Translation.PROFILE_CHANGE)}
 							</Button>
 							{isEditable && (
 								<div>
-									<Button variant="contained" color="primary" type="submit" className={classes.button}>
-									{t(Translation.SAVE)}
+									<Button
+										variant="contained"
+										color="primary"
+										type="submit"
+										className={classes.button}
+									>
+										{t(Translation.SAVE)}
 									</Button>
 									<div className={classes.declineButtonContainer}>
 										<Button
 											variant="contained"
-											size= "small"
+											size="small"
 											onClick={handleClickOpen}
-											className={classNames(classes.button, classes.declineButton)}
+											className={classNames(
+												classes.button,
+												classes.declineButton,
+											)}
 										>
-										{t(Translation.DELETE_USER)}
+											{t(Translation.DELETE_USER)}
 										</Button>
 									</div>
 									<ConfirmationModal
@@ -349,7 +440,9 @@ export default function ProfileView({ user }: HasUserProps) {
 		</>
 	);
 
-	async function uploadImageOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+	async function uploadImageOnChange(
+		event: React.ChangeEvent<HTMLInputElement>,
+	) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
@@ -363,7 +456,8 @@ export default function ProfileView({ user }: HasUserProps) {
 		const result = await uploadImage(file, '/api/user/image', user.token);
 		setIsLoadingImage(false);
 		await getUserInfo();
-		const imageUrl = result && result.data && result.data.data && result.data.data.imageUrl;
+		const imageUrl =
+			result && result.data && result.data.data && result.data.data.imageUrl;
 		if (!imageUrl || !setUser) {
 			return;
 		}

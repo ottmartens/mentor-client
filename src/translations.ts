@@ -104,9 +104,14 @@ export enum Translation {
 	REGISTER_MENTEES_ONLY = 'REGISTER_MENTEES_ONLY',
 	ACTIVITY_ACTIVITIES = 'ACTIVITY_ACTIVITIES',
 	ACTIVITY_POINTS = 'ACTIVITY_POINTS',
+	ACTIVITY_COMPLETE_ACTIVITY = 'ACTIVITY_COMPLETE_ACTIVITY',
+	ACVITITY_COMPLETE_IMAGE_FAILED = 'ACVITITY_COMPLETE_IMAGE_FAILED',
+	ACVITITY_COMPLETE_ACTIVITY_FAILED = 'ACVITITY_COMPLETE_ACTIVITY_FAILED',
 }
 // ts-ignore
-export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string } } = {
+export const TRANSLATIONS: {
+	[key in Language]: { [key in Translation]: string };
+} = {
 	EE: {
 		LOGIN: 'Logi sisse',
 		PASSWORD: 'Parool',
@@ -164,7 +169,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		APPROVE_USER: 'Kinnita',
 		DECLINE_USER: 'Lükka tagasi',
 		ADMIN_OVERVIEW: 'Admini ülevaade',
-		ACTIVITIES_INSTRUCTION: 'Vali nimekirjast tegevus mida lisada või kui ei leia siis',
+		ACTIVITIES_INSTRUCTION:
+			'Vali nimekirjast tegevus mida lisada või kui ei leia siis',
 		MAKE_NEW_ONE: 'LISA ENDA TEGEVUS',
 		BIO: 'Kirjelda ennast',
 		PROFILE_CHARACTERIZATION: 'Iseloomustus',
@@ -211,6 +217,9 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REGISTER_MENTEES_ONLY: 'Menteedele',
 		ACTIVITY_ACTIVITIES: 'Grupi tegevusi kokku',
 		ACTIVITY_POINTS: 'Grupi teenitud punktid',
+		ACTIVITY_COMPLETE_ACTIVITY: 'Tegevuse lõpetamine',
+		ACVITITY_COMPLETE_IMAGE_FAILED: 'Pildi üleslaadimine ebaõnnestus',
+		ACVITITY_COMPLETE_ACTIVITY_FAILED: 'Tegevuse lõpetamine ebaõnnestus',
 	},
 	EN: {
 		LOGIN: 'Login',
@@ -316,5 +325,8 @@ export const TRANSLATIONS: { [key in Language]: { [key in Translation]: string }
 		REGISTER_MENTEES_ONLY: 'For mentees',
 		ACTIVITY_ACTIVITIES: 'Total completed activities',
 		ACTIVITY_POINTS: 'Total points',
+		ACTIVITY_COMPLETE_ACTIVITY: 'Complete activity',
+		ACVITITY_COMPLETE_IMAGE_FAILED: 'Image upload failed',
+		ACVITITY_COMPLETE_ACTIVITY_FAILED: 'Completing the activity failed',
 	},
 };

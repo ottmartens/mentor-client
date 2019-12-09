@@ -15,6 +15,8 @@ import { validateImage, uploadImage } from '../../services/uploadImage';
 import { BASE_URL } from '../../services/variables';
 import Image from '../../components/image/Image';
 import { isSet, validateInputs, FieldError } from '../../services/validators';
+import Notice from '../../components/notice/Notice';
+import { Redirect } from 'react-router';
 
 interface Props extends HasUserProps {
 	match: {
@@ -60,7 +62,8 @@ const useStyles = makeStyles((theme) => ({
 		borderRadius: '4px',
 		letterSpacing: '0.02857em',
 		textTransform: 'uppercase',
-		boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
+		boxShadow:
+			'0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
 	},
 	imageContainer: {
 		display: 'flex',
@@ -80,12 +83,24 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function CompleteActivityView({ match: { params }, user }: Props) {
+export default function CompleteActivityView({
+	match: { params },
+	user,
+}: Props) {
 	const classes = useStyles();
-	const [participants, setParticipants] = React.useState<string[]>([] as string[]);
-	const [uploadedImages, setUploadedImages] = React.useState<string[]>([] as string[]);
-	const [imageUploadError, setImageUploadError] = React.useState<string | undefined>();
-	const [participantsError, setParticipantsError] = React.useState<FieldError | undefined>();
+	const [participants, setParticipants] = React.useState<string[]>(
+		[] as string[],
+	);
+	const [uploadedImages, setUploadedImages] = React.useState<string[]>(
+		[] as string[],
+	);
+	const [imageUploadError, setImageUploadError] = React.useState<
+		string | undefined
+	>();
+	const [participantsError, setParticipantsError] = React.useState<
+		FieldError | undefined
+	>();
+	const [isCompleted, setCompleted] = React.useState<boolean>(false);
 	const t = useTranslator();
 
 	// get info about mentors and mentees
@@ -103,7 +118,10 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 	}, [called, getGroupInfo]);
 
 	// getting details about selected activity
-	const [getActivities, { data: activityData, called: activityCalled }] = useBackend({
+	const [
+		getActivities,
+		{ data: activityData, called: activityCalled },
+	] = useBackend({
 		requestMethod: RequestMethod.GET,
 		endPoint: EndPoint.GET_ACTIVITIES,
 		authToken: user.token,
@@ -117,17 +135,25 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 		getActivities();
 	}, [activityCalled, getActivities]);
 
-	const selectedActivity = activityData && activityData.find((activity) => activity.ID === Number(params.id));
+	const selectedActivity =
+		activityData &&
+		activityData.find((activity) => activity.ID === Number(params.id));
 
 	const currentDate = new Date().toString();
 	// completing the activity
 	const input = {
-		name: useInput({ validators: [isSet], initialValue: selectedActivity && selectedActivity.name }),
+		name: useInput({
+			validators: [isSet],
+			initialValue: selectedActivity && selectedActivity.name,
+		}),
 		description: useInput({ validators: [isSet] }),
 		time: useInput({ validators: [isSet], initialValue: currentDate }),
 	};
 
-	const [completeActivity, { data: completeData }] = useBackend({
+	const [
+		completeActivity,
+		{ data: completedData, error: completedError },
+	] = useBackend({
 		requestMethod: RequestMethod.POST,
 		endPoint: EndPoint.ACTIVITIES,
 		variables: {
@@ -145,17 +171,47 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 	}
 
 	const mentees: Option[] =
-		data && data.mentees ? data.mentees.map((mentee) => ({ value: mentee.userId, label: mentee.name })) : [];
+		data && data.mentees
+			? data.mentees.map((mentee) => ({
+					value: mentee.userId,
+					label: mentee.name,
+			  }))
+			: [];
 	const mentors: Option[] =
-		data && data.mentors ? data.mentors.map((mentor) => ({ value: mentor.userId, label: mentor.name })) : [];
+		data && data.mentors
+			? data.mentors.map((mentor) => ({
+					value: mentor.userId,
+					label: mentor.name,
+			  }))
+			: [];
+	const minAmountOfParticipants =
+		(selectedActivity && selectedActivity.requiredParticipants) || 3;
+
+	if (isCompleted && completedData && !completedError) {
+		return <Redirect to="/member/my-mentorgroup-view" />;
+	}
 
 	return (
 		<>
-			<h1 className={classes.title}>Complete activity</h1>
+			{imageUploadError && (
+				<Notice
+					title={t(Translation.ACVITITY_COMPLETE_IMAGE_FAILED)}
+					message={imageUploadError}
+				/>
+			)}
+			{completedError && (
+				<Notice
+					title={t(Translation.ACVITITY_COMPLETE_ACTIVITY_FAILED)}
+					message={completedError}
+				/>
+			)}
+			<h1 className={classes.title}>
+				{t(Translation.ACTIVITY_COMPLETE_ACTIVITY)}
+			</h1>
 			<Card>
 				<form
 					className={classes.inputContainer}
-					onSubmit={(e) => {
+					onSubmit={async (e) => {
 						e.preventDefault();
 						setParticipantsError(undefined);
 						setImageUploadError(undefined);
@@ -163,7 +219,7 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 						if (!validateInputs(input)) {
 							error = true;
 						}
-						if (participants.length < (selectedActivity.requiredParticipants || 3)) {
+						if (participants.length < minAmountOfParticipants) {
 							setParticipantsError(FieldError.NOT_SET);
 							error = true;
 						}
@@ -174,7 +230,8 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 						if (error) {
 							return;
 						}
-						completeActivity();
+						await completeActivity();
+						setCompleted(true);
 					}}
 				>
 					<Field
@@ -201,6 +258,7 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 							label={t(Translation.PARTICIPANTS)}
 							options={[...mentors, ...mentees]}
 						/>
+						<span>{`Minimum amount of participants ${minAmountOfParticipants}`}</span>
 					</div>
 					<div>
 						<Field
@@ -212,7 +270,13 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 					</div>
 					<div className={classes.imageContainer}>
 						{uploadedImages.length > 0 &&
-							uploadedImages.map((url, idx) => <img key={idx} src={`${BASE_URL}${url}`} className={classes.image} />)}
+							uploadedImages.map((url, idx) => (
+								<img
+									key={idx}
+									src={`${BASE_URL}${url}`}
+									className={classes.image}
+								/>
+							))}
 					</div>
 					<label className={classes.imageButtonContainer}>
 						<input
@@ -221,7 +285,9 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 							onChange={uploadImageOnChange}
 							style={{ display: 'none' }}
 						/>
-						<span className={classes.imageButton}>{t(Translation.ADD_PICTURE)}</span>
+						<span className={classes.imageButton}>
+							{t(Translation.ADD_PICTURE)}
+						</span>
 					</label>
 					<div className={classes.buttonContainer}>
 						<Button variant="contained" color="primary" type="submit">
@@ -233,7 +299,9 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 		</>
 	);
 
-	async function uploadImageOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+	async function uploadImageOnChange(
+		event: React.ChangeEvent<HTMLInputElement>,
+	) {
 		if (!event.target.files || !event.target.files[0]) {
 			return;
 		}
@@ -244,7 +312,8 @@ export default function CompleteActivityView({ match: { params }, user }: Props)
 			return;
 		}
 		const result = await uploadImage(file, '/api/activity/image', user.token);
-		const imageUrl = result && result.data && result.data.data && result.data.data.imageUrl;
+		const imageUrl =
+			result && result.data && result.data.data && result.data.data.imageUrl;
 		if (!imageUrl) {
 			setImageUploadError('Could not upload image. Please try again later');
 			return;
