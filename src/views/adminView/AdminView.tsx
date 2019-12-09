@@ -1,4 +1,4 @@
-import React /*, { useEffect }*/ from 'react';
+import React, { useState /*, { useEffect }*/ } from 'react';
 import {
 	Container,
 	List,
@@ -110,6 +110,7 @@ export default function AdminView({ user }: HasUserProps) {
 
 	// state
 	const [hasChanged, setHasChanged] = React.useState(false);
+	const [unVerifiedUsers, setUnverifiedUsers] = React.useState([]);
 
 	// requests
 	const [
@@ -184,6 +185,13 @@ export default function AdminView({ user }: HasUserProps) {
 	}, [usersCalled, queryAllUsers]);
 
 	React.useEffect(() => {
+		if (usersData) {
+			console.log('asd')
+			setUnverifiedUsers(usersData.filter((user) => !user.isVerified));
+		}
+	}, [usersData]);
+
+	React.useEffect(() => {
 		if (currentDeadlineCalled) {
 			return;
 		}
@@ -202,7 +210,7 @@ export default function AdminView({ user }: HasUserProps) {
 	}
 
 	const activitytotal = activityData && activityData.length;
-	const usertotal = usersData && usersData.length;
+	const usertotal = unVerifiedUsers.length;
 
 	return (
 		<Container className={classes.container} maxWidth="sm">
@@ -261,18 +269,20 @@ export default function AdminView({ user }: HasUserProps) {
 					</h3>
 					<List>
 						{usersData &&
-							usersData.map(({ ID, name, tagline, imageurl }) => {
-								return (
-									<div key={ID}>
-										<Person
-											name={name}
-											tagline={tagline}
-											imageUrl={imageurl}
-											userId={ID}
-										></Person>
-									</div>
-								);
-							})}
+							usersData
+								.filter((userData) => !userData.isVerified)
+								.map(({ ID, name, tagline, imageurl }) => {
+									return (
+										<div key={ID}>
+											<Person
+												name={name}
+												tagline={tagline}
+												imageUrl={imageurl}
+												userId={ID}
+											></Person>
+										</div>
+									);
+								})}
 					</List>
 				</Card>
 			</div>

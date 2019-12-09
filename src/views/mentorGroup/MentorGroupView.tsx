@@ -85,9 +85,11 @@ export default function MentorGroupView({ match, user }: Props) {
 	}, [called, queryMentorGroupData]);
 
 	React.useEffect(() => {
-		{
-			data ? setAlreadyRequested(data.requests.some((request) => request.userId === user.id)) : console.log('NO DATA');
+		if(!data) {
+			return
 		}
+			setAlreadyRequested(data.requests.some((request) => request.userId === user.id)) ;
+		
 	}, [queryMentorGroupData]);
 
 	if (loading || !data) {

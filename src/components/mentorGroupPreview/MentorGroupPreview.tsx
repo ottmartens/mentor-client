@@ -2,8 +2,8 @@ import React from 'react';
 import { makeStyles, Card, CardContent, Typography } from '@material-ui/core';
 import { BASE_URL } from '../../services/variables';
 import Image from '../image/Image';
-import { HasUserProps } from '../../types';
-import { Link } from 'react-router-dom';
+import classNames from 'classnames'
+import { useHistory } from 'react-router';
 
 export interface Mentor {
 	imageUrl: string;
@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: 'column',
 		width: '50%',
 	},
+	showPointer: {
+		cursor:"pointer"
+	}
 }));
 
 export default function MentorGroupPreview({
@@ -69,31 +72,16 @@ export default function MentorGroupPreview({
 	linkMentors,
 }: Props) {
 	const classes = useStyles();
-
+	const h = useHistory()
 	return (
 		<Card className={classes.container}>
 			<div>
 				{mentors.map(({ imageUrl, name, userId }, idx) => {
 					return (
 						<div key={idx} className={classes.mentor}>
-							{linkMentors && userId && (
-								<Link
-								to={`/member/user/${userId}`}
-								className={classes.link}
-								>
-									<Image
-									className={classes.image}
-									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
-								/>
-									{showNames && (
-									<Typography key={idx} gutterBottom variant="body2" component="h6">
-										{name}
-									</Typography>
-								)}
-								</Link>
-							)}
-							{linkMentors === false && (
-								<div>
+								<div onClick={linkMentors?() => {
+									h.push(`/member/user/${userId}`)
+								} : undefined} className={classNames({[classes.showPointer]:linkMentors})}>
 									<Image
 									className={classes.image}
 									src={imageUrl ? `${BASE_URL}${imageUrl}` : '/images/avatar_placeholder.webp'}
@@ -102,7 +90,6 @@ export default function MentorGroupPreview({
 										{name}
 									</Typography>
 								</div>
-							)}
 						</div>
 					);
 				})}

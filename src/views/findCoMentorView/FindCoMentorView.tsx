@@ -8,6 +8,7 @@ import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 import Notice from '../../components/notice/Notice';
 import { UserContext } from '../../contexts/UserContext';
+import { Redirect } from 'react-router';
 
 type Mentor = {
 	userId: string;
@@ -79,6 +80,10 @@ export default function MentorPairingView({ user }: HasUserProps) {
 		return <Loader />;
 	}
 
+	if(hasAccepted === true && user.groupId) {
+		return <Redirect to="/member/my-mentor-group"/>;
+	}
+
 	const sortedData: Mentor[] = data.sort((_, b) =>
 		b.hasRequestedYou ? 1 : b.youHaveRequested ? 1 : -1,
 	);
@@ -89,15 +94,6 @@ export default function MentorPairingView({ user }: HasUserProps) {
 			<Card className={classes.card}>
 				{hasRequested && (
 					<Notice variant="success" title="Avaldus saadetud" message="" />
-				)}
-				{hasAccepted !== undefined && (
-					<Notice
-						variant="success"
-						title="Avaldusele vastatud"
-						message={
-							hasAccepted ? 'Avaldus vastu võetud' : 'Avaldus tagasi lükatud'
-						}
-					/>
 				)}
 
 				<List>
@@ -138,6 +134,7 @@ export default function MentorPairingView({ user }: HasUserProps) {
 														await queryFreeMentorsData();
 														await updateUserInfo();
 														setHasAccepted(true);
+
 													}}
 												>
 													{t(Translation.ACCEPT)}

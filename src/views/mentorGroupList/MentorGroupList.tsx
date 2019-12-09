@@ -48,6 +48,7 @@ export default function MentorGroupListView({ user }: HasUserProps) {
 					data.map(({ mentors, title, id, description }, idx) => {
 						return (
 							<Link
+							key={id}
 								to={
 									user.groupId && id && user.groupId.toString() == id
 										? '/member/my-mentor-group/'
