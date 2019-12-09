@@ -81,6 +81,10 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '12px',
 		textAlign: 'right',
 	},
+	minParticipants: {
+		color: '#939393',
+		fontSize: '14px',
+	},
 }));
 
 export default function CompleteActivityView({
@@ -258,8 +262,10 @@ export default function CompleteActivityView({
 							label={t(Translation.PARTICIPANTS)}
 							options={[...mentors, ...mentees]}
 						/>
-						<span>{`Minimum amount of participants ${minAmountOfParticipants}`}</span>
 					</div>
+					<div className={classes.minParticipants}>{`${t(
+						Translation.ACTIVITY_COMPLETE_MIN_PARTICIPANTS,
+					)}: ${minAmountOfParticipants}`}</div>
 					<div>
 						<Field
 							className={classNames(classes.inputField, classes.marginMiddle)}
