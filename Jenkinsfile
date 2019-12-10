@@ -3,10 +3,6 @@ node {
     stage('pull changes') {
         git 'https://github.com/ottmartens/mentor-client'
     }
-        
-    stage('tests') {
-        echo 'no tests configured!'
-    }
     
     stage('build Docker image') {
         sh 'docker build -t mentor-client .'
