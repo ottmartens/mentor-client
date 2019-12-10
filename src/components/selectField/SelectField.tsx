@@ -20,6 +20,7 @@ interface Props {
 	labelWidth?: number;
 	options: Option[];
 	multiple?: boolean;
+	testId?: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -46,6 +47,7 @@ export default function SelectField({
 	disabled,
 	options,
 	labelWidth,
+	testId,
 	multiple = false,
 }: Props) {
 	const classes = useStyles();
@@ -56,6 +58,7 @@ export default function SelectField({
 			<FormControl variant="outlined" className={classNames(className, classes.input)}>
 				<InputLabel>{label}</InputLabel>
 				<Select
+  					data-testid={testId}
 					value={value}
 					onChange={handleChange}
 					disabled={disabled}

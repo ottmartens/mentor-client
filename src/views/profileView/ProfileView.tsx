@@ -282,6 +282,7 @@ export default function ProfileView({ user }: HasUserProps) {
 					</div>
 
 					<form
+						data-testid="form"
 						onSubmit={async (e) => {
 							e.preventDefault();
 							if (validateInputs(input)) {
@@ -296,11 +297,13 @@ export default function ProfileView({ user }: HasUserProps) {
 						{isEditable ? (
 							<>
 								<Field
+									testId="name"
 									className={classes.largeWidth}
 									{...input.name}
 									label={t(Translation.NAME)}
 								/>
 								<SelectField
+									testId="degree"
 									labelWidth={42}
 									options={[
 										{
@@ -325,6 +328,7 @@ export default function ProfileView({ user }: HasUserProps) {
 									label={t(Translation.DEGREE)}
 								/>
 								<SelectField
+									testId="year"
 									labelWidth={80}
 									options={[
 										{
@@ -357,11 +361,13 @@ export default function ProfileView({ user }: HasUserProps) {
 									label={t(Translation.YEAR)}
 								/>
 								<Field
+									testId="tagline"
 									className={classes.largeWidth}
 									{...input.tagline}
 									label={t(Translation.TAGLINE)}
 								/>
 								<Field
+									testId="description"
 									className={classes.largeWidth}
 									{...input.bio}
 									label={t(Translation.USER_DESCRIPTION)}

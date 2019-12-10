@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitForElement } from '@testing-library/react';
 
-import ProfileView from '../views/profileView/ProfileView';
+import ProfileView, { user } from '../views/profileView/ProfileView';
 
 const setup = async () => {
 	const utils = render(<ProfileView />);

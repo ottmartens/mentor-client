@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment'
+import 'moment/locale/et';
 import './themes/main.scss';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
@@ -34,6 +36,9 @@ const theme = createMuiTheme({
 		},
 	},
 });
+
+
+moment.locale(localStorage.getItem('lang') === 'EE' ? 'et' : 'en')
 
 function Root() {
 	const [user, setUser] = React.useState<null | UserContextUser>(null);

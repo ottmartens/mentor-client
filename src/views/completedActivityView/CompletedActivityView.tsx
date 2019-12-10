@@ -22,6 +22,8 @@ import { isSet } from '../../services/validators';
 import Loader from '../../components/loader/Loader';
 import Field from '../../components/field/Field';
 import { BASE_URL } from '../../services/variables';
+import moment from 'moment';
+import { time } from 'console';
 
 const useStyles = makeStyles((theme) => ({
 	menteeCard: {
@@ -31,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		marginTop: '1em',
+	},
+	participants: {
+		marginTop: '2em',
 	},
 	buttonContainer: {
 		textAlign: 'center',
@@ -46,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 	image: {
 		borderRadius: '2%',
 		maxWidth: '90%',
-		marginTop: '1em',
+		margin: '0.5em 1em',
 	},
 	imageList: {
 		justifyContent: 'center',
@@ -60,6 +65,13 @@ const useStyles = makeStyles((theme) => ({
 		width: '300px',
 		height: '100px',
 	},
+	marginTop: {
+		marginTop: '0.5em',
+	},
+	list: {
+		marginLeft: '2em',
+		marginRight: '3em',
+	}	
 }));
 
 interface Props extends HasUserProps {
@@ -114,6 +126,8 @@ export default function CompletedActivityView({ match, user }: Props) {
 		return <Loader />;
 	}
 
+	const timeString = moment(new Date(data && data.activity.time)).calendar()
+
 	return (
 		<>
 			{error && (
@@ -130,18 +144,16 @@ export default function CompletedActivityView({ match, user }: Props) {
 				<Card>
 					{data && data.activity.name && data.groupName && data.activity.time && (
 						<div>
-							<Typography variant="h3" className={classes.title}>
-								{data.activity.name}
-							</Typography>
-							<Typography variant="h5">{data.groupName}</Typography>
-							<Typography variant="h6">{data.activity.time}</Typography>
+							<h1 className={classes.title}>{data.activity.name}</h1>
+							<h2 className={classes.marginTop}>{data.groupName}</h2>
+							<Typography variant="body2" className={classes.marginTop}>{timeString}</Typography>
 						</div>
 					)}
 
 					{data && data.participants && data.participants.length !== 0 && (
 						<div>
-							<h2 className={classes.title}>{t(Translation.PARTICIPANTS)}</h2>
-							<List>
+							<h2 className={classes.participants}>{t(Translation.PARTICIPANTS)}</h2>
+							<List className={classes.list}>
 								{data.participants.map(
 									({ imageUrl, name, userId, tagline }, idx) => {
 										return (

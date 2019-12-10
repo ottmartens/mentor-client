@@ -136,7 +136,7 @@ export default function RegisterView() {
 						<h2>{t(Translation.REGISTRATION)}</h2>
 						{renderOptions()}
 						<div>
-							<Field {...input.email} label="E-mail" type="text" disabled={!isRegisterEnabled} data-testid="email" />
+							<Field {...input.email} label="E-mail" type="text" disabled={!isRegisterEnabled} testId="email" />
 						</div>
 						<div>
 							<Field
@@ -144,7 +144,7 @@ export default function RegisterView() {
 								label={t(Translation.PASSWORD)}
 								type="password"
 								disabled={!isRegisterEnabled}
-								data-testid="password"
+								testId="password"
 							/>
 						</div>
 						<div>
@@ -153,7 +153,7 @@ export default function RegisterView() {
 								label={t(Translation.REPEAT_PASSWORD)}
 								type="password"
 								disabled={!isRegisterEnabled}
-								data-testid="confirmation password"
+								testId="confirmation-password"
 							/>
 						</div>
 						<Typography gutterBottom variant="subtitle2" align="center">

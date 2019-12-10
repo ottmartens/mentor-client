@@ -3,6 +3,7 @@ import { makeStyles, ListItem, ListItemText, Card, Divider, List } from '@materi
 import { Link } from 'react-router-dom';
 import { CheckCircleOutline, ErrorOutline, HelpOutline } from '@material-ui/icons';
 import classNames from 'classnames';
+import moment from 'moment';
 import useTranslator from '../../hooks/useTranslator';
 import { Translation } from '../../translations';
 
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	points: {
 		textAlign: 'right',
+		whiteSpace: 'nowrap',
 	},
 	questionmark: {
 		marginRight: '20px',
@@ -84,6 +86,7 @@ export default function ActivityFeed({ activities, showOnlyVerifiedActivities, p
 			<Divider />
 			<List>
 				{activities.map(({ ID, name, points, isVerified, time }) => {
+					const timeString = moment(new Date(time)).calendar()
 					return (
 						<div key={ID}>
 							{(!showOnlyVerifiedActivities || (showOnlyVerifiedActivities && isVerified)) && (
@@ -92,7 +95,7 @@ export default function ActivityFeed({ activities, showOnlyVerifiedActivities, p
 									{isVerified === true && <CheckCircleOutline className={classes.checkmark}></CheckCircleOutline>}
 									{isVerified === false && <ErrorOutline className={classes.exclamationmark}></ErrorOutline>}
 									<Link to={`/member/completed-activity/${ID}`} className={classes.listLink}>
-										<ListItemText primary={name} secondary={time} />
+										<ListItemText primary={name} secondary={timeString} />
 										{isVerified === true && (
 											<p className={classes.points}>
 												<span className={classes.bigNumbers}>{points} p</span>

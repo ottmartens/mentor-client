@@ -15,6 +15,7 @@ interface Props {
 	disabled?: boolean;
 	name?: string;
 	validate?: () => FieldError | undefined;
+	testId?: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,7 @@ export default function Field({
 	disabled,
 	name,
 	validate,
+	testId,
 	...rest
 }: Props) {
 	const classes = useStyles();
@@ -59,6 +61,7 @@ export default function Field({
 				className={className}
 				multiline={multiline}
 				rows={multiline ? 8 : undefined}
+				data-testid={testId}
 				{...rest}
 			/>
 			<span className={classes.error} data-testid="inputError">

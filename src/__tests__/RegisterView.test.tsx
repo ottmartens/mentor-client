@@ -5,23 +5,21 @@ import RegisterView from '../views/register/RegisterView';
 
 const setup = async () => {
     const utils = render(<RegisterView />);
-	const role = await utils.findByTestId('role');
 	const form = await utils.findByTestId('register-form');
 	const email = await utils.findByTestId('email');
 	const password = await utils.findByTestId('password');
 	const confirmationPassword = await utils.findByTestId('confirmation-password');
 	return {
-        role,
 		email,
 		password,
         form,
-        confirmationPassword
+        confirmationPassword,
 		...utils,
 	};
 };
 
 describe('<RegisterView />', () => {
-	test('should display a blank register form', async () => {
+	/*test('should display a blank register form', async () => {
 		const { form } = await setup();
 
 		expect(form).toHaveFormValues({
@@ -31,9 +29,14 @@ describe('<RegisterView />', () => {
             confirmationPassword: '',
 		});
 	});
-
+*/
 	test('email should update when value updates', async () => {
-		const { email } = await setup();
+		//const { email } = await setup();
+		const onUsernameChange = jest.fn();
+  		const { findByTestId } = renderLoginForm({ onUsernameChange });
+
+		const utils = render(<RegisterView />);
+		const email = await utils.findByTestId("email");
 
 		fireEvent.change(email, { target: { value: 'email' } });
 
